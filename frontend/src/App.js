@@ -1,12 +1,13 @@
-import React from "react";
-import SignInSide from "./components/Login";
+import React from 'react';
+import SignInSide from './components/SignInSide';
+import { useDispatch } from 'react-redux';
 
 const App = () => {
   return (
     <div>
-      <h1>
-        <SignInSide />
-      </h1>
+      <SignInSide />
     </div>
   );
 };
+
+export default App;
