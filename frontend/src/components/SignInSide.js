@@ -23,7 +23,7 @@ function Copyright(props) {
     >
       {'Copyright © '}
       <Link color='inherit' href='https://mui.com/'>
-        Your Website
+        TravelKnights
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
