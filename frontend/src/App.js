@@ -3,7 +3,7 @@ import SignInSide from './components/SignInSide';
 
 import { useDispatch } from 'react-redux';
 import { getPosts } from './actions/posts';
-// import Posts from './components/Posts/Posts';
+import Posts from './components/Posts/Posts';
 // import Form from './components/SignInSide';
 import useStyles from './components/SignInSide';
 
@@ -17,6 +17,7 @@ const App = () => {
 
   return (
     <div>
+      <Posts />
       <SignInSide />
     </div>
   );

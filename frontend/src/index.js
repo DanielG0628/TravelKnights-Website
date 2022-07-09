@@ -7,10 +7,8 @@ import reducers from './reducers';
 
 import App from './App';
 
-const store = configureStore(
-  { reducer: reducers },
-  compose(applyMiddleware(thunk))
-);
+const store = configureStore({ reducer: reducers });
+console.log(reducers);
 const root = ReactDom.createRoot(document.getElementById('root'));
 
 root.render(
