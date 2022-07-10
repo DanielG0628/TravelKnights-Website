@@ -12,9 +12,9 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use('/travelknights', postRoutes);
+app.use('/', postRoutes);
 const CONNECTION_URL =
-  'mongodb+srv://Carlos:solraC@cluster0.ukckn.mongodb.net/?retryWrites=true&w=majority';
+  'mongodb+srv://Carlos:solraC@cluster0.ukckn.mongodb.net/travelknights?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5000;
 
 mongoose
@@ -26,33 +26,6 @@ mongoose
 
 //const path = require("path");
 //const { Email } = require("@mui/icons-material");
-
-let tripList = [
-  'Orlando, FL',
-  'Kissime, FL',
-  'Sarasota, FL',
-  'St. Petersburg, FL',
-  'Key West, FL',
-  'Alexander City, AL',
-  'Andalusia, AL',
-  'Anniston, AL',
-  'San Clemente, CA',
-  'San Diego, CA',
-  'San Fernando, CA',
-  'San Francisco, CA',
-  'San Gabriel, CA',
-  'San Jose, CA',
-  'Olathe, KS',
-  'Osawatomie, KS',
-  'Ottawa, KS',
-  'Overland Park, KS',
-  'Pittsburg, KS',
-  'Salina, KS',
-  'Shawnee, KS',
-  'Smith Center, KS',
-  'Topeka, KS',
-  'Wichita, KS',
-];
 
 //require('dotenv').config();
 app.get('/', (req, res) => res.status(200).send('it works!'));

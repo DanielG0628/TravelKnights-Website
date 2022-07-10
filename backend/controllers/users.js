@@ -1,5 +1,6 @@
 import Users from '../models/dbUsers.js';
 
+// API Logic
 export const createUser = async (req, res) => {
   const post = req.body;
   const newUser = new Users(post);
