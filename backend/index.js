@@ -8,9 +8,11 @@ const app = express();
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
+
+app.use(express.json());
 app.use(cors());
 
-app.use('/posts', postRoutes);
+app.use('/travelknights', postRoutes);
 const CONNECTION_URL =
   'mongodb+srv://Carlos:solraC@cluster0.ukckn.mongodb.net/?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5000;
@@ -20,7 +22,6 @@ mongoose
   .then(() =>
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )
-
   .catch((error) => console.log(error.message));
 
 //const path = require("path");
@@ -54,7 +55,9 @@ let tripList = [
 ];
 
 //require('dotenv').config();
+app.get('/', (req, res) => res.status(200).send('it works!'));
 
+/*
 app.post('/api/addTrip', async (req, res, next) => {
   //incoming: userId, location
   //outgoing: error
@@ -70,7 +73,7 @@ app.post('/api/addTrip', async (req, res, next) => {
   res.status(200).json(ret);
 });
 
-app.post('/api/login', async (req, res, next) => {
+app.post('/api/login', async (req, res) => {
   //incoming: email, password
   //outgoing: id, name, error
 
@@ -112,7 +115,7 @@ app.post('/api/searchTrip', async (req, res, next) => {
   let ret = { results: _ret, error: '' };
   res.status(200).json(ret);
 });
-
+*/
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
