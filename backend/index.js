@@ -33,65 +33,6 @@ mongoose
 
 app.get('/', (req, res) => res.status(200).send('it works!'));
 
-/*
-app.post('/api/addTrip', async (req, res, next) => {
-  //incoming: userId, location
-  //outgoing: error
-
-  let error = '';
-
-  const { userId, location } = req.body;
-
-  // TEMP FOR LOCAL TESTING
-  tripList.push(location);
-
-  let ret = { error: error };
-  res.status(200).json(ret);
-});
-
-app.post('/api/login', async (req, res) => {
-  //incoming: email, password
-  //outgoing: id, name, error
-
-  let error = '';
-
-  const { email, password } = req.body;
-
-  let id = -1;
-  let n = '';
-
-  if (email.toLowerCase() == 'johnsmith@gmail.com' && password == 'COP4331') {
-    id = 1;
-    n = 'John Smith';
-  } else {
-    error = 'Invalid user name/password';
-  }
-
-  let ret = { id: id, name: n, error: error };
-  res.status(200).json(ret);
-});
-
-app.post('/api/searchTrip', async (req, res, next) => {
-  //incoming: userId, search
-  //outgoing: results[], error
-
-  let error = '';
-
-  const { userId, search } = req.body;
-  let _search = search.toLowerCase().trim();
-  let _ret = [];
-
-  for (var i = 0; i < tripList.length; i++) {
-    let lowerFromList = tripList[i].toLocaleLowerCase();
-    if (lowerFromList.indexOf(_search) >= 0) {
-      _ret.push(tripList[i]);
-    }
-  }
-
-  let ret = { results: _ret, error: '' };
-  res.status(200).json(ret);
-});
-*/
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
