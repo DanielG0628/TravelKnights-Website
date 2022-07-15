@@ -20,7 +20,7 @@ import GithubButton from "react-github-login-button";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
-import Logo from "/mnt/c/Users/Carso/Desktop/fyasdfiysdvfas/travelknights/frontend/src/images/logo.png";
+import Logo from "../images/logo.png";
 
 function Copyright(props) {
   return (
