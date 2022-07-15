@@ -13,24 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Logo from "../images/logo.png";
 
 const theme = createTheme();
 
@@ -57,8 +40,16 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar
+            sx={{
+              m: 1,
+              bgcolor: "white",
+              width: 120,
+              height: 120,
+              fontSize: 70,
+            }}
+          >
+            <img src={Logo} alt="Logo" height="70" />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -129,7 +120,6 @@ export default function SignUp() {
             </Box>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
