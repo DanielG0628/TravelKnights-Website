@@ -14,12 +14,34 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Alert, SpeedDialIcon } from "@mui/material";
+<<<<<<< HEAD
 import ErrorIcon from "@mui/icons-material/Error";
 import LockOutlined from "@mui/icons-material/LockOutlined";
+=======
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
 
 const theme = createTheme();
 
 export default function SignUp() {
+<<<<<<< HEAD
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -29,6 +51,8 @@ export default function SignUp() {
       }}
     />
   );
+=======
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -51,6 +75,7 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
+<<<<<<< HEAD
           <Avatar
             sx={{
               m: 3,
@@ -62,6 +87,10 @@ export default function SignUp() {
             }}
           >
             <LockOutlined fontSize="70px" />
+=======
+          <Avatar sx={{ m: 3, width: 50, height: 50 }}>
+            <ErrorOutlineIcon />
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
           </Avatar>
           <Typography component="h1" variant="h5">
             Forgot Password
@@ -97,6 +126,7 @@ export default function SignUp() {
             <Button
               type="submit"
               variant="contained"
+<<<<<<< HEAD
               sx={{ mt: 3, mb: 2, width: 500, textTransform: "none" }}
             >
               Send password reset email
@@ -123,6 +153,11 @@ export default function SignUp() {
               sx={{ mt: 1, mb: 2, width: 500, textTransform: "none" }}
             >
               Create new account
+=======
+              sx={{ mt: 3, mb: 2, width: 500 }}
+            >
+              Submit
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
             </Button>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Link href="/" variant="body2" sx={{ mt: 3 }}>
@@ -131,6 +166,10 @@ export default function SignUp() {
             </Box>
           </Box>
         </Box>
+<<<<<<< HEAD
+=======
+        <Copyright sx={{ mt: 5 }} />
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
       </Container>
     </ThemeProvider>
   );

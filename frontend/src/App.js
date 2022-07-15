@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import SignInSide from "./components/SignInSide";
 import SignUp from "./components/SignUp";
 import Forgot from "./components/Forgot";
+<<<<<<< HEAD
+=======
+import Map from "./components/Map";
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
 // import Posts from './components/Posts/Posts';
@@ -26,6 +30,10 @@ const App = () => {
           <Route path="/" element={<SignInSide />} />
           <Route path="/FOrgot" element={<Forgot />} />
           <Route path="/SignUp" element={<SignUp />} />
+<<<<<<< HEAD
+=======
+          <Route path="/Map" element={<Map />} />
+>>>>>>> 9ff2cbee75321bd595216bd500377464281a495a
         </Routes>
       </Router>
     </div>
