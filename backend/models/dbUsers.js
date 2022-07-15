@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   phone: String,
-  states: Object,
+  states: Array,
   secretanswer: String,
 });
 
