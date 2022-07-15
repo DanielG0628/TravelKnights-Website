@@ -21,11 +21,11 @@ import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import Logo from "../images/logo.png";
-
+import ri from "../images/randomimage";
 const theme = createTheme();
 
 export default function SignInSide() {
-  const navigate = useNavigate();
+  const randomImage = ri[Math.floor(Math.random() * ri.length)];  const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
       style={{
