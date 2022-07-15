@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import SignInSide from "./components/SignInSide";
 import SignUp from "./components/SignUp";
 import Forgot from "./components/Forgot";
+import Map from "./components/Map";
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
 // import Posts from './components/Posts/Posts';
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/" element={<SignInSide />} />
           <Route path="/FOrgot" element={<Forgot />} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/Map" element={<Map />} />
         </Routes>
       </Router>
     </div>

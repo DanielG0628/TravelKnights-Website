@@ -171,9 +171,14 @@ export default function SignInSide() {
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item>
+                <Grid item xs>
                   <Link href="SignUp" variant="body2">
                     Don't have an account? Sign Up
+                  </Link>
+                </Grid>
+                <Grid item xs>
+                  <Link href="Map" variant="body2">
+                    Map?
                   </Link>
                 </Grid>
               </Grid>
