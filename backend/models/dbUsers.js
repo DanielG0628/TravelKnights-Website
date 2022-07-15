@@ -6,7 +6,6 @@ const userSchema = mongoose.Schema({
   password: String,
   phone: String,
   states: Array,
-  secretanswer: String,
 });
 
 export default mongoose.model('users', userSchema);
