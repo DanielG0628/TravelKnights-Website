@@ -19,6 +19,8 @@ import GithubIcon from "@material-ui/icons/GitHub";
 import GithubButton from "react-github-login-button";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
+import { useNavigate } from "react-router-dom";
+import Logo from "/mnt/c/Users/Carso/Desktop/fyasdfiysdvfas/travelknights/frontend/src/images/logo.png";
 
 function Copyright(props) {
   return (
@@ -41,6 +43,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  const navigate = useNavigate();
   const handleFailure = (result) => {
     alert(result);
   };
@@ -88,11 +91,10 @@ export default function SignInSide() {
               alignItems: "center",
             }}
           >
-            <Avatar
-              alt="Trevor Henderson"
-              src="https://www.princeton.edu/sites/default/files/styles/half_1x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=fAtaOLnw"
-              size={100}
-            />
+            <Avatar sx={{ m: 1, bgcolor: "white" }}>
+              <img src={Logo} alt="Logo" height="30" />
+            </Avatar>
+
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
@@ -165,13 +167,13 @@ export default function SignInSide() {
               />
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href="Forgot" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="SignUp" variant="body2">
+                    Don't have an account? Sign Up
                   </Link>
                 </Grid>
               </Grid>
