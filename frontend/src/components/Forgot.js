@@ -14,28 +14,21 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Alert, SpeedDialIcon } from "@mui/material";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import ErrorIcon from "@mui/icons-material/Error";
+import LockOutlined from "@mui/icons-material/LockOutlined";
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const ColoredLine = ({ color }) => (
+    <hr
+      style={{
+        color: color,
+        backgroundColor: color,
+        height: 2,
+      }}
+    />
+  );
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -58,8 +51,17 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 3, width: 50, height: 50 }}>
-            <ErrorOutlineIcon />
+          <Avatar
+            sx={{
+              m: 3,
+              color: "white",
+              bgcolor: "black",
+              width: 66,
+              height: 66,
+              fontSize: 54,
+            }}
+          >
+            <LockOutlined fontSize="70px" />
           </Avatar>
           <Typography component="h1" variant="h5">
             Forgot Password
@@ -95,9 +97,32 @@ export default function SignUp() {
             <Button
               type="submit"
               variant="contained"
-              sx={{ mt: 3, mb: 2, width: 500 }}
+              sx={{ mt: 3, mb: 2, width: 500, textTransform: "none" }}
             >
-              Submit
+              Send password reset email
+            </Button>
+
+            <Grid container sx={{ mt: 3, mb: 3 }}>
+              <Grid item xs={5} sm={5} md={5}>
+                <ColoredLine color="#666666" />
+              </Grid>
+              <Grid item xs={2} sm={2} md={2}>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Typography color="#666666">OR</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={5} sm={5} md={5}>
+                <ColoredLine color="#666666" />
+              </Grid>
+            </Grid>
+            <Grid container></Grid>
+            <Button
+              href="SignUp"
+              type="submit"
+              variant="contained"
+              sx={{ mt: 1, mb: 2, width: 500, textTransform: "none" }}
+            >
+              Create new account
             </Button>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Link href="/" variant="body2" sx={{ mt: 3 }}>
@@ -106,7 +131,6 @@ export default function SignUp() {
             </Box>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
