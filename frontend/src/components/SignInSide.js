@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,28 +13,36 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color='inherit' href='https://mui.com/'>
-        TravelKnights
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import ReactGoogleLogin, { GoogleLogin } from 'react-google-login';
+import GitHubLogin from 'react-github-login';
+import GithubIcon from '@material-ui/icons/GitHub';
+import GithubButton from 'react-github-login-button';
+import { GoogleLoginButton } from 'react-social-login-buttons';
+import { GithubLoginButton } from 'react-social-login-buttons';
+import { useNavigate } from 'react-router-dom';
+import Logo from '../images/logo.png';
 
 const theme = createTheme();
 
 export default function SignInSide() {
+  const navigate = useNavigate();
+  const ColoredLine = ({ color }) => (
+    <hr
+      style={{
+        color: color,
+        backgroundColor: color,
+        height: 2,
+      }}
+    />
+  );
+  const handleFailure = (result) => {
+    alert(result);
+  };
+  const handleLogin = (googleData) => {
+    alert(googleData);
+  };
+  const onSuccess = (response) => console.log(response);
+  const onFailure = (response) => console.error(response);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -73,9 +82,18 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar
+              sx={{
+                m: 1,
+                bgcolor: 'white',
+                width: 120,
+                height: 120,
+                fontSize: 70,
+              }}
+            >
+              <img src={Logo} alt='Logo' height='70' />
             </Avatar>
+
             <Typography component='h1' variant='h5'>
               Sign in
             </Typography>
@@ -117,19 +135,70 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
+
+              {/*
+              <GoogleLogin
+                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                fullwidth
+                buttonText="Log in with Google"
+                onSuccess={handleLogin}
+                onFailure={handleLogin}
+                cookiePolicy={"single_host_origin"}
+                sx={{ mt: 3, mb: 2 }}
+              />
+          */}
+
+              {/*
+                <GitHubLogin
+                  clientId={process.env.ReactGitHubLogin}
+                  fullwidth
+                  buttonText="Log in with GitHub"
+                  onSuccess={onSuccess}
+                  onFailure={onFailure}
+                  cookiePolicy={"single_host_origin"}
+                  sx={{ mt: 3, mb: 2 }}
+                >
+
+                </GitHubLogin>
+              */}
+
               <Grid container>
                 <Grid item xs>
-                  <Link href='#' variant='body2'>
+                  <Link href='Forgot' variant='body2'>
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href='#' variant='body2'>
-                    {"Don't have an account? Sign Up"}
+                  <Link href='SignUp' variant='body2'>
+                    Don't have an account? Sign Up
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Grid container sx={{ mt: 3, mb: 3 }}>
+                <Grid item xs={5} sm={5} md={5}>
+                  <ColoredLine color='#666666' />
+                </Grid>
+                <Grid item xs={2} sm={2} md={2}>
+                  <Box
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    <Typography color='#666666'>OR</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={5} sm={5} md={5}>
+                  <ColoredLine color='#666666' />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={6} sm={6} md={6}>
+                  <GoogleLoginButton />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6}>
+                  <GithubLoginButton />
+                </Grid>
+              </Grid>
             </Box>
           </Box>
         </Grid>
