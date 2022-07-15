@@ -1,13 +1,21 @@
 import Users from '../models/dbUsers.js';
+import VerificationToken from '../models/verificationToken.js';
+import generateOTP from '../utils/mailVer.js';
 
 // API Logic
 export const createUser = async (req, res) => {
-  const {name, email, password, phone, secretanswer} = req.body;
-  Users.findOne({email:email}, (err,user) => {
+  const {name, email, password, phone, states} = req.body;
+   Users.findOne({email:email}, (err,user) => {
       if(user){
         res.status(500).json({message:"already an existing user"});
       }else {
-        const user = new Users({name, email, password, phone, secretanswer});
+        const user = new Users({name, email, password, phone, states});
+        const OTP = generateOTP();
+        const verificationToken = new VerificationToken({
+          owner: user._id,
+          token: OTP
+        });
+        verificationToken.save();
         user.save(err=>{
           if(err){
             res.status(501).send(err);
