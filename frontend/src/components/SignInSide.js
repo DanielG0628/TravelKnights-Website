@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -20,38 +21,20 @@ import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import Logo from "../images/logo.png";
-import ri from "../images/randomimage";
-
-
-
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        TravelKnights
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
 export default function SignInSide() {
-  const randomImage = ri[Math.floor(Math.random() * ri.length)];
-
-
-
-
   const navigate = useNavigate();
+  const ColoredLine = ({ color }) => (
+    <hr
+      style={{
+        color: color,
+        backgroundColor: color,
+        height: 2,
+      }}
+    />
+  );
   const handleFailure = (result) => {
     alert(result);
   };
@@ -99,8 +82,16 @@ export default function SignInSide() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "white" }}>
-              <img src={Logo} alt="Logo" height="30" />
+            <Avatar
+              sx={{
+                m: 1,
+                bgcolor: "white",
+                width: 120,
+                height: 120,
+                fontSize: 70,
+              }}
+            >
+              <img src={Logo} alt="Logo" height="70" />
             </Avatar>
 
             <Typography component="h1" variant="h5">
@@ -156,10 +147,8 @@ export default function SignInSide() {
                 sx={{ mt: 3, mb: 2 }}
               />
           */}
-              <GoogleLoginButton />
 
-              <GithubLoginButton
-              /*
+              {/*
                 <GitHubLogin
                   clientId={process.env.ReactGitHubLogin}
                   fullwidth
@@ -171,8 +160,8 @@ export default function SignInSide() {
                 >
 
                 </GitHubLogin>
-                 */
-              />
+              */}
+
               <Grid container>
                 <Grid item xs>
                   <Link href="Forgot" variant="body2">
@@ -190,7 +179,31 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Grid container sx={{ mt: 3, mb: 3 }}>
+                <Grid item xs={5} sm={5} md={5}>
+                  <ColoredLine color="#666666" />
+                </Grid>
+                <Grid item xs={2} sm={2} md={2}>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Typography color="#666666">OR</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={5} sm={5} md={5}>
+                  <ColoredLine color="#666666" />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={6} sm={6} md={6}>
+                  <GoogleLoginButton />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6}>
+                  <GithubLoginButton />
+                </Grid>
+              </Grid>
             </Box>
           </Box>
         </Grid>
