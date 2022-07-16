@@ -14,10 +14,25 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Logo from "../images/logo.png";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -109,9 +124,32 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleClickOpen}
             >
               Sign Up
             </Button>
+
+            <Dialog open={open} onClose={handleClose} onBackdropClick="false">
+              <DialogContent>
+                <DialogContentText>
+                  We have sent you a one time password to the email provided.
+                  Please enter password to finish account setup
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Enter one time password"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleClose}>Submit</Button>
+              </DialogActions>
+            </Dialog>
 
             <Box display="flex" justifyContent="center" alignItems="center">
               <Link href="/" variant="body2" sx={{ mt: 3 }}>

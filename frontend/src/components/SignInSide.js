@@ -92,11 +92,11 @@ export default function SignInSide() {
               }}
             >
               <img src={Logo} alt="Logo" height="70" />
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
             </Avatar>
 
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
             <Box
               component="form"
               noValidate

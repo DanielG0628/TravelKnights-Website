@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import SignInSide from "./components/SignInSide";
 import SignUp from "./components/SignUp";
 import Forgot from "./components/Forgot";
-
 import Map from "./components/Map";
-
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
 // import Posts from './components/Posts/Posts';
@@ -15,12 +13,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   //const classes = useStyles();
+  /*
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
-
+*/
   return (
     <div>
       {/* use router switch */}
