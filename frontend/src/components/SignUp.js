@@ -129,7 +129,12 @@ export default function SignUp() {
               Sign Up
             </Button>
 
-            <Dialog open={open} onClose={handleClose} onBackdropClick="false">
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              onBackdropClick="false"
+              PaperProps={{ sx: { bottom: 350 } }}
+            >
               <DialogContent>
                 <DialogContentText>
                   We have sent you a one time password to the email provided.
