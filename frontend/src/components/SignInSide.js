@@ -10,13 +10,11 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ReactGoogleLogin, { GoogleLogin } from "react-google-login";
-import GitHubLogin from "react-github-login";
-import GithubIcon from "@material-ui/icons/GitHub";
-import GithubButton from "react-github-login-button";
+
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
