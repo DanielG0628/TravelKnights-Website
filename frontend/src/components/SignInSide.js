@@ -10,22 +10,22 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ReactGoogleLogin, { GoogleLogin } from "react-google-login";
-import GitHubLogin from "react-github-login";
-import GithubIcon from "@material-ui/icons/GitHub";
-import GithubButton from "react-github-login-button";
+
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
-import Logo from "../images/logo.png";
 import ri from "../images/randomimage";
+import Logo from "../images/logo.png";
+
 const theme = createTheme();
 
 export default function SignInSide() {
-  const randomImage = ri[Math.floor(Math.random() * ri.length)];  const navigate = useNavigate();
+  const randomImage = ri[Math.floor(Math.random() * ri.length)];
+  const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -92,11 +92,11 @@ export default function SignInSide() {
               }}
             >
               <img src={Logo} alt="Logo" height="70" />
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
             </Avatar>
 
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
             <Box
               component="form"
               noValidate
