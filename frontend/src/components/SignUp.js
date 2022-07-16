@@ -29,15 +29,15 @@ export default function SignUp() {
     console.log({
       email: user.get("email"),
       password: user.get("password"),
-      fullName: user.get("fullName"),
+      name: user.get("name"),
       phone: user.get("phone")
        });
-      const newuser = { fullName:'', email:'', phone:'', password:''};
-      newuser.fullName= user.get("fullName");
+       //using user results in empty req.body
+      const newuser = { name:'', email:'', phone:'', password:''};
+      newuser.name= user.get("name");
       newuser.email=user.get("email");
       newuser.password=user.get("password");
       newuser.phone=user.get("phone");
-      console.log("HELLO", newuser.body);
           dispatch(createUser(newuser));
       };
 
@@ -76,11 +76,11 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="fullName"
+                  name="name"
                   required
                   fullWidth
-                  id="fullName"
-                  label="fullName"
+                  id="name"
+                  label="name"
                   autoFocus
                 />
               </Grid>
