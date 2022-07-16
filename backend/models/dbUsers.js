@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
   phone: String,
   states: Array
 });
-/*
+
 userSchema.pre("save", async function (next) {
   if(this.isModified("password")) {
     const hash = await bcrypt.hash(this.password, 8);
@@ -17,7 +17,7 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
-*/
+
 userSchema.methods.comparePassword = async function (password) {
   const result = await bcrypt.compareSync(password, this.password);
   return result;
