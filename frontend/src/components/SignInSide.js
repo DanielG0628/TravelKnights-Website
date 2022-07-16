@@ -20,10 +20,16 @@ import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
-
+/*client ID: 718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com */
+/*client secret: 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 */
 const theme = createTheme();
 
 export default function SignInSide() {
+  const responseSuccessGoogle = (response) => {
+    console.log(response);
+  };
+  const responseErrorGoogle = (response) => {};
+
   const randomImage = ri[Math.floor(Math.random() * ri.length)];
   const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
@@ -193,7 +199,12 @@ export default function SignInSide() {
               </Grid>
               <Grid container>
                 <Grid item xs={6} sm={6} md={6}>
-                  <GoogleLoginButton />
+                  <GoogleLogin
+                    clientId="718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com"
+                    onSuccess={responseSuccessGoogle}
+                    onFailure={responseErrorGoogle}
+                    cookiePolicy={"single_host_origin"}
+                  />
                 </Grid>
                 <Grid item xs={6} sm={6} md={6}>
                   <GithubLoginButton />

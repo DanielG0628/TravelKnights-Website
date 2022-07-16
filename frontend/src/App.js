@@ -5,6 +5,7 @@ import Forgot from "./components/Forgot";
 import Map from "./components/Map";
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
+
 // import Posts from './components/Posts/Posts';
 // import Form from './components/SignInSide';
 //import useStyles from './components/SignInSide';
@@ -20,6 +21,7 @@ const App = () => {
     dispatch(getPosts());
   }, [dispatch]);
 */
+
   return (
     <div>
       {/* use router switch */}
