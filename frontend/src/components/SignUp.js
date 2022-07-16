@@ -1,4 +1,6 @@
-import * as React from "react";
+
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,19 +16,30 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Logo from "../images/logo.png";
+import { createUser } from '../actions/posts';
 
 const theme = createTheme();
-
 export default function SignUp() {
+  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const user = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+      email: user.get("email"),
+      password: user.get("password"),
+      fullName: user.get("fullName"),
+      phone: user.get("phone")
+       });
+      const newuser = { fullName:'', email:'', phone:'', password:''};
+      newuser.fullName= user.get("fullName");
+      newuser.email=user.get("email");
+      newuser.password=user.get("password");
+      newuser.phone=user.get("phone");
+      console.log("HELLO", newuser.body);
+          dispatch(createUser(newuser));
+      };
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,12 +76,11 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  name="fullName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="fullName"
+                  label="fullName"
                   autoFocus
                 />
               </Grid>
@@ -76,10 +88,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="phone"
+                  label="phone"
+                  name="phone"
                 />
               </Grid>
               <Grid item xs={12}>
