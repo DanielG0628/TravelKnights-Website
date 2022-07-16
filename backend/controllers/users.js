@@ -1,6 +1,9 @@
 import Users from '../models/dbUsers.js';
 import VerificationToken from '../models/verificationToken.js';
-import generateOTP from '../utils/mailVer.js';
+import { generateOTP } from '../utils/mailVer.js';
+import { mailVerification } from '../utils/mailVer.js';
+import { generateEmailTemplate } from '../utils/mailVer.js';
+
 
 // API Logic
 export const createUser = async (req, res) => {
@@ -16,6 +19,13 @@ export const createUser = async (req, res) => {
           token: OTP
         });
         verificationToken.save();
+        mailVerification().sendMail({
+          from: 'verifyEmail@email.com',
+          to: user.email,
+          subject: "Verify your email account",
+          html: generateEmailTemplate(OTP),
+        });
+        
         user.save(err=>{
           if(err){
             res.status(501).send(err);
