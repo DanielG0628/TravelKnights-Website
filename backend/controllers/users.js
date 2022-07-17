@@ -1,4 +1,5 @@
-import isValidObjectId from 'mongoose';
+import pkg from 'mongoose';
+const { isValidObjectId } = pkg;
 import Users from '../models/dbUsers.js';
 import VerificationToken from '../models/verificationToken.js';
 import { sendError } from '../utils/helper.js';
@@ -7,14 +8,16 @@ import { mailVerification } from '../utils/mailVer.js';
 import { generateEmailTemplate } from '../utils/mailVer.js';
 
 // API Logic
+// FIXME:
+// Implement a expiration for non verified users
 export const createUser = async (req, res) => {
-  const { name, email, password, phone, states } = req.body;
+  const { name, email, password, states } = req.body;
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
       res.status(500).json({ message: 'already an existing user' });
     } else {
-      const user = new Users({ name, email, password, phone, states });
+      const user = new Users({ name, email, password, states });
       const OTP = generateOTP();
       const verificationToken = new VerificationToken({
         owner: user._id,
@@ -41,6 +44,8 @@ export const createUser = async (req, res) => {
   });
 };
 
+// FIXME:
+// Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
   Users.findOne({ email: email }, (err, user) => {
@@ -58,12 +63,14 @@ export const getUser = async (req, res) => {
 
 // This function verifies that the user has inputted
 // the correct token and CAN send a confirmation email
+// FIXME:
+// Implement button instead of token for verify email
 export const verifyEmail = async (req, res) => {
   const { userId, OTP } = req.body;
   if (!userId || !OTP.trim())
     return sendError(res, 'Invalid request, missing parameters!');
 
-  if (!isValidObjectId(userId)) return sendError(res, 'Invalid user id!');
+  if (!isValidObjectId(userId)) return sendError(res, 'Invalid user id! ');
 
   const user = await Users.findById(userId);
   if (!user) return sendError(res, 'User not found!');
@@ -80,19 +87,6 @@ export const verifyEmail = async (req, res) => {
 
   await VerificationToken.findByIdAndDelete(token._id);
   await user.save();
-
-  // Confirmation email sent!
-  // NOTE FOR DANIEL:
-  // Maybe we don't do a confirmation email and
-  // give a confirmation on the front end
-  // once the user enters the correct token
-  // -----------------------------
-  // mailTransport().sendMail({
-  //   from: 'verifyEmail@email.com',
-  //   to: user.email,
-  //   subject: 'Verify your email account',
-  //   html: generateEmailTemplate(OTP),
-  // });
 
   // If everything is succesful
   res.json({
