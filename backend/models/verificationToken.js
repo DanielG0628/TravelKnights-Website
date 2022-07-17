@@ -18,10 +18,6 @@ const verificationTokenSchema = mongoose.Schema({
   },
 });
 
-// NOTE for Daniel:
-// The two awaits below are saying they have no effect
-// maybe the actions are not async?
-// We need to fix this
 verificationTokenSchema.pre('save', async function (next) {
   if (this.isModified('token')) {
     const hash = await bcrypt.hash(this.token, 8);
