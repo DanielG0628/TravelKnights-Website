@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelknights/constants.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -17,11 +18,20 @@ class Background extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-              top: 0,
-              left: 0,
-              child:
-                  Image.asset("assets/images/new-york.png", width: size.width)),
-          child,
+              top: 20,
+              left: 20,
+              child: CircleAvatar(
+                  backgroundColor: kThirdColor,
+                  child: Image.asset(
+                    "assets/images/goldengate.png",
+                  ),
+                  radius: size.width * .15)),
+          Positioned(
+              bottom: 100,
+              right: 0,
+              child: Image.asset("assets/images/keywest.png",
+                  width: size.width * .3)),
+          child
         ],
       ),
     );
