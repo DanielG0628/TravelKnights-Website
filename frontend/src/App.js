@@ -28,7 +28,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<SignInSide />} />
-          <Route path="/FOrgot" element={<Forgot />} />
+          <Route path="/Forgot" element={<Forgot />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Map" element={<Map />} />
         </Routes>
