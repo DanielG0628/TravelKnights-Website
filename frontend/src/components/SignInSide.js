@@ -10,11 +10,11 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-
+import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ReactGoogleLogin, { GoogleLogin } from "react-google-login";
-
+import jwt_decode from "jwt-decode";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
@@ -22,13 +22,32 @@ import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 /*client ID: 718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com */
 /*client secret: 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 */
+/*NEW client ID: 527171615531-lir17eijsj2fi41toef1ro3gauenpdnh.apps.googleusercontent.com */
+/*NEW client secret: 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 */
 const theme = createTheme();
 
 export default function SignInSide() {
-  const responseSuccessGoogle = (response) => {
-    console.log(response);
-  };
-  const responseErrorGoogle = (response) => {};
+  const [user, setUser] = useState({});
+
+  function handleCallbackResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    var userObject = jwt_decode(response.credential);
+    console.log(userObject);
+    setUser(userObject);
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        "527171615531-lir17eijsj2fi41toef1ro3gauenpdnh.apps.googleusercontent.com",
+      callback: handleCallbackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+    });
+  }, []);
 
   const randomImage = ri[Math.floor(Math.random() * ri.length)];
   const navigate = useNavigate();
@@ -199,16 +218,19 @@ export default function SignInSide() {
               </Grid>
               <Grid container>
                 <Grid item xs={6} sm={6} md={6}>
-                  <GoogleLogin
-                    clientId="718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com"
-                    onSuccess={responseSuccessGoogle}
-                    onFailure={responseErrorGoogle}
-                    cookiePolicy={"single_host_origin"}
-                  />
+                  <div id="signInDiv"></div>
                 </Grid>
+
                 <Grid item xs={6} sm={6} md={6}>
                   <GithubLoginButton />
                 </Grid>
+                {user && (
+                  <div>
+                    <img src={user.picture}></img>
+                    <h3>{user.name}</h3>
+                    <h3>{user.email}</h3>
+                  </div>
+                )}
               </Grid>
             </Box>
           </Box>

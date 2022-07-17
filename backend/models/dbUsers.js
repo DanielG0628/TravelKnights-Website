@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   phone: String,
-  states: Array,
+  states: Array
 });
 
 userSchema.pre("save", async function (next) {
