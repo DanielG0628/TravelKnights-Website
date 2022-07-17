@@ -13,12 +13,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   //const classes = useStyles();
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
-  useEffect(() => {
+  /*useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
-
+*/
   return (
     <div>
       {/* use router switch */}
