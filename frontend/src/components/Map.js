@@ -19,10 +19,15 @@ import { ReactComponent as Svg } from "../map/usaHigh.svg";
 
 const theme = createTheme();
 
+
+function sayHello(el) {
+ if (el != "")
+  alert(el);
+}
 export default function Map() {
   var htmlElement = document.getElementById("US-AK");
  return( 
-  <Box onClick={(element) => alert(element.target.id)}>
+  <Box onClick={(element) => sayHello(element.target.id)}>
 
     <h1>THIS IS THE MAP</h1>
     <Svg />
