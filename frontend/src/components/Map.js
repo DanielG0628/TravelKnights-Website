@@ -27,10 +27,11 @@ var htmlElement = "";
 
 export default function Map() {
   function sayHello(el) {
-    if (el != "")
+    if (el.id != "")
     {
       handleClickOpen();
-      htmlElement = el;
+      htmlElement = el.id;
+el.setAttribute("class", "visited");
     }
   }
   
@@ -46,12 +47,10 @@ export default function Map() {
    
  
   return( 
-  <Box onClick={(element) => sayHello(element.target.id)}>
+  <Box onClick={(element) => sayHello(element.target)}>
 
     <h1>THIS IS THE MAP</h1>
     <Svg />
-    <svg overflow="visible">
-</svg>
 
 <Dialog
  open={open}
