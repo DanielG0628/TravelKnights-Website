@@ -23,16 +23,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const theme = createTheme();
-
+var htmlElement = "";
 
 export default function Map() {
-  var htmlElement = document.getElementById("US-AK");
   function sayHello(el) {
     if (el != "")
     {
-      alert(el);
       handleClickOpen();
-   
+      htmlElement = el;
     }
   }
   
@@ -62,7 +60,7 @@ PaperProps={{ sx: { bottom: 350 } }}
 >
 <DialogContent>
   <DialogContentText>
-    Welcome to the United States!
+    Welcome to the United States! {htmlElement}
   </DialogContentText>
 </DialogContent>
 </Dialog>
