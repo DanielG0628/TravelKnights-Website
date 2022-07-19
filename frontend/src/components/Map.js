@@ -16,12 +16,17 @@ import { useNavigate } from "react-router-dom";
 import usa from "../map/usaHigh.svg";
 import logo from "../images/logo.png";
 import { ReactComponent as Svg } from "../map/usaHigh.svg";
+
 const theme = createTheme();
 
-const Map = () => (
-  <div>
+export default function Map() {
+  var htmlElement = document.getElementById("US-AK");
+ return( 
+  <h1>
+
     <h1>THIS IS THE MAP</h1>
-    <Svg overflow="visible" />
-  </div>
-);
-export default Map;
+    <Svg/>
+    </h1>  
+ )
+
+}
