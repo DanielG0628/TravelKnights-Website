@@ -9,7 +9,7 @@ import { generateEmailTemplate } from '../utils/mailVer.js';
 
 // API Logic
 // FIXME:
-// Implement a expiration for non verified users
+// Implement a expiration for non verified users?
 export const createUser = async (req, res) => {
   const { name, email, password, states } = req.body;
 
