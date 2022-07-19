@@ -5,7 +5,17 @@ const userSchema = mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  states: Array,
+  states: [
+    {
+      state: String,
+      cities: [
+        {
+          city: String,
+          memories: [{ date: String, description: String, img: String }],
+        },
+      ],
+    },
+  ],
   emailVerified: {
     type: Boolean,
     default: false,
