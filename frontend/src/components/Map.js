@@ -16,24 +16,57 @@ import { useNavigate } from "react-router-dom";
 import usa from "../map/usaHigh.svg";
 import logo from "../images/logo.png";
 import { ReactComponent as Svg } from "../map/usaHigh.svg";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const theme = createTheme();
 
 
-function sayHello(el) {
- if (el != "")
-  alert(el);
-}
 export default function Map() {
   var htmlElement = document.getElementById("US-AK");
- return( 
+  function sayHello(el) {
+    if (el != "")
+    {
+      alert(el);
+      handleClickOpen();
+   
+    }
+  }
+  
+  const [open, setOpen] = React.useState(false);
+  
+   const handleClickOpen = () => {
+     setOpen(true);
+   };
+  
+   const handleClose = () => {
+     setOpen(false);
+   };
+   
+ 
+  return( 
   <Box onClick={(element) => sayHello(element.target.id)}>
 
     <h1>THIS IS THE MAP</h1>
     <Svg />
     <svg overflow="visible">
 </svg>
-    </Box>  
+
+<Dialog
+ open={open}
+ onClose={handleClose}
+PaperProps={{ sx: { bottom: 350 } }}
+>
+<DialogContent>
+  <DialogContentText>
+    Welcome to the United States!
+  </DialogContentText>
+</DialogContent>
+</Dialog>
+</Box>
  )
 
 }
