@@ -145,26 +145,16 @@ export default function SignUp() {
               open={open}
               onClose={handleClose}
               onBackdropClick="false"
-              PaperProps={{ sx: { bottom: 350 } }}
+              PaperProps={{ sx: { bottom: 200 } }}
             >
               <DialogContent>
-                <DialogContentText>
-                  We have sent you a one time password to the email provided.
-                  Please enter password to finish account setup
+                <DialogContentText component="h1" variant="h5">
+                  We have sent you a link to the email provided. Please check
+                  you email to finish setting up your account
                 </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Enter one time password"
-                  type="email"
-                  fullWidth
-                  variant="standard"
-                />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Submit</Button>
+                <Button onClick={handleClose}>OK</Button>
               </DialogActions>
             </Dialog>
 
