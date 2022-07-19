@@ -22,13 +22,13 @@ const theme = createTheme();
 export default function Map() {
   var htmlElement = document.getElementById("US-AK");
  return( 
-  <h1 onClick={(element) => alert(element.target.id)}>
+  <Box onClick={(element) => alert(element.target.id)}>
 
     <h1>THIS IS THE MAP</h1>
     <Svg />
     <svg overflow="visible">
 </svg>
-    </h1>  
+    </Box>  
  )
 
 }
