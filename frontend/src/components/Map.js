@@ -16,12 +16,90 @@ import { useNavigate } from "react-router-dom";
 import usa from "../map/usaHigh.svg";
 import logo from "../images/logo.png";
 import { ReactComponent as Svg } from "../map/usaHigh.svg";
+import AppBar from "@mui/material/AppBar";
+import { useDispatch } from "react-redux";
+import Toolbar from "@mui/material/Toolbar";
+import { useEffect, useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useRadioGroup } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+
 const theme = createTheme();
 
-const Map = () => (
-  <div>
-    <h1>THIS IS THE MAP</h1>
-    <Svg overflow="visible" />
-  </div>
-);
-export default Map;
+export default function Map() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const Logout = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  console.log(user);
+  return (
+    <div>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar sx={{ backgroundColor: "#65743a" }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Travel Knights
+            </Typography>
+            <img src={user.result.picture}></img>
+            <Button
+              color="inherit"
+              sx={{ textTransform: "none" }}
+              onClick={handleOpenUserMenu}
+            >
+              {user.result.name}
+            </Button>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={Logout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <h1>THIS IS THE MAP</h1>
+
+      <Svg overflow="visible" />
+    </div>
+  );
+}
