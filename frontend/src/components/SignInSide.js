@@ -49,7 +49,7 @@ export default function SignInSide() {
     });
   }, []);
 
-  const randomImage = ri[Math.floor(Math.random() * ri.length)];
+  const randomImage = ri[Math.floor(Math.random() * (ri.length-1))];
   const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
