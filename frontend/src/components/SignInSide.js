@@ -22,10 +22,6 @@ import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
-/*client ID: 718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com */
-/*client secret: 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 */
-/*NEW client ID: 527171615531-lir17eijsj2fi41toef1ro3gauenpdnh.apps.googleusercontent.com */
-/*NEW client secret: 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 */
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -52,23 +48,24 @@ export default function SignInSide() {
       console.log(error);
     }
   }
-
-  const SignInReg = (event) => {
-    event.preventDefault();
-    const user = new FormData(event.currentTarget);
+  /*
+  const SignInReg = (e) => {
+    e.preventDefault();
+    const user1 = new FormData(e.currentTarget);
     console.log({
-      email: user.get("email"),
-      password: user.get("password"),
+      email: user1.get("email"),
+      password: user1.get("password"),
     });
     //using user results in empty req.body
     const newuser = { email: "", password: "" };
 
-    newuser.email = user.get("email");
-    newuser.password = user.get("password");
+    newuser.email = user1.get("email");
+    newuser.password = user1.get("password");
 
-    dispatch(getUser(newuser));
+    dispatch(getUser(user1));
+    console.log(getUser(user1));
   };
-
+*/
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
@@ -108,6 +105,14 @@ export default function SignInSide() {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    const newuser = { email: "", password: "" };
+
+    newuser.email = data.get("email");
+    newuser.password = data.get("password");
+
+    dispatch(getUser(data));
+    console.log(getUser(data));
   };
 
   return (
@@ -200,7 +205,6 @@ export default function SignInSide() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={SignInReg}
               >
                 Sign In
               </Button>
