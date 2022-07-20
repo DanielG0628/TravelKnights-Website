@@ -25,10 +25,31 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRadioGroup } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const theme = createTheme();
-
+var htmlElement = "";
 export default function Map() {
+  function sayHello(el) {
+    if (el.id != "") {
+      handleClickOpen();
+      htmlElement = el.id;
+      el.setAttribute("class", "visited");
+    }
+  }
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -51,7 +72,7 @@ export default function Map() {
   console.log(user);
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box onClick={(element) => sayHello(element.target)}>
         <AppBar position="static">
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
             <IconButton
@@ -94,10 +115,21 @@ export default function Map() {
             </Menu>
           </Toolbar>
         </AppBar>
-      </Box>
-      <h1>THIS IS THE MAP</h1>
 
-      <Svg overflow="visible" />
+        <Svg />
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{ sx: { bottom: 350 } }}
+        >
+          <DialogContent>
+            <DialogContentText>
+              Welcome to the United States! {htmlElement}
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
+      </Box>
     </div>
   );
 }
