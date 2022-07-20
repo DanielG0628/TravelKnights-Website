@@ -66,14 +66,12 @@ export default function Map() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Travel Knights
             </Typography>
-            <img src={user.result.picture}></img>
+
             <Button
               color="inherit"
               sx={{ textTransform: "none" }}
               onClick={handleOpenUserMenu}
-            >
-              {user.result.name}
-            </Button>
+            ></Button>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
