@@ -7,19 +7,19 @@
 		<style type="text/css">
 			.land
 			{
-				fill: gray;
+				fill: #433633;
 				fill-opacity: 1;
 				stroke:white;
 				stroke-opacity: 1;
 				stroke-width:0.5;
 			}
 			.land:hover {
-				fill: #65743A;
+				fill: #1976d2;
 				opacity:1;
 			}
 			.visited
 			{
-				fill: #433633;
+				fill: #65743A;
 				fill-opacity: 1;
 				stroke:white;
 				stroke-opacity: 1;
