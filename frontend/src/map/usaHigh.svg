@@ -7,7 +7,7 @@
 		<style type="text/css">
 			.land
 			{
-				fill: gray;
+				fill: #433633;
 				fill-opacity: 1;
 				stroke:white;
 				stroke-opacity: 1;
@@ -19,14 +19,14 @@
 			}
 			.visited
 			{
-				fill: #433633;
+				fill: #65743A;
 				fill-opacity: 1;
 				stroke:white;
 				stroke-opacity: 1;
 				stroke-width:0.5;
 			}
 			.visited:hover {
-				fill: #65743A;
+				fill: #65872A;
 				opacity:1;
 			}
 	
