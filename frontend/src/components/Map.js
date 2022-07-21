@@ -31,6 +31,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import svg from "../map/usaHigh.svg";
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
+
+
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
@@ -49,7 +54,7 @@ export default function Map() {
   
   
   function sayHello(el) {
-    if (el.id != "") {
+    if (el.id != "" && el.id != "USMap") {
       handleClickOpen();
       htmlElement = el.id;
       el.setAttribute("class", "visited");
@@ -82,6 +87,19 @@ export default function Map() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '1px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
 
   console.log(user);
   return (
@@ -132,17 +150,28 @@ export default function Map() {
 
         <Svg />
 
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          PaperProps={{ sx: { bottom: 350 } }}
-        >
-          <DialogContent>
-            <DialogContentText>
-              Welcome to the United States! {htmlElement}
-            </DialogContentText>
-          </DialogContent>
-        </Dialog>
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              The State you clicked was {htmlElement}
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              This is {htmlElement}'s description!
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
       </Box>
     </div>
   );
