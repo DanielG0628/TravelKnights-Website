@@ -18,7 +18,7 @@
 				stroke-width:0.5;
 			}
 			.land:hover {
-				fill: #65743A;
+				fill: #1976d2;
 				opacity:1;
 			}
 			.visited

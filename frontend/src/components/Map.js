@@ -142,7 +142,9 @@ export default function Map() {
               color="inherit"
               sx={{ textTransform: "none" }}
               onClick={handleOpenUserMenu}
-            ></Button>
+            >
+              {user.payload.user.name}
+            </Button>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"

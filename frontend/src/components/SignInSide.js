@@ -13,18 +13,20 @@ import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ReactGoogleLogin, { GoogleLogin } from "react-google-login";
 import jwt_decode from "jwt-decode";
-import { GoogleLoginButton } from "react-social-login-buttons";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
+import { waitUntil } from "async-wait-until";
+
 const theme = createTheme();
 
 export default function SignInSide() {
+  const response = "";
+  const loginresult = "";
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -43,6 +45,7 @@ export default function SignInSide() {
     setUser(userObject);
     try {
       dispatch({ type: "AUTH", data: { result } });
+
       navigate("/Map");
     } catch (error) {
       console.log(error);
@@ -66,6 +69,7 @@ export default function SignInSide() {
     console.log(getUser(user1));
   };
 */
+
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
@@ -101,20 +105,68 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    /*
     console.log({
       email: data.get("email"),
       password: data.get("password"),
-    });
+    });*/
 
     const newuser = { email: "", password: "" };
-
     newuser.email = data.get("email");
     newuser.password = data.get("password");
+    //console.log(newuser);
 
-    dispatch(getUser(data));
-    console.log(getUser(data));
+    dispatch(getUser(newuser));
+
+    const checkuser = JSON.parse(localStorage.getItem("profile"));
+    console.log(checkuser);
+    if (checkuser == null) {
+      if (checkuser.payload != null) console.log(checkuser.payload);
+
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
+    } else if (checkuser.payload.user) {
+      //console.log(checkuser.payload);
+      navigate("/Map");
+    } else {
+      console.log(checkuser.payload);
+    }
+
+    /*
+    await waitUntil(() => checkuser != null);
+    console.log("this is" + checkuser);
+*/
+    /*
+    test async function ('profile') {
+      await null;
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+  }
+    */
+    //console.log(checkuser);
+    //were getting the response after this file is called so yeah look into that
+    //check vid at around 2hr mark
+    //it works fine but we get a null error since check user isnt getting fetched
+
+    /*
+    if (Object.keys(checkuser.email).length != 0) {
+      navigate("/Map");
+    } else {
+      console.log("balllllls");
+      loginresult = "Email or Password is Incorrect";
+    }*/
+    //yguyfuyfuyf
   };
 
+  const clicktest = async (event) => {
+    const checkuser = JSON.parse(localStorage.getItem("profile"));
+    console.log(checkuser);
+  };
+
+  function check() {
+    const checkuser = JSON.parse(localStorage.getItem("profile"));
+    const qwe = JSON.parse(localStorage.getItem("profile"));
+    console.log(qwe);
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -195,6 +247,7 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -246,13 +299,6 @@ export default function SignInSide() {
                 <Grid item xs={6} sm={6} md={6}>
                   <GithubLoginButton />
                 </Grid>
-                {user && (
-                  <div>
-                    <img src={user.picture}></img>
-                    <h3>{user.name}</h3>
-                    <h3>{user.email}</h3>
-                  </div>
-                )}
               </Grid>
             </Box>
           </Box>
