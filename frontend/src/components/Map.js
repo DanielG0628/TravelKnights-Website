@@ -34,14 +34,14 @@ import svg from "../map/usaHigh.svg";
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
-//we'll call this from MongoDB
+//temp object before info is sent
 const States = {FL:true, GA:false, NY:true};
 
 
 export default function Map() {
   //useEffect needed to getElement without NULL result
   useEffect(() => {
-      
+    //will update for all states once object is sent
     var FL = document.getElementById("US-FL");
     if (States.FL == true)    
     FL.setAttribute("class", "visited");
