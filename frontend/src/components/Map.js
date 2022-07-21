@@ -30,10 +30,24 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
+import svg from "../map/usaHigh.svg";
 const theme = createTheme();
-var htmlElement = "";
+var htmlElement = "../map/usaHigh.svg";
+
+//we'll call this from MongoDB
+const States = {FL:true, GA:false, NY:true};
+
+
 export default function Map() {
+  //useEffect needed to getElement without NULL result
+  useEffect(() => {
+      
+    var FL = document.getElementById("US-FL");
+    if (States.FL == true)    
+    FL.setAttribute("class", "visited");
+  }, []);
+  
+  
   function sayHello(el) {
     if (el.id != "") {
       handleClickOpen();
