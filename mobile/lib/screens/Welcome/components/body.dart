@@ -101,7 +101,8 @@ class _BodyState extends State<Body> {
                   text: "LOGIN",
                   press: () async {
                     newMessageText = "";
-                    changeText();
+                    Navigator.pushNamed(context, '/states');
+                    /*                   changeText();
                     String payload = '{"login":"' +
                         email.trim() +
                         '","password":"' +
@@ -131,7 +132,7 @@ class _BodyState extends State<Body> {
                       UserData.email = jsonObject["email"];
                       UserData.password = password;
                       Navigator.pushNamed(context, '/states');
-                    }
+                    }*/
                   }),
             ],
           )
