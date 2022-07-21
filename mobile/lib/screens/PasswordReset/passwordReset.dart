@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:travelknights/components/rounded_button.dart';
 import 'package:travelknights/constants.dart';
 import 'package:travelknights/routes/routes.dart';
 
-class Register extends StatelessWidget {
-  const Register({Key? key}) : super(key: key);
+class Reset extends StatelessWidget {
+  const Reset({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +34,11 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isObscure = true;
-  var email, name;
-  String? password1, password2, userPassword;
+  TextEditingController _passwordController1 = TextEditingController();
+  TextEditingController _passwordController2 = TextEditingController();
+  var email;
+  String? password1, password2;
   bool validUser = true;
-  var nameController = TextEditingController();
-  var emailController = TextEditingController();
-  var passwordController1 = TextEditingController();
-  var passwordController2 = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -47,31 +46,20 @@ class _BodyState extends State<Body> {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Create an Account', style: TextStyle(fontSize: 20)),
+        Text('Reset password', style: TextStyle(fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
           child: TextFormField(
-            decoration: const InputDecoration(
-                hintText: 'Full Name', prefixIcon: Icon(Icons.person)),
-            validator: validateName,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
-          child: TextFormField(
-            decoration: const InputDecoration(
-                hintText: 'Email', prefixIcon: Icon(Icons.email)),
-            validator: validateEmail,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
-          child: TextFormField(
+            controller: _passwordController1,
             obscureText: _isObscure,
+            onChanged: (value) {
+              password1 = value;
+            },
             decoration: InputDecoration(
-                hintText: 'Enter your password',
+                hintText: 'Enter new password',
                 suffixIcon: IconButton(
                     icon: Icon(
+                      size: 20,
                       _isObscure ? Icons.visibility : Icons.visibility_off,
                     ),
                     onPressed: () {
@@ -79,20 +67,17 @@ class _BodyState extends State<Body> {
                         _isObscure = !_isObscure;
                       });
                     })),
-            validator: (String? value) {
-              password1 = value;
-              if (value == null || value.isEmpty) {
-                validUser = false;
-                return 'Please enter some text';
-              }
-              if (value.length < 8) {
-                validUser = false;
-                return 'Password must be at least 8 characters';
-              }
-              return null;
-            },
           ),
         ),
+        FlutterPwValidator(
+            width: 215,
+            height: 100,
+            minLength: 8,
+            uppercaseCharCount: 1,
+            numericCharCount: 1,
+            specialCharCount: 1,
+            onSuccess: () {},
+            controller: _passwordController1),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
           child: TextFormField(
@@ -101,6 +86,7 @@ class _BodyState extends State<Body> {
                   hintText: 'Confirm password',
                   suffixIcon: IconButton(
                       icon: Icon(
+                        size: 15,
                         _isObscure ? Icons.visibility : Icons.visibility_off,
                       ),
                       onPressed: () {
@@ -108,52 +94,33 @@ class _BodyState extends State<Body> {
                           _isObscure = !_isObscure;
                         });
                       })),
-              validator: (String? value) {
+              controller: _passwordController2,
+              validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Please enter a password";
                 }
                 if (value != password1) {
                   return "Passwords don't match";
                 }
-                return null;
               }),
         ),
         RoundedButton(
-            text: "REGISTER",
+            text: "RESET PASSWORD",
             press: () {
-              UserData.name = nameController.text;
-              UserData.email = emailController.text;
-              UserData.password = passwordController1.text;
-              nameController.clear;
-              passwordController1.clear;
-              passwordController2.clear;
-              // Send verification API
-              Navigator.pushNamed(context, '/emailregister');
+              // Change password
+              Navigator.pushReplacementNamed(context, '/');
             })
       ],
     ));
   }
 }
 
-String? validateEmail(String? value) {
-  if (value == null || value.length == 0) {
-    return 'Please enter an Email';
+String? validatePassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a valid password';
   }
-  String pattern =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regex = new RegExp(pattern);
-  if (!regex.hasMatch(value))
-    return 'Enter Valid Email';
-  else
-    return null;
-}
-
-String? validateName(String? value) {
-  if (value == null || value.length == 0) {
-    return 'Please enter a Name';
+  if (value.length < 8) {
+    return 'Password must be at least 8 characters long';
   }
-  if (value.length < 3)
-    return 'Name must be more than 2 charater';
-  else
-    return null;
+  return null;
 }

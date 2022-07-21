@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:travelknights/components/rounded_button.dart';
 import 'package:travelknights/constants.dart';
-import 'package:travelknights/screens/Register/register.dart';
+import 'package:travelknights/routes/routes.dart';
 import 'package:travelknights/screens/Welcome/components/background.dart';
-import 'package:travelknights/screens/ForgotPassword/forgotPassword.dart';
+import 'package:travelknights/utils/getAPI.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -14,6 +16,13 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isObscure = true;
+  String message = "", newMessageText = '';
+  String email = "", password = "";
+  changeText() {
+    setState() {
+      message = newMessageText;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +72,9 @@ class _BodyState extends State<Body> {
             width: 225,
             child: TextButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgotPassword()),
+                    '/passwordreset',
                   );
                 },
                 child: Align(
@@ -77,19 +85,54 @@ class _BodyState extends State<Body> {
                   ),
                 )),
           ),
+          Row(children: <Widget>[
+            Text('$message', style: TextStyle(fontSize: 14, color: Colors.red))
+          ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundedButton(
                   text: "REGISTER",
                   press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Register()));
+                    Navigator.pushNamed(context, '/register');
                   }),
               SizedBox(width: 10),
-              RoundedButton(text: "LOGIN", press: () {}),
+              RoundedButton(
+                  text: "LOGIN",
+                  press: () async {
+                    newMessageText = "";
+                    changeText();
+                    String payload = '{"login":"' +
+                        email.trim() +
+                        '","password":"' +
+                        password.trim() +
+                        '"}';
+                    var userId = -1;
+                    var jsonObject;
+                    try {
+                      String url = ApiConstants.baseUrl +
+                          ApiConstants.usersEndpoint +
+                          '/login';
+                      String ret = await LoginData.getJson(url, payload);
+                      jsonObject = json.decode(ret);
+                      userId = jsonObject["id"];
+                    } catch (e) {
+                      newMessageText = e.toString();
+                      changeText();
+                      return;
+                    }
+
+                    if (userId <= 0) {
+                      newMessageText = "Incorrect Login/Password";
+                      changeText();
+                    } else {
+                      UserData.userId = userId;
+                      UserData.name = jsonObject["name"];
+                      UserData.email = jsonObject["email"];
+                      UserData.password = password;
+                      Navigator.pushNamed(context, '/states');
+                    }
+                  }),
             ],
           )
         ],

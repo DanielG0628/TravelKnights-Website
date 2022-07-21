@@ -5,8 +5,11 @@ import mongoose from "mongoose";
 import postRoutes from "./routes/posts.js";
 import dotenv from "dotenv";
 const app = express();
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+const path = require('path');
+
+app.use(bodyParser.json({ limit: "30mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
+app.use(express.static(path.join(_dirname, "client/build")))
 
 app.use(express.json());
 app.use(cors());
