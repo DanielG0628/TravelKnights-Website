@@ -30,17 +30,51 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import svg from "../map/usaHigh.svg";
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
+
+
+//we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
+//or we can check if first three characters are US-
+
 
 const theme = createTheme();
-var htmlElement = "";
+var htmlElement = "../map/usaHigh.svg";
+
+//temp objects before info is sent
+const States = {FL:true, GA:false, NY:true};
+const Trips = ["Orlando, FL", "Fort Myers, FL","Atlanta, GA", "St. Augustine, FL", "New York, NY"];
+var items = [""];
+var itemsnum = 0;
 export default function Map() {
+  //useEffect needed to getElement without NULL result
+  useEffect(() => {
+    //will update for all states once object is sent
+    var FL = document.getElementById("US-FL");
+    if (States.FL == true)    
+    FL.setAttribute("class", "visited");
+  }, []);
+  
+  
   function sayHello(el) {
-    if (el.id != "") {
+    if (el.id.startsWith("US-")) {
       handleClickOpen();
       htmlElement = el.id;
       el.setAttribute("class", "visited");
+      if (htmlElement == "US-FL") {
+        for (var i = 0; i < Trips.length; i++)
+        if(Trips[i].endsWith(", FL"))    
+        {
+          items.push(Trips[i]); //Array of Trips in FL
+          itemsnum++;
+        
+        }
+      }
     }
   }
+  
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -50,6 +84,9 @@ export default function Map() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const openForm = () => setOpen(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -68,6 +105,19 @@ export default function Map() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: '#f8f4e3',
+    border: '1px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
 
   console.log(user);
   return (
@@ -120,17 +170,50 @@ export default function Map() {
 
         <Svg />
 
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          PaperProps={{ sx: { bottom: 350 } }}
-        >
-          <DialogContent>
-            <DialogContentText>
-              Welcome to the United States! {htmlElement}
-            </DialogContentText>
-          </DialogContent>
-        </Dialog>
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography textAlign="center" id="transition-modal-title" variant="h6" component="h2">
+              Here are your trips from {htmlElement}!
+            </Typography>
+        
+            <Typography id="transition-modal-description" textAlign="center" sx={{ mt: 2 }}>
+              Your trip to City, {htmlElement}. Edit? Delete?
+            </Typography>
+            <Button onClick={openForm}>Add trip</Button>
+            <Box type="form" open={open}>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              Would you like to add a trip to {htmlElement}?
+            </Typography>
+            <Grid item xs={12} md={10} padding="10px">
+          <TextField
+          id="state"
+          name="state"
+          label="State Name"
+          type="text" />
+           
+          </Grid>
+          <Grid item xs={12} md={10} sx={{mx: '10px' }}>
+          <TextField
+          padding="10px"
+          id="name"
+          name="name"
+          label="ButtonWillOpenBothForm"
+          type="text" /></Grid>
+          </Box>
+          </Box>
+        </Fade>
+      </Modal>
       </Box>
     </div>
   );
