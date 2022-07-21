@@ -73,6 +73,9 @@ export default function Map() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const openForm = () => setOpen(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -168,11 +171,32 @@ export default function Map() {
         <Fade in={open}>
           <Box sx={style}>
             <Typography textAlign="center" id="transition-modal-title" variant="h6" component="h2">
-              The State you clicked was {htmlElement}
+              Here are your trips from {htmlElement}!
             </Typography>
+            <Typography id="transition-modal-description" textAlign="center" sx={{ mt: 2 }}>
+              Your trip to City, {htmlElement}. Edit? Delete?
+            </Typography>
+            <Button onClick={openForm}>Add trip</Button>
+            <Box type="form" open={open}>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              This is {htmlElement}'s description!
+              Would you like to add a trip to {htmlElement}?
             </Typography>
+            <Grid item xs={12} md={10} padding="10px">
+          <TextField
+          id="state"
+          name="state"
+          label="State Name"
+          type="text" />
+           
+          </Grid>
+          <Grid item xs={12} md={10} sx={{mx: '10px' }}>
+          <TextField
+          padding="10px"
+          id="name"
+          name="name"
+          label="ButtonWillOpenBothForm"
+          type="text" /></Grid>
+          </Box>
           </Box>
         </Fade>
       </Modal>
