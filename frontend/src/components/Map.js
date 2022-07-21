@@ -36,6 +36,10 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 
 
+//we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
+//or we can check if first three characters are US-
+
+
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
@@ -54,7 +58,7 @@ export default function Map() {
   
   
   function sayHello(el) {
-    if (el.id != "" && el.id != "USMap") {
+    if (el.id.startsWith("US-")) {
       handleClickOpen();
       htmlElement = el.id;
       el.setAttribute("class", "visited");
@@ -93,8 +97,8 @@ export default function Map() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
+    width: 500,
+    bgcolor: '#f8f4e3',
     border: '1px solid #000',
     boxShadow: 24,
     p: 4,
@@ -163,7 +167,7 @@ export default function Map() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
+            <Typography textAlign="center" id="transition-modal-title" variant="h6" component="h2">
               The State you clicked was {htmlElement}
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
