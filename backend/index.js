@@ -20,7 +20,7 @@ app.use(cors());
 
 dotenv.config();
 
-//app.use('/', postRoutes);
+app.use("/", postRoutes);
 
 const PORT = process.env.PORT || 5000;
 

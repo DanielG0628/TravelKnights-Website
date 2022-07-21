@@ -1,13 +1,23 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../constants/actionTypes";
+import {
+  FETCH_ALL,
+  CREATE,
+  UPDATE,
+  DELETE,
+  AUTH,
+  LOGOUT,
+} from "../constants/actionTypes";
 
 import * as api from "../api/index";
 
 export const getUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.getUser(user);
-    dispatch({ type: "POST", payload: data });
+    //console.log(error.message);
+    dispatch({ type: "AUTH", payload: data });
+    console.log(data);
   } catch (error) {
-    console.log(error.message);
+    dispatch({ type: "AUTH", payload: error.response.data.message });
+    console.log(error.response.data.message);
   }
 };
 

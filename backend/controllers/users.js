@@ -6,6 +6,7 @@ import { sendError } from "../utils/helper.js";
 import { generateOTP } from "../utils/mailVer.js";
 import { mailVerification } from "../utils/mailVer.js";
 import { generateEmailTemplate } from "../utils/mailVer.js";
+import bcrypt from "bcrypt";
 
 // API Logic
 // FIXME:
@@ -48,23 +49,46 @@ export const createUser = async (req, res) => {
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
+
   Users.findOne({ email: email }, (err, user) => {
+    //const correctpass = await bcrypt.compare(password, user.password);
+    //console.log(password);
+    //console.log(user.password);
     if (user) {
-      if (password == user.password) {
-        res.status(202).send({ message: "login successful", user: user });
+      if (user.emailVerified) {
+        console.log("Email Verified");
+        bcrypt.compare(password, user.password, function (error, isMatch) {
+          if (error) {
+            throw error;
+          } else if (!isMatch) {
+            console.log("Password doesn't match!");
+            res.status(401).send({ message: "wrong credentials" });
+          } else {
+            console.log("Password matches!");
+            //local storeage send json
+            //return res.json(user);
+            res.status(202).send({ user: user });
+          }
+        });
       } else {
-        res.status(401).send({ message: "wrong credentials" });
+        console.log("Email not Verified");
+        res.status(403).send({ message: "Email not Verified" });
       }
     } else {
-      res.status(404).send({ message: "not registered" });
+      res.status(405).send({ message: "not registered" });
     }
   });
 };
+
+//create userGoogle that checks if database has email
+//if not then use the creatUser funct and utilize jti token
+//if so then use get user funct and utilize jti token
 
 // This function verifies that the user has inputted
 // the correct token and CAN send a confirmation email
 // FIXME:
 // Implement button instead of token for verify email
+
 export const verifyEmail = async (req, res) => {
   const { userId, OTP } = req.body;
   if (!userId || !OTP.trim())
