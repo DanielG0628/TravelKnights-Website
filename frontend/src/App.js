@@ -5,7 +5,7 @@ import Forgot from "./components/Forgot";
 import Map from "./components/Map";
 import Verified from "./components/Verified";
 import { useDispatch } from "react-redux";
-import { getPosts } from "./actions/posts";
+import { getUser } from "./actions/posts";
 
 // import Posts from './components/Posts/Posts';
 // import Form from './components/SignInSide';
@@ -19,7 +19,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   /*useEffect(() => {
-    dispatch(getPosts());
+    dispatch(getUser());
   }, [dispatch]);
 */
   return (
