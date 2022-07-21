@@ -43,10 +43,11 @@ import Fade from '@mui/material/Fade';
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
-//temp object before info is sent
+//temp objects before info is sent
 const States = {FL:true, GA:false, NY:true};
-
-
+const Trips = ["Orlando, FL", "Fort Myers, FL","Atlanta, GA", "St. Augustine, FL", "New York, NY"];
+var items = [""];
+var itemsnum = 0;
 export default function Map() {
   //useEffect needed to getElement without NULL result
   useEffect(() => {
@@ -62,8 +63,18 @@ export default function Map() {
       handleClickOpen();
       htmlElement = el.id;
       el.setAttribute("class", "visited");
+      if (htmlElement == "US-FL") {
+        for (var i = 0; i < Trips.length; i++)
+        if(Trips[i].endsWith(", FL"))    
+        {
+          items.push(Trips[i]); //Array of Trips in FL
+          itemsnum++;
+        
+        }
+      }
     }
   }
+  
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -173,6 +184,7 @@ export default function Map() {
             <Typography textAlign="center" id="transition-modal-title" variant="h6" component="h2">
               Here are your trips from {htmlElement}!
             </Typography>
+        
             <Typography id="transition-modal-description" textAlign="center" sx={{ mt: 2 }}>
               Your trip to City, {htmlElement}. Edit? Delete?
             </Typography>
