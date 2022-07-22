@@ -21,7 +21,6 @@ import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
 import { waitUntil } from "async-wait-until";
-
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -117,20 +116,22 @@ export default function SignInSide() {
     //console.log(newuser);
 
     dispatch(getUser(newuser));
+setTimeout(() => {
+  const checkuser = JSON.parse(localStorage.getItem("profile"));
+  console.log(checkuser);
+  if (checkuser == null) {
+    if (checkuser.payload != null) console.log(checkuser.payload);
 
     const checkuser = JSON.parse(localStorage.getItem("profile"));
     console.log(checkuser);
-    if (checkuser == null) {
-      if (checkuser.payload != null) console.log(checkuser.payload);
-
-      const checkuser = JSON.parse(localStorage.getItem("profile"));
-      console.log(checkuser);
-    } else if (checkuser.payload.user) {
-      //console.log(checkuser.payload);
-      navigate("/Map");
-    } else {
-      console.log(checkuser.payload);
-    }
+  } else if (checkuser.payload.user) {
+    //console.log(checkuser.payload);
+    navigate("/Map");
+  } else {
+    console.log(checkuser.payload);
+  } 
+}, 1000); //Waits a little bit to grab user
+   
 
     /*
     await waitUntil(() => checkuser != null);
