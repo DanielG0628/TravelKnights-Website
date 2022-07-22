@@ -82,7 +82,7 @@ export default function Map() {
     if (el.id.startsWith("US-")) {
 
       htmlElement = el.id;
-      var ST = htmlElement.substring(htmlElement.length - 2);
+      var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
       handleClickOpen();
       el.setAttribute("class", "visited");
       if (itemsnum != 0) {
