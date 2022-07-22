@@ -34,13 +34,14 @@ import svg from "../map/usaHigh.svg";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
-
 //we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
 //or we can check if first three characters are US-
 
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
-
+var list;
+var li;
+var ul;
 //temp objects before info is sent
 const States = { FL: true, GA: false, NY: true };
 const Trips = [
@@ -49,12 +50,31 @@ const Trips = [
   "Atlanta, GA",
   "St. Augustine, FL",
   "New York, NY",
+  "Austin, TX"
 ];
-var items = [""];
+var items = [];
 var itemsnum = 0;
+
+// We format List of Trips in this function.
+function NameList() {
+  if (itemsnum != 0) {
+    return (
+      <ul>
+        {
+        items.map(name => <li>{name}</li>)
+        }
+      </ul>
+    );
+  }
+  else
+    return(<h3>No Trips Found. Would you like to add one?</h3>);
+}
 export default function Map() {
   //useEffect needed to getElement without NULL result
+ 
   useEffect(() => {
+ 
+
     //will update for all states once object is sent
     var FL = document.getElementById("US-FL");
     if (States.FL == true) FL.setAttribute("class", "visited");
@@ -62,18 +82,29 @@ export default function Map() {
 
   function sayHello(el) {
     if (el.id.startsWith("US-")) {
-      handleClickOpen();
+
       htmlElement = el.id;
+      var ST = htmlElement.substring(htmlElement.length - 2);
+      handleClickOpen();
       el.setAttribute("class", "visited");
-      if (htmlElement == "US-FL") {
+      if (itemsnum != 0) {
+      items = [];
+      itemsnum = 0;
+      }
+      
         for (var i = 0; i < Trips.length; i++)
-          if (Trips[i].endsWith(", FL")) {
+        {
+          if (Trips[i].endsWith(ST)) {
             items.push(Trips[i]); //Array of Trips in FL
             itemsnum++;
+    
           }
+        }
+
       }
     }
-  }
+  
+ 
 
   const [open, setOpen] = React.useState(false);
   const [open_editdel, setOpeneditdelete] = React.useState(false);
@@ -233,6 +264,8 @@ export default function Map() {
               >
                 Here are your trips from {htmlElement}!
               </Typography>
+            
+<NameList />
 
               <Typography
                 id="transition-modal-description"
