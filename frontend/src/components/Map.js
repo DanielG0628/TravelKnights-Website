@@ -39,9 +39,7 @@ import Fade from "@mui/material/Fade";
 
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
-var list;
-var li;
-var ul;
+
 //temp objects before info is sent
 const States = { FL: true, GA: false, NY: true };
 const Trips = [
