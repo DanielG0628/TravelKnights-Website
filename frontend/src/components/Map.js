@@ -34,6 +34,9 @@ import svg from "../map/usaHigh.svg";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
+import Card from "@mui/material/Card";
+
+import { CardActionArea} from "@mui/material";
 //we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
 //or we can check if first three characters are US-
 
@@ -57,11 +60,11 @@ var itemsnum = 0;
 function NameList() {
   if (itemsnum != 0) {
     return (
-      <ul>
-        {
-        items.map(name => <li>{name}</li>)
-        }
-      </ul>
+      
+        
+        items.map(name => <Card variant="outlined" style={{margin: "5px"}}><CardActionArea> <Typography level="body2">{name}</Typography></CardActionArea></Card>)
+        
+      
     );
   }
   else
