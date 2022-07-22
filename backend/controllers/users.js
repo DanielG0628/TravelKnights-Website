@@ -62,7 +62,7 @@ export const getUser = async (req, res) => {
             throw error;
           } else if (!isMatch) {
             console.log("Password doesn't match!");
-            res.status(401).send({ message: "wrong credentials" });
+            res.status(401).send({ message: "*Password is Incorrect*" });
           } else {
             console.log("Password matches!");
             //local storeage send json
@@ -72,10 +72,10 @@ export const getUser = async (req, res) => {
         });
       } else {
         console.log("Email not Verified");
-        res.status(403).send({ message: "Email not Verified" });
+        res.status(403).send({ message: "*Email is not Verified*" });
       }
     } else {
-      res.status(405).send({ message: "not registered" });
+      res.status(405).send({ message: "*User is not registered*" });
     }
   });
 };
