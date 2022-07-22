@@ -15,15 +15,19 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import jwt_decode from "jwt-decode";
 import { GithubLoginButton } from "react-social-login-buttons";
+import { GoogleLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
 import { waitUntil } from "async-wait-until";
+import { sizeHeight } from "@mui/system";
 const theme = createTheme();
 var response = "A";
 export default function SignInSide() {
+  var changeThis = document.getElementsByClassName("loginresponse");
+
   const loginresult = "";
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
@@ -48,6 +52,9 @@ export default function SignInSide() {
     } catch (error) {
       console.log(error);
     }
+
+    //implement signin logic like getuser and set user for google
+    //users.js has to have a new function for google signin
   }
   /*
   const SignInReg = (e) => {
@@ -78,6 +85,9 @@ export default function SignInSide() {
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
       theme: "outline",
+      size: "large",
+      alignItemss: "center",
+      width: 400,
     });
   }, []);
 
@@ -131,6 +141,10 @@ export default function SignInSide() {
         console.log("Else");
         console.log(checkuser.payload);
         response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
       }
     }, 1000); //Waits a little bit to grab user
 
@@ -254,6 +268,22 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              <Box
+                sx={{
+                  marginTop: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  style={{ color: "red" }}
+                  justifyContent="center"
+                  align="center"
+                  sx={{ mt: 0, mb: 0 }}
+                  class="loginresponse"
+                ></Typography>
+              </Box>
               <Button
                 style={{ backgroundColor: "#65743A" }}
                 type="submit"
@@ -293,13 +323,18 @@ export default function SignInSide() {
                   <ColoredLine color="#666666" />
                 </Grid>
               </Grid>
-              <Grid container>
-                <Grid item xs={6} sm={6} md={6}>
-                  <div id="signInDiv"></div>
-                </Grid>
-                <Grid item xs={6} sm={6} md={6}>
-                  <GithubLoginButton />
-                </Grid>
+              <Grid
+                container
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <div
+                  justifyContent="center"
+                  alignItems="center"
+                  id="signInDiv"
+                  data-width="328"
+                ></div>
               </Grid>
             </Box>
           </Box>
