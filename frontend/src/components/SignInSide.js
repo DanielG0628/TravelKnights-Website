@@ -22,9 +22,8 @@ import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
 import { waitUntil } from "async-wait-until";
 const theme = createTheme();
-
+var response = "A";
 export default function SignInSide() {
-  const response = "";
   const loginresult = "";
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
@@ -116,22 +115,24 @@ export default function SignInSide() {
     //console.log(newuser);
 
     dispatch(getUser(newuser));
-setTimeout(() => {
-  const checkuser = JSON.parse(localStorage.getItem("profile"));
-  console.log(checkuser);
-  if (checkuser == null) {
-    if (checkuser.payload != null) console.log(checkuser.payload);
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
 
-    const checkuser = JSON.parse(localStorage.getItem("profile"));
-    console.log(checkuser);
-  } else if (checkuser.payload.user) {
-    //console.log(checkuser.payload);
-    navigate("/Map");
-  } else {
-    console.log(checkuser.payload);
-  } 
-}, 1000); //Waits a little bit to grab user
-   
+      if (checkuser == null) {
+        if (checkuser.payload != null) console.log(checkuser.payload);
+
+        console.log("payload is not null ");
+        console.log(checkuser);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+      }
+    }, 1000); //Waits a little bit to grab user
 
     /*
     await waitUntil(() => checkuser != null);
@@ -296,7 +297,6 @@ setTimeout(() => {
                 <Grid item xs={6} sm={6} md={6}>
                   <div id="signInDiv"></div>
                 </Grid>
-
                 <Grid item xs={6} sm={6} md={6}>
                   <GithubLoginButton />
                 </Grid>
