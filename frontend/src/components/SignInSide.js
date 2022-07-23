@@ -1,29 +1,30 @@
-import * as React from 'react';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { useEffect, useState } from "react";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import jwt_decode from "jwt-decode";
+import { GithubLoginButton } from "react-social-login-buttons";
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { useNavigate } from "react-router-dom";
+import ri from "../images/randomimage";
+import Logo from "../images/logo.png";
+import { useDispatch } from "react-redux";
+import { getUser } from "../actions/posts";
+import { googcreateUser } from "../actions/posts";
+import { googgetUser } from "../actions/posts";
+import { waitUntil } from "async-wait-until";
+import { sizeHeight } from "@mui/system";
 
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import { useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ReactGoogleLogin, { GoogleLogin } from 'react-google-login';
-import jwt_decode from 'jwt-decode';
-import { GoogleLoginButton } from 'react-social-login-buttons';
-import { GithubLoginButton } from 'react-social-login-buttons';
-import { useNavigate } from 'react-router-dom';
-import ri from '../images/randomimage';
-import Logo from '../images/logo.png';
-/*client ID: 718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com */
-/*client secret: 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 */
-/*NEW client ID: 527171615531-lir17eijsj2fi41toef1ro3gauenpdnh.apps.googleusercontent.com */
-/*NEW client secret: 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 */
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -32,8 +33,46 @@ export default function SignInSide() {
   function handleCallbackResponse(response) {
     console.log('Encoded JWT ID token: ' + response.credential);
     var userObject = jwt_decode(response.credential);
-    console.log(userObject);
+    const googuser = { email: "", password: "" };
+    googuser.email = userObject.email;
+    googuser.password = userObject?.jti;
+    googuser.name = userObject.name;
+    googuser.emailVerified = true;
+    console.log(googuser); //jti is token
+
+    dispatch(googgetUser(googuser));
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
+
+      if (checkuser == null) {
+        dispatch(googcreateUser(googuser));
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 1000);
+
+    /*
     setUser(userObject);
+    try {
+      dispatch({ type: "AUTH", data: { result } });
+
+      navigate("/Map");
+    } catch (error) {
+      console.log(error);
+    }
+*/
+    //implement signin logic like getuser and set user for google
+    //users.js has to have a new function for google signin
   }
 
   useEffect(() => {
@@ -71,10 +110,35 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    const newuser = { email: "", password: "" };
+    newuser.email = data.get("email");
+    newuser.password = data.get("password");
+    //console.log(newuser);
+
+    dispatch(getUser(newuser));
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
+
+      if (checkuser == null) {
+        if (checkuser.payload != null) console.log(checkuser.payload);
+
+        console.log("payload is not null ");
+        console.log(checkuser);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 1000); //Waits a little bit to grab user
   };
 
   return (

@@ -80,6 +80,76 @@ export const getUser = async (req, res) => {
   });
 };
 
+export const googcreateUser = async (req, res) => {
+  const { name, email, password, states } = req.body;
+
+  Users.findOne({ email: email }, (err, user) => {
+    if (user) {
+      res.status(500).json({ message: "already an existing user" });
+    } else {
+      const user = new Users({ name, email, password, states });
+      const OTP = generateOTP();
+      const verificationToken = new VerificationToken({
+        owner: user._id,
+        token: OTP,
+      });
+
+      verificationToken.save();
+      /*
+      mailVerification().sendMail({
+        from: 'verifyEmail@email.com',
+        to: user.email,
+        subject: 'Verify your email account',
+        html: generateEmailTemplate(OTP),
+      });
+*/
+      user.save((err) => {
+        if (err) {
+          res.status(501).send(err);
+        } else {
+          console.log("USER CREATED GOOGLE");
+          res.status(201).send(user);
+        }
+      });
+    }
+  });
+};
+
+// FIXME:
+// Implement if user is not verified, they cannot log in
+export const googgetUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  Users.findOne({ email: email }, (err, user) => {
+    //const correctpass = await bcrypt.compare(password, user.password);
+    //console.log(password);
+    //console.log(user.password);
+    if (user) {
+      if (user.emailVerified) {
+        console.log("Email Verified");
+        bcrypt.compare(password, user.password, function (error, isMatch) {
+          if (error) {
+            throw error;
+          } else if (!isMatch) {
+            console.log("Password doesn't match!");
+            res.status(401).send({ message: "*Password is Incorrect*" });
+          } else {
+            console.log("Password matches!");
+            //local storeage send json
+            //return res.json(user);
+            res.status(202).send({ user: user });
+          }
+        });
+      } else {
+        console.log("Email not Verified");
+        res.status(403).send({ message: "*Email is not Verified*" });
+      }
+    } else {
+      res.status(405).send({ message: "*User is not registered*" });
+    }
+  });
+};
+
 //create userGoogle that checks if database has email
 //if not then use the creatUser funct and utilize jti token
 //if so then use get user funct and utilize jti token
