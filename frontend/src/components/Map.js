@@ -40,6 +40,162 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 
+
+
+
+
+//we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
+//or we can check if first three characters are US-
+
+const theme = createTheme();
+var htmlElement = "../map/usaHigh.svg";
+
+/*
+This is how I plan on sending mongo info to table.
+const rows = [];
+for (var j = 0; j < Trips.length; j++)
+{
+  for (var i = 0; i < Trips[j].cities.length; i++)
+  {
+    createData(Trips[j].cities[i].city, Trips[j].stateAbbrev, Trips[j].cities[i].memories)
+  }
+}
+*/
+
+//temp objects before info is sent
+const Trips = [
+{
+  stateAbbrev: "FL",
+  cities: [
+    {city: "Orlando", memories: [{date: "12/12/12", description: "desc.", image:"img"}]},
+    {city: "Tampa", memories: [{date: "02/10/22", description: "desc.2", image:"img"}]}
+  ]
+},
+{
+  stateAbbrev: "GA",
+  cities: [
+    {city: "Atlanta", memories: [{date: "12/12/02", description: "desc.3", image:"img"}]}
+  ]
+},
+];
+var items = [];
+var itemsnum = 0;
+
+// We format List of Trips in this function.
+function NameList() {
+  if (itemsnum != 0) {
+    return (
+      
+       //this is probably gonna go back to <ul> 
+        items.map(name => <Card variant="outlined" style={{margin: "2px"}}><CardActionArea> <Typography level="body2">{name}</Typography></CardActionArea></Card>)
+    );
+  }
+  else
+    return(<h3>No Trips Found. Would you like to add one?</h3>);
+}
+
+export default function Map() {
+
+  
+  //useEffect needed to getElement without NULL result
+ 
+  useEffect(() => {
+ 
+    for(var i = 0; i < Trips.length; i++)
+    {
+      var STVisited = Trips[i].stateAbbrev;
+      STVisited = "US-" + STVisited;
+      var STCheck = document.getElementById(STVisited);
+      STCheck.setAttribute("class", "visited");
+    }
+
+  }, []);
+
+  function sayHello(el) {
+    if (el.id.startsWith("US-")) {
+
+      htmlElement = el.id;
+      var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
+      handleClickOpen();
+      el.setAttribute("class", "visited");
+      if (itemsnum != 0) {
+      items = [];
+      itemsnum = 0;
+      }
+      
+        for (var i = 0; i < Trips.length; i++)
+        {
+          if (Trips[i].endsWith(ST)) {
+            items.push(Trips[i]); //Array of Trips in FL
+            itemsnum++;
+    
+          }
+        }
+
+      }
+    }
+  
+ 
+
+  const [open, setOpen] = React.useState(false);
+  const [open_editdel, setOpeneditdelete] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const editdeleteOpen = () => {
+    setOpeneditdelete(true);
+  };
+
+  const editdeleteClose = () => {
+    setOpeneditdelete(false);
+  };
+  const openEditDelete = () => setOpeneditdelete(true);
+  const openForm = () => setOpen(true);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [nav, setnav] = React.useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const navMenu = (event) => {
+    setnav(event.currentTarget);
+  };
+
+  const Logout = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const navclose = () => {
+    setnav(null);
+  };
+
+//This styles the modals
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "#f8f4e3",
+    border: "1px solid #000",
+    boxShadow: 24,
+    p: 4,
+    minWidth: "480px"
+  };
+  
+//After this line and before return is code solely for the table
 function createData(cityname, state, datestarted, dateended, image) {
   return {
     cityname,
@@ -121,6 +277,7 @@ function Row(props) {
   );
 }
 
+//I'm sure this can be replaced
 Row.propTypes = {
   row: PropTypes.shape({
     state: PropTypes.string.isRequired,
@@ -171,139 +328,14 @@ function CollapsibleTable() {
     </TableContainer>
   );
 }
+//Code for Table End
 
 
 
-//we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
-//or we can check if first three characters are US-
-
-const theme = createTheme();
-var htmlElement = "../map/usaHigh.svg";
-
-//temp objects before info is sent
-const States = { FL: true, GA: false, NY: true };
-const Trips = [
-  "Orlando, FL",
-  "Fort Myers, FL",
-  "Atlanta, GA",
-  "St. Augustine, FL",
-  "New York, NY",
-  "Austin, TX"
-];
-var items = [];
-var itemsnum = 0;
-
-// We format List of Trips in this function.
-function NameList() {
-  if (itemsnum != 0) {
-    return (
-      
-       //this is probably gonna go back to <ul> 
-        items.map(name => <Card variant="outlined" style={{margin: "2px"}}><CardActionArea> <Typography level="body2">{name}</Typography></CardActionArea></Card>)
-    );
-  }
-  else
-    return(<h3>No Trips Found. Would you like to add one?</h3>);
-}
-
-export default function Map() {
-  //useEffect needed to getElement without NULL result
- 
-  useEffect(() => {
- 
-
-    //will update for all states once object is sent
-    var FL = document.getElementById("US-FL");
-    if (States.FL == true) FL.setAttribute("class", "visited");
-  }, []);
-
-  function sayHello(el) {
-    if (el.id.startsWith("US-")) {
-
-      htmlElement = el.id;
-      var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
-      handleClickOpen();
-      el.setAttribute("class", "visited");
-      if (itemsnum != 0) {
-      items = [];
-      itemsnum = 0;
-      }
-      
-        for (var i = 0; i < Trips.length; i++)
-        {
-          if (Trips[i].endsWith(ST)) {
-            items.push(Trips[i]); //Array of Trips in FL
-            itemsnum++;
-    
-          }
-        }
-
-      }
-    }
-  
- 
-
-  const [open, setOpen] = React.useState(false);
-  const [open_editdel, setOpeneditdelete] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const editdeleteOpen = () => {
-    setOpeneditdelete(true);
-  };
-
-  const editdeleteClose = () => {
-    setOpeneditdelete(false);
-  };
-  const openEditDelete = () => setOpeneditdelete(true);
-  const openForm = () => setOpen(true);
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("profile"));
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [nav, setnav] = React.useState(null);
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const navMenu = (event) => {
-    setnav(event.currentTarget);
-  };
-
-  const Logout = () => {
-    dispatch({ type: "LOGOUT" });
-    navigate("/");
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-  const navclose = () => {
-    setnav(null);
-  };
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "#f8f4e3",
-    border: "1px solid #000",
-    boxShadow: 24,
-    p: 4,
-    minWidth: "480px"
-  };
-  
   console.log(user);
   return (
     <div>
-      <Box onClick={(element) => sayHello(element.target)}>
+      <Box onClick={(element) => sayHello(element.target)}> 
         <AppBar position="static">
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
             <IconButton
