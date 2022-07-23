@@ -112,7 +112,7 @@ export const verifyEmail = async (req, res) => {
   await VerificationToken.findByIdAndDelete(token._id);
   await user.save();
 
-  // If everything is succesful
+  // If everything is successful
   res.json({
     success: true,
     message: "Email verified!",
@@ -120,14 +120,17 @@ export const verifyEmail = async (req, res) => {
   });
 };
 
-//Function to add memory to a users states array
-
+// Function to add memory to a user's state's array of object
 export const addMemory = async (req, res) => {
-  //recieve stateAbbreviation, city, date, description, image
+  // recieve stateAbbreviation, city, date, description, image
   const { userId, stateAbbreviation, city, date, description, image } = req.body;
 
   const user = await Users.findById(userId);
-  let stateIndex = 0;
+  
+  // initialize a non-existing state 
+  let stateIndex = -1;
+
+  // Look for state in states array
   for(let i = 0; i < user.states.length; i++)
   {
     if(user.states[i].stateAbbreviation == stateAbbreviation)
@@ -137,5 +140,92 @@ export const addMemory = async (req, res) => {
     }
   }
 
-  
+  // State was not found, create a new state object 
+  if(stateIndex == -1)
+  {
+    // Declare and initialize a new state object 
+    const newState = {
+      stateAbbreviation: String,
+      cities: [],
+    };
+
+    // Assign state abbreviation 
+    newState.stateAbbreviation = stateAbbreviation;
+
+    // Declare and initialize a new city object
+    const newCity = {
+      city: String,
+      memories: [],
+    };
+
+    // Assign city name 
+    newCity.city = city;
+
+    // Declare and initialize a new memory for the city
+    const newMemory = { date: String, description: String, img: String };
+    newMemory.date = date;
+    newMemory.description = description;
+    newMemory.img = image;
+
+    // Add memory to the states array
+    newCity.memories.push(newMemory);
+    newState.cities.push(newCity);
+    user.states.push(newState);
+  }
+
+  // If state already exists
+  // Add new city or add to pre-existing city
+  else
+  {
+    let cityIndex = -1;
+    // Look for city in city array
+    for(let i = 0; i < user.states[stateIndex].cities.length; i++)
+    {
+      if(user.states[stateIndex].cities[i].city == city)
+      { 
+        cityIndex = i;
+        break;
+      }
+    }
+    
+    // City was not found, create new city object
+    if(cityIndex == -1)
+    {
+      const newCity = {
+        city: String,
+        memories: [],
+      };
+
+      // Assign city name
+      newCity.city = city;
+
+      const newMemory = { date: String, description: String, img: String };
+      newMemory.date = date;
+      newMemory.description = description;
+      newMemory.img = image;
+
+      // Add memory to the states array
+      newCity.memories.push(newMemory);
+      user.states[stateIndex].cities.push(newCity);
+    }
+
+    // City exists, add memory to the existing city
+    else
+    {
+      const newMemory = { date: String, description: String, img: String };
+      newMemory.date = date;
+      newMemory.description = description;
+      newMemory.img = image;
+      user.states[stateIndex].cities[cityIndex].memories.push(newMemory);
+    }
+  }
+
+  // Save user info to MongoDB
+  user.save((err) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+  });
 }
