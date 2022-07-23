@@ -13,8 +13,6 @@ import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import jwt_decode from "jwt-decode";
-import { GithubLoginButton } from "react-social-login-buttons";
-import { GoogleLoginButton } from "react-social-login-buttons";
 import { useNavigate } from "react-router-dom";
 import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
