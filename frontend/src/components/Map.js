@@ -33,48 +33,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CloseIcon from "@mui/icons-material/Close";
 import { styled} from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
+import AddIcon from "@mui/icons-material/Add";
 
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
 
 
 //we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
@@ -408,77 +370,94 @@ function CollapsibleTable() {
 }
 //Code for Table End
 function CollapsibleTable2() {
-  const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
   if (itemsnum != 0) {
   return (
+    <div>
+    <Grid style={{display: "flex"}}>  
+
+    <Button onClick={openForm} startIcon={<AddIcon/>} style={{marginLeft:"auto", color:"#F8F4E3", backgroundColor:"#65743A"}}>Add Memory</Button>
+    </Grid>
+
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow>
+          <TableRow align="left">
             <TableCell />
-            <TableCell>City</TableCell>
+            <TableCell><b style={{fontSize: 18}}>City</b></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((item) => (
-            <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-              <TableCell>
-                <IconButton
-                  aria-label="expand row"
-                  size="small"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {item.city}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                  <Box sx={{ margin: 1 }}>
-                    <Typography variant="h6" gutterBottom component="div">
-                      Memories:
-                    </Typography>
-                    <Table size="small" aria-label="purchases">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Date</TableCell>
-                          <TableCell align="center">Description:</TableCell>
-                          <TableCell align="center">Image</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {item.memories.map((historyRow) => (
-                          <TableRow key={historyRow.date}>
-                            <TableCell component="th" scope="row">
-                              {historyRow.date}
-                            </TableCell>
-                            <TableCell align="center">{historyRow.description}</TableCell>
-                            <TableCell align="center">{historyRow.image}</TableCell>
-                            
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </Collapse>
-              </TableCell>
-            </TableRow>
-          </React.Fragment>
+
+
+          {items.map((row) => (
+            <Row2 key={row.city} row={row} />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+</div>
   );
 }
 else
 {
-return(<h3>No Trips Found. Would you like to add one?</h3>);
+return(<h3 style={{textAlign: "center"}}>No Trips Found. Would you like to add one?</h3>);
 }
+}
+function Row2(props) {
+  const { row } = props;
+  const [open2, setOpen2] = React.useState(false);
+  return(
+    <React.Fragment>
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell>
+        <IconButton
+          aria-label="expand row"
+          size="small"
+          onClick={() => setOpen2(!open2)}
+        >
+          {open2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.city}
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+      <Collapse in={open2} timeout="auto" unmountOnExit>
+          <Box sx={{ margin: 1 }}>
+             <Typography variant="h6" gutterBottom component="div">
+              Memories:
+            </Typography>
+            <Table size="small" aria-label="Memories">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell align="center">Description:</TableCell>
+                  <TableCell align="center">Image</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {row.memories.map((historyRow) => (
+                  <TableRow key={historyRow.date}>
+                    <TableCell component="th" scope="row">
+                      {historyRow.date}
+                    </TableCell>
+                    <TableCell align="center">{historyRow.description}</TableCell>
+                    <TableCell align="center">{historyRow.image}</TableCell>
+                    
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </Collapse>
+      </TableCell>
+    </TableRow>
+  </React.Fragment>
+
+  );
 }
 
   console.log(user);
@@ -497,7 +476,7 @@ return(<h3>No Trips Found. Would you like to add one?</h3>);
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1}} style={{alignContent:"center"}}>
               Travel Knights
             </Typography>
 
@@ -561,7 +540,7 @@ return(<h3>No Trips Found. Would you like to add one?</h3>);
 
         <Svg />
         <CollapsibleTable />
-   
+
     <Modal
           
           aria-labelledby="transition-modal-title"
@@ -576,8 +555,9 @@ return(<h3>No Trips Found. Would you like to add one?</h3>);
         >
           <Fade in={open}>
             <Grid sx={style} xs="auto">
+
               <Typography
-                sx={{ mb: 3 }}
+                sx={{ mb: 2 }}
                 textAlign="center"
                 id="transition-modal-title"
                 variant="h6"
@@ -585,44 +565,12 @@ return(<h3>No Trips Found. Would you like to add one?</h3>);
               >
                 Here are your trips from {htmlElement}!
               </Typography>
-
-
-
-
-            <CollapsibleTable2/>
-
+          
+              <CollapsibleTable2/>
 
   
-              <Typography
-                id="transition-modal-description"
-                textAlign="center"
-                sx={{ mt: 2 }}
-              >
-                Your trip to City, {htmlElement}. Edit? Delete?
-              </Typography>
-              <Button onClick={openForm}>Add trip</Button>
-              <Box type="form" open={open}>
-                <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                  Would you like to add a trip to {htmlElement}?
-                </Typography>
-                <Grid item xs={12} md={10} padding="10px">
-                  <TextField
-                    id="state"
-                    name="state"
-                    label="State Name"
-                    type="text"
-                  />
-                </Grid>
-                <Grid item xs={12} md={10} sx={{ mx: "10px" }}>
-                  <TextField
-                    padding="10px"
-                    id="name"
-                    name="name"
-                    label="ButtonWillOpenBothForm"
-                    type="text"
-                  />
-                </Grid>
-              </Box>
+              
+              
             </Grid>
           </Fade>
         </Modal>
