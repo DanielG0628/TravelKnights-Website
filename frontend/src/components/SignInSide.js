@@ -1,39 +1,42 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import jwt_decode from "jwt-decode";
-import { GithubLoginButton } from "react-social-login-buttons";
-import { GoogleLoginButton } from "react-social-login-buttons";
-import { useNavigate } from "react-router-dom";
-import ri from "../images/randomimage";
-import Logo from "../images/logo.png";
-import { useDispatch } from "react-redux";
-import { getUser } from "../actions/posts";
-import { googcreateUser } from "../actions/posts";
-import { googgetUser } from "../actions/posts";
-import { waitUntil } from "async-wait-until";
-import { sizeHeight } from "@mui/system";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import { useEffect, useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+import ri from '../images/randomimage';
+import Logo from '../images/logo.png';
+import { useDispatch } from 'react-redux';
+import { getUser } from '../actions/posts';
+import { googcreateUser } from '../actions/posts';
+import { googgetUser } from '../actions/posts';
 
 const theme = createTheme();
-
+var response = 'A';
 export default function SignInSide() {
-  const [user, setUser] = useState({});
+  var changeThis = document.getElementsByClassName('loginresponse');
+
+  const loginresult = '';
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+
+  console.log(user);
 
   function handleCallbackResponse(response) {
     console.log('Encoded JWT ID token: ' + response.credential);
     var userObject = jwt_decode(response.credential);
-    const googuser = { email: "", password: "" };
+    const googuser = { email: '', password: '' };
     googuser.email = userObject.email;
     googuser.password = userObject?.jti;
     googuser.name = userObject.name;
@@ -42,16 +45,16 @@ export default function SignInSide() {
 
     dispatch(googgetUser(googuser));
     setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      const checkuser = JSON.parse(localStorage.getItem('profile'));
       console.log(checkuser);
 
       if (checkuser == null) {
         dispatch(googcreateUser(googuser));
       } else if (checkuser.payload.user) {
         //console.log(checkuser.payload);
-        navigate("/Map");
+        navigate('/Map');
       } else {
-        console.log("Else");
+        console.log('Else');
         console.log(checkuser.payload);
         response = checkuser.payload;
 
@@ -85,6 +88,9 @@ export default function SignInSide() {
 
     google.accounts.id.renderButton(document.getElementById('signInDiv'), {
       theme: 'outline',
+      size: 'large',
+      alignItemss: 'center',
+      width: 400,
     });
   }, []);
 
@@ -111,26 +117,26 @@ export default function SignInSide() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const newuser = { email: "", password: "" };
-    newuser.email = data.get("email");
-    newuser.password = data.get("password");
+    const newuser = { email: '', password: '' };
+    newuser.email = data.get('email');
+    newuser.password = data.get('password');
     //console.log(newuser);
 
     dispatch(getUser(newuser));
     setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      const checkuser = JSON.parse(localStorage.getItem('profile'));
       console.log(checkuser);
 
       if (checkuser == null) {
         if (checkuser.payload != null) console.log(checkuser.payload);
 
-        console.log("payload is not null ");
+        console.log('payload is not null ');
         console.log(checkuser);
       } else if (checkuser.payload.user) {
         //console.log(checkuser.payload);
-        navigate("/Map");
+        navigate('/Map');
       } else {
-        console.log("Else");
+        console.log('Else');
         console.log(checkuser.payload);
         response = checkuser.payload;
 
@@ -141,6 +147,16 @@ export default function SignInSide() {
     }, 1000); //Waits a little bit to grab user
   };
 
+  const clicktest = async (event) => {
+    const checkuser = JSON.parse(localStorage.getItem('profile'));
+    console.log(checkuser);
+  };
+
+  function check() {
+    const checkuser = JSON.parse(localStorage.getItem('profile'));
+    const qwe = JSON.parse(localStorage.getItem('profile'));
+    console.log(qwe);
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component='main' sx={{ height: '100vh' }}>
@@ -161,7 +177,16 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          item
+          sx={{ backgroundColor: '#f8f4e3' }}
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+        >
           <Box
             sx={{
               my: 8,
@@ -174,7 +199,7 @@ export default function SignInSide() {
             <Avatar
               sx={{
                 m: 1,
-                bgcolor: 'white',
+                bgcolor: '#f8f4e3',
                 width: 120,
                 height: 120,
                 fontSize: 70,
@@ -216,6 +241,22 @@ export default function SignInSide() {
                 control={<Checkbox value='remember' color='primary' />}
                 label='Remember me'
               />
+              <Box
+                sx={{
+                  marginTop: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  style={{ color: 'red' }}
+                  justifyContent='center'
+                  align='center'
+                  sx={{ mt: 0, mb: 0 }}
+                  class='loginresponse'
+                ></Typography>
+              </Box>
               <Button
                 style={{ backgroundColor: '#65743A' }}
                 type='submit'
@@ -255,21 +296,18 @@ export default function SignInSide() {
                   <ColoredLine color='#666666' />
                 </Grid>
               </Grid>
-              <Grid container>
-                <Grid item xs={6} sm={6} md={6}>
-                  <div id='signInDiv'></div>
-                </Grid>
-
-                <Grid item xs={6} sm={6} md={6}>
-                  <GithubLoginButton />
-                </Grid>
-                {user && (
-                  <div>
-                    <img src={user.picture}></img>
-                    <h3>{user.name}</h3>
-                    <h3>{user.email}</h3>
-                  </div>
-                )}
+              <Grid
+                container
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+              >
+                <div
+                  justifyContent='center'
+                  alignItems='center'
+                  id='signInDiv'
+                  data-width='328'
+                ></div>
               </Grid>
             </Box>
           </Box>
