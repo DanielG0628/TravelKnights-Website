@@ -15,10 +15,10 @@ export const googgetUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.googUser(user);
     //console.log(error.message);
-    dispatch({ type: "AUTH", payload: data });
+    dispatch({ type: 'AUTH', payload: data });
     console.log(data);
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
@@ -26,7 +26,7 @@ export const googgetUser = (user) => async (dispatch) => {
 export const googcreateUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.createUser(user);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message); //ERROR HERE
   }
@@ -34,9 +34,9 @@ export const googcreateUser = (user) => async (dispatch) => {
 
 export const createUser = (user) => async (dispatch) => {
   try {
-    const {data} = await api.createUser(user);
-    dispatch({type: 'CREATE', payload: data });
-  }catch(error) {
+    const { data } = await api.createUser(user);
+    dispatch({ type: 'CREATE', payload: data });
+  } catch (error) {
     console.log(error.message); //ERROR HERE
   }
 };
