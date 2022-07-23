@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,8 +20,11 @@ import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
+import { googcreateUser } from "../actions/posts";
+import { googgetUser } from "../actions/posts";
 import { waitUntil } from "async-wait-until";
 import { sizeHeight } from "@mui/system";
+
 const theme = createTheme();
 var response = "A";
 export default function SignInSide() {
@@ -38,12 +40,35 @@ export default function SignInSide() {
   function handleCallbackResponse(response) {
     //console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
+    const googuser = { email: "", password: "" };
+    googuser.email = userObject.email;
+    googuser.password = userObject?.jti;
+    googuser.name = userObject.name;
+    googuser.emailVerified = true;
+    console.log(googuser); //jti is token
 
-    //console.log(userObject);
-    const result = userObject;
-    const token = userObject?.jti;
-    //console.log("User Token: " + token); //jti is token
+    dispatch(googgetUser(googuser));
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
 
+      if (checkuser == null) {
+        dispatch(googcreateUser(googuser));
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 1000);
+
+    /*
     setUser(userObject);
     try {
       dispatch({ type: "AUTH", data: { result } });
@@ -52,28 +77,10 @@ export default function SignInSide() {
     } catch (error) {
       console.log(error);
     }
-
+*/
     //implement signin logic like getuser and set user for google
     //users.js has to have a new function for google signin
   }
-  /*
-  const SignInReg = (e) => {
-    e.preventDefault();
-    const user1 = new FormData(e.currentTarget);
-    console.log({
-      email: user1.get("email"),
-      password: user1.get("password"),
-    });
-    //using user results in empty req.body
-    const newuser = { email: "", password: "" };
-
-    newuser.email = user1.get("email");
-    newuser.password = user1.get("password");
-
-    dispatch(getUser(user1));
-    console.log(getUser(user1));
-  };
-*/
 
   useEffect(() => {
     /* global google */
@@ -113,11 +120,6 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    /*
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });*/
 
     const newuser = { email: "", password: "" };
     newuser.email = data.get("email");
@@ -147,30 +149,6 @@ export default function SignInSide() {
         //figure out how to update and send to div
       }
     }, 1000); //Waits a little bit to grab user
-
-    /*
-    await waitUntil(() => checkuser != null);
-    console.log("this is" + checkuser);
-*/
-    /*
-    test async function ('profile') {
-      await null;
-      const checkuser = JSON.parse(localStorage.getItem("profile"));
-  }
-    */
-    //console.log(checkuser);
-    //were getting the response after this file is called so yeah look into that
-    //check vid at around 2hr mark
-    //it works fine but we get a null error since check user isnt getting fetched
-
-    /*
-    if (Object.keys(checkuser.email).length != 0) {
-      navigate("/Map");
-    } else {
-      console.log("balllllls");
-      loginresult = "Email or Password is Incorrect";
-    }*/
-    //yguyfuyfuyf
   };
 
   const clicktest = async (event) => {

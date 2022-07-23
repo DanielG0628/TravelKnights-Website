@@ -22,9 +22,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { createUser } from "../actions/posts";
-
+var response = "";
 const theme = createTheme();
 export default function SignUp() {
+  var changeThis = document.getElementsByClassName("signupresponse");
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -44,16 +45,24 @@ export default function SignUp() {
     console.log({
       email: user.get("email"),
       password: user.get("password"),
+      password: user.get("password"),
       name: user.get("name"),
-      phone: user.get("phone"),
     });
     //using user results in empty req.body
     const newuser = { name: "", email: "", phone: "", password: "" };
     newuser.name = user.get("name");
     newuser.email = user.get("email");
     newuser.password = user.get("password");
-    newuser.phone = user.get("phone");
-    dispatch(createUser(newuser));
+
+    if (newuser.password == user.get("confirmpassword")) {
+      console.log("passwords match");
+      dispatch(createUser(newuser));
+      handleClickOpen();
+      changeThis[0].innerHTML = "";
+    } else {
+      console.log("passwords dont match");
+      changeThis[0].innerHTML = "*Passwords do not match*";
+    }
   };
 
   return (
@@ -89,25 +98,17 @@ export default function SignUp() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   name="name"
                   required
                   fullWidth
                   id="name"
-                  label="name"
+                  label="Full Name"
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="phone"
-                  label="phone"
-                  name="phone"
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -129,6 +130,17 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmpassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmpassword"
+                  autoComplete="new-password"
+                />
+              </Grid>
             </Grid>
             <Button
               style={{ backgroundColor: "#65743A" }}
@@ -136,7 +148,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleClickOpen}
+              //onClick={handleClickOpen}
             >
               Sign Up
             </Button>
@@ -162,6 +174,22 @@ export default function SignUp() {
               <Link href="/" variant="body2" sx={{ mt: 3 }}>
                 Already have an account? Sign in
               </Link>
+            </Box>
+            <Box
+              sx={{
+                marginTop: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                style={{ color: "red" }}
+                justifyContent="center"
+                align="center"
+                sx={{ mt: 0, mb: 0 }}
+                class="signupresponse"
+              ></Typography>
             </Box>
           </Box>
         </Box>
