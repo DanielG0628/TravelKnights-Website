@@ -78,8 +78,8 @@ var itemsnum = 0;
 // We format List of Trips in this function.
 function NameList() {
   if (itemsnum != 0) {
+
     return (
-      
        //this is probably gonna go back to <ul> 
         items.map(name => <Card variant="outlined" style={{margin: "2px"}}><CardActionArea> <Typography level="body2">{name}</Typography></CardActionArea></Card>)
     );
@@ -120,13 +120,15 @@ export default function Map() {
       
         for (var i = 0; i < Trips.length; i++)
         {
-          if (Trips[i].endsWith(ST)) {
-            items.push(Trips[i]); //Array of Trips in FL
+
+          if (Trips[i].stateAbbrev == ST) {
+            for (var j = 0; j < Trips[i].cities.length; j++)
+            {
+            items.push(Trips[i].cities[j].city); //Array of Trips in FL DOESNT WORK YET
             itemsnum++;
-    
+            }
           }
         }
-
       }
     }
   
