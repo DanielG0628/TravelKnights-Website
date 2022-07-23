@@ -31,10 +31,50 @@ import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CloseIcon from "@mui/icons-material/Close";
+import { styled} from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
 
+const BootstrapDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
 
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
 
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
 
 
 //we should see if onclick cant be called in a modal, if not, we need alot of && for all fields with id.
@@ -76,20 +116,9 @@ var items = [];
 var itemsnum = 0;
 
 // We format List of Trips in this function.
-function NameList() {
-  if (itemsnum != 0) {
 
-    return (
-       //this is probably gonna go back to <ul> 
-        items.map(name => <Card variant="outlined" style={{margin: "2px"}}><CardActionArea> <Typography level="body2">{name}</Typography></CardActionArea></Card>)
-    );
-  }
-  else
-    return(<h3>No Trips Found. Would you like to add one?</h3>);
-}
 
 export default function Map() {
-
   
   //useEffect needed to getElement without NULL result
  
@@ -105,12 +134,12 @@ export default function Map() {
     }
 
   }, []);
-
   function sayHello(el) {
     if (el.id.startsWith("US-")) {
 
       htmlElement = el.id;
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
+      htmlElement = ST;
       handleClickOpen();
       el.setAttribute("class", "visited");
       if (itemsnum != 0) {
@@ -124,7 +153,7 @@ export default function Map() {
           if (Trips[i].stateAbbrev == ST) {
             for (var j = 0; j < Trips[i].cities.length; j++)
             {
-            items.push(Trips[i].cities[j].city); //Array of Trips in FL DOESNT WORK YET
+            items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
             itemsnum++;
             }
           }
@@ -178,6 +207,74 @@ export default function Map() {
   const navclose = () => {
     setnav(null);
   };
+  const [openList, setOpenList] = React.useState(false);
+
+  /* Code for this is inside modal due to animation
+  function NameList() {
+    if (itemsnum != 0) {
+  var citylength = items.length;
+  
+  //need to use a .map inside another .map for memories.
+      return (
+  <TableContainer component={Paper}>
+    <Table aria-label="trip table">
+    <caption> Your Trips in {htmlElement}!</caption>
+     <TableBody>
+      {items.map(name => <React.Fragment><TableRow sx={{ "& > *": {borderBottom: 'unset'}}}>
+        <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpenList(!openList)}>
+            {openList ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+        {name.city}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+          <Collapse in={openList} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1}}>
+              <Typography variant="h6" gutterBottom component="div">
+                Your Memories
+              </Typography>
+              <Table size="small" aria-label="memories">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Image</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {name.memories.map((memories) => ( <TableRow key={memories.date}>
+                    <TableCell component="th" scope="row">
+                      {memories.date}
+                    </TableCell>
+                    <TableCell>{memories.description}</TableCell>
+                    <TableCell>{memories.image}</TableCell>
+                  </TableRow>))}
+                </TableBody>
+              </Table>
+            </Box>
+            </Collapse>
+        </TableCell>
+      </TableRow> </React.Fragment>
+      )}
+     </TableBody>
+    </Table>
+  </TableContainer>
+  
+  
+      );
+    }
+    else
+      return(<h3>No Trips Found. Would you like to add one?</h3>);
+  }
+*/
+
+
+
+
 
 //This styles the modals
   const style = {
@@ -275,23 +372,7 @@ function Row(props) {
 }
 
 //I'm sure this can be replaced
-Row.propTypes = {
-  row: PropTypes.shape({
-    state: PropTypes.string.isRequired,
-    datestarted: PropTypes.string.isRequired,
-    dateended: PropTypes.string.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    cityname: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-  }).isRequired,
-};
+
 
 //here we createData with the info from mongo
 const rows = [
@@ -326,8 +407,79 @@ function CollapsibleTable() {
   );
 }
 //Code for Table End
-
-
+function CollapsibleTable2() {
+  const [open, setOpen] = React.useState(false);
+  if (itemsnum != 0) {
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible table">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>City</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items.map((item) => (
+            <React.Fragment>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+              <TableCell>
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {item.city}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Box sx={{ margin: 1 }}>
+                    <Typography variant="h6" gutterBottom component="div">
+                      Memories:
+                    </Typography>
+                    <Table size="small" aria-label="purchases">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Date</TableCell>
+                          <TableCell align="center">Description:</TableCell>
+                          <TableCell align="center">Image</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {item.memories.map((historyRow) => (
+                          <TableRow key={historyRow.date}>
+                            <TableCell component="th" scope="row">
+                              {historyRow.date}
+                            </TableCell>
+                            <TableCell align="center">{historyRow.description}</TableCell>
+                            <TableCell align="center">{historyRow.image}</TableCell>
+                            
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          </React.Fragment>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+else
+{
+return(<h3>No Trips Found. Would you like to add one?</h3>);
+}
+}
 
   console.log(user);
   return (
@@ -409,6 +561,7 @@ function CollapsibleTable() {
 
         <Svg />
         <CollapsibleTable />
+   
     <Modal
           
           aria-labelledby="transition-modal-title"
@@ -430,11 +583,16 @@ function CollapsibleTable() {
                 variant="h6"
                 component="h2"
               >
-                Here are your trips from Florida!
+                Here are your trips from {htmlElement}!
               </Typography>
 
-            <NameList/>
 
+
+
+            <CollapsibleTable2/>
+
+
+  
               <Typography
                 id="transition-modal-description"
                 textAlign="center"
