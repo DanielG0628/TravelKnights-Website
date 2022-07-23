@@ -1,17 +1,19 @@
-import {
-  FETCH_ALL,
-  CREATE,
-  UPDATE,
-  DELETE,
-  AUTH,
-  LOGOUT,
-} from "../constants/actionTypes";
+//import { FETCH_ALL, CREATE, UPDATE, DELETE} from '../constants/actionTypes';
 
-import * as api from "../api/index";
+import * as api from '../api/index';
 
-export const getUser = (user) => async (dispatch) => {
+export const getUser = () => async (dispatch) => {
   try {
-    const { data } = await api.getUser(user);
+    const { data } = await api.fetchPosts();
+    dispatch({ type: 'POST', payload: data });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const googgetUser = (user) => async (dispatch) => {
+  try {
+    const { data } = await api.googUser(user);
     //console.log(error.message);
     dispatch({ type: "AUTH", payload: data });
     console.log(data);
@@ -21,11 +23,20 @@ export const getUser = (user) => async (dispatch) => {
   }
 };
 
-export const createUser = (user) => async (dispatch) => {
+export const googcreateUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.createUser(user);
     dispatch({ type: "CREATE", payload: data });
   } catch (error) {
+    console.log(error.message); //ERROR HERE
+  }
+};
+
+export const createUser = (user) => async (dispatch) => {
+  try {
+    const {data} = await api.createUser(user);
+    dispatch({type: 'CREATE', payload: data });
+  }catch(error) {
     console.log(error.message); //ERROR HERE
   }
 };
