@@ -186,7 +186,7 @@ export const verifyEmail = async (req, res) => {
   await VerificationToken.findByIdAndDelete(token._id);
   await user.save();
 
-  // If everything is succesful
+  // If everything is successful
   res.json({
     success: true,
     message: "Email verified!",
