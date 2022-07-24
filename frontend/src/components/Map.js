@@ -33,9 +33,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CloseIcon from "@mui/icons-material/Close";
 import { styled} from "@mui/material/styles";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 //poop
 import AddIcon from "@mui/icons-material/Add";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
 
 
@@ -456,23 +458,15 @@ function Row2(props) {
   );
 }
 
-  console.log(user);
+//  console.log(user);
   return (
     <div>
       <Box onClick={(element) => sayHello(element.target)}> 
-        <AppBar position="static">
+        <AppBar position="sticky">
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={navMenu}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1}} style={{alignContent:"center"}}>
+          <AccountCircle sx={{ fontSize: 21, m:0.4}}/>
+          <Typography component="div" sx={{ fontSize:15}}>{user.payload.user.name}</Typography>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1}} style={{textAlign:"center"}}>
               Travel Knights
             </Typography>
 
@@ -481,35 +475,10 @@ function Row2(props) {
               sx={{ textTransform: "none" }}
               onClick={handleOpenUserMenu}
             >
-              {user.payload.user.name}
+             <MenuIcon />
             </Button>
 
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={nav}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(nav)}
-              onClose={navclose}
-            >
-              <MenuItem onClick={handleClickOpen}>
-                <Typography textAlign="center">Add Trip</Typography>
-              </MenuItem>
-              <MenuItem onClick={editdeleteOpen}>
-                <Typography textAlign="center">Delete Trip</Typography>
-              </MenuItem>
-              <MenuItem onClick={Logout}>
-                <Typography textAlign="center">Edit Trip</Typography>
-              </MenuItem>
-            </Menu>
+          
 
             <Menu
               sx={{ mt: "45px" }}
@@ -550,7 +519,7 @@ function Row2(props) {
           }}
         >
           <Fade in={open}>
-            <Grid sx={style} xs="auto">
+            <Grid sx={style}>
 
               <Typography
                 sx={{ mb: 2 }}
