@@ -2,7 +2,7 @@ import axios from 'axios';
 let url = '';
 
 if (process.env.NODE_ENV === 'production') {
-  url = 'travelknights.herokuapp.com/api';
+  url = 'https://travelknights.herokuapp.com/api';
 } else {
   url = 'http://localhost:5000/api';
 }
