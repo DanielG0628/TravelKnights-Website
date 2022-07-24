@@ -36,7 +36,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import CancelIcon from "@mui/icons-material/Cancel";
-//import { addMemory } from '../actions/posts';
+import { addMemory } from '../actions/posts';
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
@@ -108,14 +108,16 @@ export default function Map() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     //html Element has state
-    const newTrip = { date: "", city: "", description: "", stateAbbreviation: "", image: ""};
+    const newTrip = { date: "", city: "", description: "", stateAbbreviation: "", image: "", userId: ""};
     newTrip.date = data.get("date");
     newTrip.city = data.get("city");
     newTrip.description = data.get("description");
     newTrip.stateAbbreviation = htmlElement;
     newTrip.image = "img";
+    newTrip.userId = user.payload.user._id;
+    console.log(user);
     console.log(newTrip);
-    //dispatch(addMemory(newTrip));
+    dispatch(addMemory(newTrip));
 
   }
 
@@ -144,7 +146,7 @@ export default function Map() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [nav, setnav] = React.useState(null);
-
+  
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };

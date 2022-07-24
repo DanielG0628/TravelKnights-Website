@@ -63,7 +63,7 @@ export const createUser = (user) => async (dispatch) => {
     console.log(error.message);
   }
 };
-/*
+
 
 export const addMemory = (trip) => async (dispatch) => {
   try {
@@ -74,4 +74,3 @@ export const addMemory = (trip) => async (dispatch) => {
     console.log(error.message);
   }
 }
-*/
