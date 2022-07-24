@@ -4,13 +4,11 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travelknights/constants.dart';
-import 'package:travelknights/dbhelper/mongodb.dart';
 import 'package:travelknights/screens/Welcome/sign_in.dart';
 import 'package:travelknights/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
