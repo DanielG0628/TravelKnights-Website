@@ -321,18 +321,59 @@ export default function Map() {
   aria-labelledby="Add Trip"
   aria-describedby="Add Trip Form">
     <Fade in={open2}>
-    <Box sx={{...addStyle, width: "300px", "& > :not(style)" : {m : 1}}} component="form" onSubmit={handleSubmit}>
-      <h3 id="Add Memory">Add Memory to {htmlElement}</h3>
-      <Input placeholder="City Name:" id="city" name="city" startAdornment={<InputAdornment position="start"><AddLocationIcon/></InputAdornment>}></Input>
-      <Input placeholder="Description:" id="description" name="description" startAdornment={<InputAdornment position="start"><StickyNote2Icon/></InputAdornment>}></Input>
+    <Box
+              sx={{ ...addStyle, width: '300px', '& > :not(style)': { m: 1 } }}
+              component='form'
+              onSubmit={handleSubmit}
+            >
+               <Typography style={{fontSize: 18}} align='center'>
+               <b>Add Memory to {htmlElement}</b>
+              </Typography>
+              <Stack direction='column' justifyContent='center'>
+                <Input
+                  placeholder='City Name:'
+                  id='city'
+                  name='city'
+                  startAdornment={
+                    <InputAdornment position='start'>
+                      <AddLocationIcon />
+                    </InputAdornment>
+                  }
+                ></Input>
+                <TextField
+                  placeholder='Description:'
+                  id='standard-multiline-flexible'
+                  multiline
+                  name='description'
+                  maxRows={4}
+                  onChange={handleChange}
+                  variant='standard'
+                  inputProps={{
+                    maxLength: 145,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <StickyNote2Icon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />{' '}
+              </Stack>
 
-      <Input type="date" id="date" name="date"></Input>
-    <Stack direction="row" spacing={1.5} justifyContent="center">
-    <Button type="submit" style={{color: "#F8F4E3", backgroundColor: "#65743A"}}>Submit</Button>
-    <Button onClick={handleClose2} style={{color: "#65743A"}}>Cancel</Button>
-    </Stack>
-
-    </Box>
+              <Input type='date' id='date'></Input>
+              <Stack direction='row' spacing={1.5} justifyContent='center'>
+                <Button
+                  type='submit'
+                  style={{ color: '#F8F4E3', backgroundColor: '#65743A' }}
+                >
+                  Submit
+                </Button>
+                <Button onClick={handleClose2} style={{ color: '#65743A' }}>
+                  Cancel
+                </Button>
+              </Stack>
+            </Box>
     </Fade>
   </Modal>
   </React.Fragment> );
