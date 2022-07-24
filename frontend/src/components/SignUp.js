@@ -67,32 +67,32 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component='main' maxWidth='xs'>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <Avatar
             sx={{
               m: 1,
-              bgcolor: 'white',
+              bgcolor: "#f8f4e3",
               width: 120,
               height: 120,
               fontSize: 70,
             }}
           >
-            <img src={Logo} alt='Logo' height='70' />
+            <img src={Logo} alt="Logo" height="70" />
           </Avatar>
-          <Typography component='h1' variant='h5'>
+          <Typography component="h1" variant="h5">
             Sign up
           </Typography>
           <Box
-            component='form'
+            component="form"
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
@@ -100,7 +100,7 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  name='name'
+                  name="name"
                   required
                   fullWidth
                   id="name"
@@ -113,21 +113,21 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id='email'
-                  label='Email Address'
-                  name='email'
-                  autoComplete='email'
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name='password'
-                  label='Password'
-                  type='password'
-                  id='password'
-                  autoComplete='new-password'
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -143,10 +143,10 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
-              style={{ backgroundColor: '#65743A' }}
-              type='submit'
+              style={{ backgroundColor: "#65743A" }}
+              type="submit"
               fullWidth
-              variant='contained'
+              variant="contained"
               sx={{ mt: 3, mb: 2 }}
               //onClick={handleClickOpen}
             >
@@ -156,32 +156,22 @@ export default function SignUp() {
             <Dialog
               open={open}
               onClose={handleClose}
-              onBackdropClick='false'
-              PaperProps={{ sx: { bottom: 350 } }}
+              onBackdropClick="false"
+              PaperProps={{ sx: { bottom: 200 } }}
             >
               <DialogContent>
-                <DialogContentText>
-                  We have sent you a one time password to the email provided.
-                  Please enter password to finish account setup
+                <DialogContentText component="h1" variant="h5">
+                  We have sent you a link to the email provided. Please check
+                  you email to finish setting up your account
                 </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin='dense'
-                  id='name'
-                  label='Enter one time password'
-                  type='email'
-                  fullWidth
-                  variant='standard'
-                />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Submit</Button>
+                <Button onClick={handleClose}>OK</Button>
               </DialogActions>
             </Dialog>
 
-            <Box display='flex' justifyContent='center' alignItems='center'>
-              <Link href='/' variant='body2' sx={{ mt: 3 }}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Link href="/" variant="body2" sx={{ mt: 3 }}>
                 Already have an account? Sign in
               </Link>
             </Box>

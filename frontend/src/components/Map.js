@@ -26,11 +26,11 @@ import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import Card from "@mui/material/Card";
-import { CardActionArea} from "@mui/material";
-import PropTypes from 'prop-types';
-import Collapse from '@mui/material/Collapse';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { CardActionArea } from "@mui/material";
+import PropTypes from "prop-types";
+import Collapse from "@mui/material/Collapse";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled} from "@mui/material/styles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -62,69 +62,67 @@ for (var j = 0; j < Trips.length; j++)
 //temp objects before info is sent This is proper format
 //Everything involving Trips, most likely needs to be in useEffect.
 const Trips = [
-{
-  stateAbbrev: "FL",
-  cities: [
-    {city: "Orlando", memories: [{date: "12/12/12", description: "desc.", image:"img"}]},
-    {city: "Tampa", memories: [{date: "02/10/22", description: "desc.2", image:"img"}]}
-  ]
-},
-{
-  stateAbbrev: "GA",
-  cities: [
-    {city: "Atlanta", memories: [{date: "12/12/02", description: "desc.3", image:"img"}]}
-  ]
-},
+  {
+    stateAbbrev: "FL",
+    cities: [
+      {
+        city: "Orlando",
+        memories: [{ date: "12/12/12", description: "desc.", image: "img" }],
+      },
+      {
+        city: "Tampa",
+        memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
+      },
+    ],
+  },
+  {
+    stateAbbrev: "GA",
+    cities: [
+      {
+        city: "Atlanta",
+        memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
+      },
+    ],
+  },
 ];
 var items = [];
 var itemsnum = 0;
 
 // We format List of Trips in this function.
 
-
 export default function Map() {
-  
   //useEffect needed to getElement without NULL result
- 
+
   useEffect(() => {
- 
-    for(var i = 0; i < Trips.length; i++)
-    {
+    for (var i = 0; i < Trips.length; i++) {
       var STVisited = Trips[i].stateAbbrev;
       STVisited = "US-" + STVisited;
       var STCheck = document.getElementById(STVisited);
       STCheck.setAttribute("class", "visited");
       //Possibly add Trip Table code here.
     }
-
   }, []);
   function sayHello(el) {
     if (el.id.startsWith("US-")) {
-
       htmlElement = el.id;
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
       htmlElement = ST;
       handleClickOpen();
       if (itemsnum != 0) {
-      items = [];
-      itemsnum = 0;
+        items = [];
+        itemsnum = 0;
       }
-      
-        for (var i = 0; i < Trips.length; i++)
-        {
 
-          if (Trips[i].stateAbbrev == ST) {
-            for (var j = 0; j < Trips[i].cities.length; j++)
-            {
+      for (var i = 0; i < Trips.length; i++) {
+        if (Trips[i].stateAbbrev == ST) {
+          for (var j = 0; j < Trips[i].cities.length; j++) {
             items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
             itemsnum++;
-            }
           }
         }
       }
+    }
   }
-  
- 
 
   const [open, setOpen] = React.useState(false);
   const [open_editdel, setOpeneditdelete] = React.useState(false);
@@ -161,6 +159,7 @@ export default function Map() {
 
   const Logout = () => {
     dispatch({ type: "LOGOUT" });
+    localStorage.clear();
     navigate("/");
   };
 
@@ -235,11 +234,7 @@ export default function Map() {
   }
 */
 
-
-
-
-
-//This styles the modals
+  //This styles the modals
   const style = {
     position: "absolute",
     top: "50%",
@@ -249,36 +244,37 @@ export default function Map() {
     border: "1px solid #000",
     boxShadow: 24,
     p: 4,
-    minWidth: "480px"
+    minWidth: "480px",
   };
-  
-//After this line and before return is code solely for the table
-function createData(cityname, state, datestarted, dateended, image) {
-  return {
-    cityname,
-    state,
-    datestarted,
-    dateended,
-    image,
-    history: [
-      {
-        date: 'Jan. 15, 2021',
-        customerId: 'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off ',
-        amount: 3,
-      },
-      {
-        date: '01/12/2020',
-        customerId: 'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off2',
-        amount: 1,
-      },
-    ],
-  };
-}
 
-/* ALL THIS CODE IS PLANNED TO BE DELETED
+  //After this line and before return is code solely for the table
+  function createData(cityname, state, datestarted, dateended, image) {
+    return {
+      cityname,
+      state,
+      datestarted,
+      dateended,
+      image,
+      history: [
+        {
+          date: "Jan. 15, 2021",
+          customerId:
+            "According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off ",
+          amount: 3,
+        },
+        {
+          date: "01/12/2020",
+          customerId:
+            "According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off2",
+          amount: 1,
+        },
+      ],
+    };
+  }
+
+  /* ALL THIS CODE IS PLANNED TO BE DELETED
 var STABRV;
 function Row(props) {
-
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   return (
@@ -314,7 +310,6 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-
                   {row.memories.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
@@ -322,7 +317,6 @@ function Row(props) {
                       </TableCell>
                       <TableCell align="center">{historyRow.description}</TableCell>
                       <TableCell align="center">{historyRow.image}</TableCell>
-
                     </TableRow>
                   ))}
                 </TableBody>
@@ -348,125 +342,140 @@ function CollapsibleTable() {
         </TableHead>
         <TableBody>
         <React.Fragment>
-
         {Trips.map((row) => (
     <div>
       {STABRV = row.stateAbbrev}
       {row.cities.map((row) => (
-
           <Row key={row.city} row={row} />
       ))}
    
    </div>  
     ))}
    </React.Fragment>
-
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
 */
-function CollapsibleTable2() {
-  const [open2, setOpen2] = React.useState(false);
-  if (itemsnum != 0) {
-  return (
-    <div>
-    <Grid style={{display: "flex"}}>  
+  function CollapsibleTable2() {
+    const [open2, setOpen2] = React.useState(false);
+    if (itemsnum != 0) {
+      return (
+        <div>
+          <Grid style={{ display: "flex" }}>
+            <Button
+              onClick={openForm}
+              startIcon={<AddIcon />}
+              style={{
+                marginLeft: "auto",
+                color: "#F8F4E3",
+                backgroundColor: "#65743A",
+              }}
+            >
+              Add Memory
+            </Button>
+          </Grid>
 
-    <Button onClick={openForm} startIcon={<AddIcon/>} style={{marginLeft:"auto", color:"#F8F4E3", backgroundColor:"#65743A"}}>Add Memory</Button>
-    </Grid>
-
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow align="left">
-            <TableCell />
-            <TableCell><b style={{fontSize: 18}}>City</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-
-
-          {items.map((row) => (
-            <Row2 key={row.city} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-</div>
-  );
-}
-else
-{
-return(<h3 style={{textAlign: "center"}}>No Trips Found. Would you like to add one?</h3>);
-}
-}
-function Row2(props) {
-  const { row } = props;
-  const [open2, setOpen2] = React.useState(false);
-  return(
-    <React.Fragment>
-    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-      <TableCell>
-        <IconButton
-          aria-label="expand row"
-          size="small"
-          onClick={() => setOpen2(!open2)}
-        >
-          {open2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </IconButton>
-      </TableCell>
-      <TableCell component="th" scope="row">
-        {row.city}
-      </TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-      <Collapse in={open2} timeout="auto" unmountOnExit>
-          <Box sx={{ margin: 1 }}>
-             <Typography variant="h6" gutterBottom component="div">
-              Memories:
-            </Typography>
-            <Table size="small" aria-label="Memories">
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
               <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell align="center">Description:</TableCell>
-                  <TableCell align="center">Image</TableCell>
+                <TableRow align="left">
+                  <TableCell />
+                  <TableCell>
+                    <b style={{ fontSize: 18 }}>City</b>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {row.memories.map((historyRow) => (
-                  <TableRow key={historyRow.date}>
-                    <TableCell component="th" scope="row">
-                      {historyRow.date}
-                    </TableCell>
-                    <TableCell align="center">{historyRow.description}</TableCell>
-                    <TableCell align="center">{historyRow.image}</TableCell>
-                    
-                  </TableRow>
+                {items.map((row) => (
+                  <Row2 key={row.city} row={row} />
                 ))}
               </TableBody>
             </Table>
-          </Box>
-        </Collapse>
-      </TableCell>
-    </TableRow>
-  </React.Fragment>
+          </TableContainer>
+        </div>
+      );
+    } else {
+      return (
+        <h3 style={{ textAlign: "center" }}>
+          No Trips Found. Would you like to add one?
+        </h3>
+      );
+    }
+  }
+  function Row2(props) {
+    const { row } = props;
+    const [open2, setOpen2] = React.useState(false);
+    return (
+      <React.Fragment>
+        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen2(!open2)}
+            >
+              {open2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell component="th" scope="row">
+            {row.city}
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open2} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>
+                <Typography variant="h6" gutterBottom component="div">
+                  Memories:
+                </Typography>
+                <Table size="small" aria-label="Memories">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell align="center">Description:</TableCell>
+                      <TableCell align="center">Image</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {row.memories.map((historyRow) => (
+                      <TableRow key={historyRow.date}>
+                        <TableCell component="th" scope="row">
+                          {historyRow.date}
+                        </TableCell>
+                        <TableCell align="center">
+                          {historyRow.description}
+                        </TableCell>
+                        <TableCell align="center">{historyRow.image}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
+  }
 
-  );
-}
-
-//  console.log(user);
+  //  console.log(user);
   return (
     <div>
-      <Box onClick={(element) => sayHello(element.target)}> 
+      <Box onClick={(element) => sayHello(element.target)}>
         <AppBar position="sticky">
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
-          <AccountCircle sx={{ fontSize: 21, m:0.4}}/>
-          <Typography component="div" sx={{ fontSize:15}}>{user.payload.user.name}</Typography>
-            <Typography variant="h5" component="div" sx={{ flexGrow: 1}} style={{textAlign:"center"}}>
+            <AccountCircle sx={{ fontSize: 21, m: 0.4 }} />
+            <Typography component="div" sx={{ fontSize: 15 }}>
+              {user.payload.user.name}
+            </Typography>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              style={{ textAlign: "center" }}
+            >
               Travel Knights
             </Typography>
 
@@ -475,10 +484,8 @@ function Row2(props) {
               sx={{ textTransform: "none" }}
               onClick={handleOpenUserMenu}
             >
-             <MenuIcon />
+              <MenuIcon />
             </Button>
-
-          
 
             <Menu
               sx={{ mt: "45px" }}
@@ -504,10 +511,8 @@ function Row2(props) {
         </AppBar>
 
         <Svg />
-         
 
-    <Modal
-          
+        <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={open}
@@ -520,7 +525,6 @@ function Row2(props) {
         >
           <Fade in={open}>
             <Grid sx={style}>
-
               <Typography
                 sx={{ mb: 2 }}
                 textAlign="center"
@@ -530,12 +534,8 @@ function Row2(props) {
               >
                 Here are your trips from {htmlElement}!
               </Typography>
-          
-              <CollapsibleTable2/>
 
-  
-              
-              
+              <CollapsibleTable2 />
             </Grid>
           </Fade>
         </Modal>
@@ -592,7 +592,6 @@ function Row2(props) {
           </Fade>
         </Modal>
       </Box>
-    
     </div>
   );
 }
