@@ -273,6 +273,8 @@ function createData(cityname, state, datestarted, dateended, image) {
     ],
   };
 }
+
+/* ALL THIS CODE IS PLANNED TO BE DELETED
 var STABRV;
 function Row(props) {
 
@@ -332,10 +334,6 @@ function Row(props) {
       
   );
 }
-
-
-
-
 function CollapsibleTable() {
   return (
     <TableContainer component={Paper}>
@@ -367,7 +365,7 @@ function CollapsibleTable() {
     </TableContainer>
   );
 }
-//Code for Table End
+*/
 function CollapsibleTable2() {
   const [open2, setOpen2] = React.useState(false);
   if (itemsnum != 0) {
@@ -538,7 +536,7 @@ function Row2(props) {
         </AppBar>
 
         <Svg />
-        <CollapsibleTable />
+         
 
     <Modal
           
