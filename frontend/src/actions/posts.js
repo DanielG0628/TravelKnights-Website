@@ -60,6 +60,18 @@ export const createUser = (user) => async (dispatch) => {
     console.log(data);
     dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
-    console.log(error.message); //ERROR HERE
+    console.log(error.message);
   }
 };
+/*
+
+export const addMemory = (trip) => async (dispatch) => {
+  try {
+    const { data } = await api.addMemory(trip);
+    console.log(data);
+    dispatch({ type: 'CREATE', payload: data});
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+*/

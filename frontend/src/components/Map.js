@@ -36,7 +36,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import CancelIcon from "@mui/icons-material/Cancel";
-
+//import { addMemory } from '../actions/posts';
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
@@ -108,12 +108,15 @@ export default function Map() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     //html Element has state
-    const newTrip = { date: "", city: "", description: "", state: ""};
+    const newTrip = { date: "", city: "", description: "", stateAbbreviation: "", image: ""};
     newTrip.date = data.get("date");
     newTrip.city = data.get("city");
     newTrip.description = data.get("description");
-    newTrip.state = htmlElement;
+    newTrip.stateAbbreviation = htmlElement;
+    newTrip.image = "img";
     console.log(newTrip);
+    //dispatch(addMemory(newTrip));
+
   }
 
   const [open, setOpen] = React.useState(false);
