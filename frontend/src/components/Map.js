@@ -34,7 +34,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CloseIcon from "@mui/icons-material/Close";
 import { styled} from "@mui/material/styles";
 
-
+//poop
 import AddIcon from "@mui/icons-material/Add";
 
 
@@ -273,14 +273,14 @@ function createData(cityname, state, datestarted, dateended, image) {
     ],
   };
 }
-
+var STABRV;
 function Row(props) {
+
   const { row } = props;
   const [open, setOpen] = React.useState(false);
-
   return (
-    <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+    <div>
+        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -291,11 +291,9 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.cityname}
+          {row.city}
         </TableCell>
-        <TableCell align="left">{row.state}</TableCell>
-        <TableCell align="left">{row.datestarted}</TableCell>
-        <TableCell align="left">{row.image}</TableCell>
+        <TableCell align="left">{STABRV}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -313,14 +311,15 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
+
+                  {row.memories.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">{historyRow.customerId}</TableCell>
-                      <TableCell align="center">{historyRow.amount}</TableCell>
-                      
+                      <TableCell align="center">{historyRow.description}</TableCell>
+                      <TableCell align="center">{historyRow.image}</TableCell>
+
                     </TableRow>
                   ))}
                 </TableBody>
@@ -329,22 +328,13 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </div>
+      
   );
 }
 
-//I'm sure this can be replaced
 
 
-//here we createData with the info from mongo
-const rows = [
-  createData("Orlando", "Florida", "10/12/2012", "10/14/2012", "Image"),
-  createData("Kissimmee", "Florida", "09/12/2021", "10/10/2021", "Image2"),
-  createData("Atlanta", "Florida", "10/12/2012", "10/14/2012", "Image3"),
-  createData("New York", "New York", "12/24/2019", "12/29/2019", "Image4"),
-  createData("Austin", "Texas", "10/19/2014", "10/22/2014", "Image5"),
-
-];
 
 function CollapsibleTable() {
   return (
@@ -354,15 +344,24 @@ function CollapsibleTable() {
           <TableRow>
             <TableCell />
             <TableCell>City</TableCell>
-            <TableCell align="left">State</TableCell>
-            <TableCell align="left">Date</TableCell>
-            <TableCell align="left">Image</TableCell>
+            <TableCell>State</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
+        <React.Fragment>
+
+        {Trips.map((row) => (
+    <div>
+      {STABRV = row.stateAbbrev}
+      {row.cities.map((row) => (
+
+          <Row key={row.city} row={row} />
+      ))}
+   
+   </div>  
+    ))}
+   </React.Fragment>
+
         </TableBody>
       </Table>
     </TableContainer>
