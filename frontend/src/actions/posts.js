@@ -7,43 +7,27 @@ import {
   LOGOUT,
   GOOGAUTH,
   GOOGCREATE,
-} from "../constants/actionTypes";
+} from '../constants/actionTypes';
 
-import * as api from "../api/index";
+import * as api from '../api/index';
 
 export const getUser = (user) => async (dispatch) => {
   try {
-<<<<<<< HEAD
-    const { data } = await api.fetchPosts();
-    dispatch({ type: 'POST', payload: data });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-/*
-export const googgetUser = (user) => async (dispatch) => {
-  try {
-    const { data } = await api.googUser(user);
-    //console.log(error.message);
-    dispatch({ type: "AUTH", payload: data });
-    console.log(data);
-=======
     console.log(user.verified);
     if (user.verified == true) {
-      console.log("YEA");
+      console.log('YEA');
 
       const { data } = await api.getUser(user);
       //data.user.verified == true;
       console.log(data);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     } else {
       const { data } = await api.getUser(user);
       //console.log(error.message);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     }
->>>>>>> cd60ae61e11fa70bd6e08a3d8eeebebf8ff89b28
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
@@ -75,20 +59,8 @@ export const createUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.createUser(user);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
-  } catch (error) {
-    console.log(error.message); //ERROR HERE
-  }
-};
-<<<<<<< HEAD
-*/
-export const createUser = (user) => async (dispatch) => {
-  try {
-    const { data } = await api.createUser(user);
     dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message); //ERROR HERE
   }
 };
-=======
->>>>>>> cd60ae61e11fa70bd6e08a3d8eeebebf8ff89b28
