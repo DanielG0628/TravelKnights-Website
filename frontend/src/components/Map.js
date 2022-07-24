@@ -34,7 +34,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CloseIcon from "@mui/icons-material/Close";
 import { styled} from "@mui/material/styles";
 
-
+//poop
 import AddIcon from "@mui/icons-material/Add";
 
 
@@ -251,106 +251,66 @@ export default function Map() {
     minWidth: '480px',
   };
 
-  //After this line and before return is code solely for the table
-  function createData(cityname, state, datestarted, dateended, image) {
-    return {
-      cityname,
-      state,
-      datestarted,
-      dateended,
-      image,
-      history: [
-        {
-          date: 'Jan. 15, 2021',
-          customerId:
-            'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off ',
-          amount: 3,
-        },
-        {
-          date: '01/12/2020',
-          customerId:
-            'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off2',
-          amount: 1,
-        },
-      ],
-    };
-  }
+/* ALL THIS CODE IS PLANNED TO BE DELETED
+var STABRV;
+function Row(props) {
 
-  function Row(props) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
-
-    return (
-      <React.Fragment>
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-          <TableCell>
-            <IconButton
-              aria-label='expand row'
-              size='small'
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component='th' scope='row'>
-            {row.cityname}
-          </TableCell>
-          <TableCell align='left'>{row.state}</TableCell>
-          <TableCell align='left'>{row.datestarted}</TableCell>
-          <TableCell align='left'>{row.image}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout='auto' unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant='h6' gutterBottom component='div'>
-                  Memories:
-                </Typography>
-                <Table size='small' aria-label='purchases'>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align='center'>Description:</TableCell>
-                      <TableCell align='center'>Image</TableCell>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.city}
+        </TableCell>
+        <TableCell align="left">{STABRV}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Memories:
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell align="center">Description:</TableCell>
+                    <TableCell align="center">Image</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+
+                  {row.memories.map((historyRow) => (
+                    <TableRow key={historyRow.date}>
+                      <TableCell component="th" scope="row">
+                        {historyRow.date}
+                      </TableCell>
+                      <TableCell align="center">{historyRow.description}</TableCell>
+                      <TableCell align="center">{historyRow.image}</TableCell>
+
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {row.history.map((historyRow) => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component='th' scope='row'>
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell align='center'>
-                          {historyRow.customerId}
-                        </TableCell>
-                        <TableCell align='center'>
-                          {historyRow.amount}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </React.Fragment>
-    );
-  }
-
-//I'm sure this can be replaced
-
-
-//here we createData with the info from mongo
-const rows = [
-  createData("Orlando", "Florida", "10/12/2012", "10/14/2012", "Image"),
-  createData("Kissimmee", "Florida", "09/12/2021", "10/10/2021", "Image2"),
-  createData("Atlanta", "Florida", "10/12/2012", "10/14/2012", "Image3"),
-  createData("New York", "New York", "12/24/2019", "12/29/2019", "Image4"),
-  createData("Austin", "Texas", "10/19/2014", "10/22/2014", "Image5"),
-
-];
-
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </div>
+      
+  );
+}
 function CollapsibleTable() {
   return (
     <TableContainer component={Paper}>
@@ -359,21 +319,30 @@ function CollapsibleTable() {
           <TableRow>
             <TableCell />
             <TableCell>City</TableCell>
-            <TableCell align="left">State</TableCell>
-            <TableCell align="left">Date</TableCell>
-            <TableCell align="left">Image</TableCell>
+            <TableCell>State</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
+        <React.Fragment>
+
+        {Trips.map((row) => (
+    <div>
+      {STABRV = row.stateAbbrev}
+      {row.cities.map((row) => (
+
+          <Row key={row.city} row={row} />
+      ))}
+   
+   </div>  
+    ))}
+   </React.Fragment>
+
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
-//Code for Table End
+*/
 function CollapsibleTable2() {
   const [open2, setOpen2] = React.useState(false);
   if (itemsnum != 0) {
@@ -552,7 +521,7 @@ function Row2(props) {
         </AppBar>
 
         <Svg />
-        <CollapsibleTable />
+         
 
     <Modal
           
