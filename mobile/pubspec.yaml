@@ -40,6 +40,15 @@ dependencies:
   flutter_svg: ^1.1.1+1
   http: ^0.13.4
   firebase_auth: ^3.4.2
+  pin_code_fields: ^7.4.0
+  flutter_pw_validator: ^1.4.2
+  firebase_core: ^1.20.0
+  email_auth: ^1.0.0
+  mongo_dart: ^0.7.4+1
+  amplify_flutter: ^0.6.3
+  amplify_datastore: ^0.6.3
+  amplify_datastore_plugin_interface: ^0.6.3
+  syncfusion_flutter_maps: ^20.2.39
   
 
 
@@ -71,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

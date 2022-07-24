@@ -8,12 +8,20 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
+<<<<<<< HEAD
+const path = require('path');
+
+app.use(bodyParser.json({ limit: "30mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
+app.use(express.static(path.join(_dirname, "client/build")))
+=======
 const filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(filename);
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 //app.use(express.static(path.join(__dirname, "frontend/build")));
+>>>>>>> c673f0930bf0f14b4de4c7cc3707de71c8ef06bc
 
 app.use(express.json());
 app.use(cors());
