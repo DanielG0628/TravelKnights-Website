@@ -12,13 +12,13 @@ import bcrypt from "bcrypt";
 // FIXME:
 // Implement a expiration for non verified users
 export const createUser = async (req, res) => {
-  const { name, email, password, states } = req.body;
+  const { name, email, password, states, emailVerified } = req.body;
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
       res.status(500).json({ message: "already an existing user" });
     } else {
-      const user = new Users({ name, email, password, states });
+      const user = new Users({ name, email, password, states, emailVerified });
       const OTP = generateOTP();
       const verificationToken = new VerificationToken({
         owner: user._id,
@@ -48,12 +48,12 @@ export const createUser = async (req, res) => {
 // FIXME:
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
-  const { email, password } = req.body;
-
+  const { email, password, emailVerified } = req.body;
+  console.log(emailVerified);
   Users.findOne({ email: email }, (err, user) => {
     //const correctpass = await bcrypt.compare(password, user.password);
     //console.log(password);
-    //console.log(user.password);
+
     if (user) {
       if (user.emailVerified) {
         console.log("Email Verified");
@@ -61,9 +61,11 @@ export const getUser = async (req, res) => {
           if (error) {
             throw error;
           } else if (!isMatch) {
+            console.log(password + "        " + user.password);
             console.log("Password doesn't match!");
             res.status(401).send({ message: "wrong credentials" });
           } else {
+            console.log(password + "        " + user.password);
             console.log("Password matches!");
             //local storeage send json
             //return res.json(user);
@@ -80,6 +82,7 @@ export const getUser = async (req, res) => {
   });
 };
 
+/*
 export const googcreateUser = async (req, res) => {
   const { name, email, password, states } = req.body;
 
@@ -94,8 +97,8 @@ export const googcreateUser = async (req, res) => {
         token: OTP,
       });
 
-      verificationToken.save();
-      /*
+      verificationToken.save();*/
+/*
       mailVerification().sendMail({
         from: 'verifyEmail@email.com',
         to: user.email,
@@ -103,11 +106,11 @@ export const googcreateUser = async (req, res) => {
         html: generateEmailTemplate(OTP),
       });
 */
+/*
       user.save((err) => {
         if (err) {
           res.status(501).send(err);
         } else {
-          console.log("USER CREATED GOOGLE");
           res.status(201).send(user);
         }
       });
@@ -131,6 +134,7 @@ export const googgetUser = async (req, res) => {
           if (error) {
             throw error;
           } else if (!isMatch) {
+            console.log("ye" + password + user.password);
             console.log("Password doesn't match!");
             res.status(401).send({ message: "*Password is Incorrect*" });
           } else {
@@ -158,7 +162,7 @@ export const googgetUser = async (req, res) => {
 // the correct token and CAN send a confirmation email
 // FIXME:
 // Implement button instead of token for verify email
-
+*/
 export const verifyEmail = async (req, res) => {
   const { userId, OTP } = req.body;
   if (!userId || !OTP.trim())
