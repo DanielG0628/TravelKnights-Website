@@ -45,7 +45,6 @@ export default function SignUp() {
     console.log({
       email: user.get('email'),
       password: user.get('password'),
-      password: user.get('password'),
       name: user.get('name'),
     });
     //using user results in empty req.body
@@ -54,7 +53,7 @@ export default function SignUp() {
     newuser.email = user.get('email');
     newuser.password = user.get('password');
 
-    if (newuser.password == user.get('confirmpassword')) {
+    if (newuser.password === user.get('confirmpassword')) {
       console.log('passwords match');
       dispatch(createUser(newuser));
       handleClickOpen();
@@ -67,32 +66,32 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Avatar
             sx={{
               m: 1,
-              bgcolor: "#f8f4e3",
+              bgcolor: '#f8f4e3',
               width: 120,
               height: 120,
               fontSize: 70,
             }}
           >
-            <img src={Logo} alt="Logo" height="70" />
+            <img src={Logo} alt='Logo' height='70' />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
           <Box
-            component="form"
+            component='form'
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
@@ -100,7 +99,7 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  name="name"
+                  name='name'
                   required
                   fullWidth
                   id='name'
@@ -113,21 +112,21 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  name='password'
+                  label='Password'
+                  type='password'
+                  id='password'
+                  autoComplete='new-password'
                 />
               </Grid>
               <Grid item xs={12}>
@@ -143,10 +142,10 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
-              style={{ backgroundColor: "#65743A" }}
-              type="submit"
+              style={{ backgroundColor: '#65743A' }}
+              type='submit'
               fullWidth
-              variant="contained"
+              variant='contained'
               sx={{ mt: 3, mb: 2 }}
               //onClick={handleClickOpen}
             >
@@ -156,11 +155,11 @@ export default function SignUp() {
             <Dialog
               open={open}
               onClose={handleClose}
-              onBackdropClick="false"
+              onBackdropClick='false'
               PaperProps={{ sx: { bottom: 200 } }}
             >
               <DialogContent>
-                <DialogContentText component="h1" variant="h5">
+                <DialogContentText component='h1' variant='h5'>
                   We have sent you a link to the email provided. Please check
                   you email to finish setting up your account
                 </DialogContentText>
@@ -170,8 +169,8 @@ export default function SignUp() {
               </DialogActions>
             </Dialog>
 
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Link href="/" variant="body2" sx={{ mt: 3 }}>
+            <Box display='flex' justifyContent='center' alignItems='center'>
+              <Link href='/' variant='body2' sx={{ mt: 3 }}>
                 Already have an account? Sign in
               </Link>
             </Box>

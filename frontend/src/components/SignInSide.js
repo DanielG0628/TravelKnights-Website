@@ -58,7 +58,6 @@ export default function SignInSide() {
       //dispatch(createUser(googuser));
 
       if (checkuser.payload.user == null) {
-        console.log('PEEPEEPOOPOO');
         dispatch(createUser(googuser));
         setTimeout(() => {
           dispatch(getUser(googuser));
@@ -138,7 +137,7 @@ export default function SignInSide() {
     google.accounts.id.renderButton(document.getElementById('signInDiv'), {
       theme: 'outline',
       size: 'large',
-      alignItemss: 'center',
+      alignItems: 'center',
       width: 400,
     });
   }, []);
@@ -304,7 +303,7 @@ export default function SignInSide() {
                   justifyContent='center'
                   align='center'
                   sx={{ mt: 0, mb: 0 }}
-                  class='loginresponse'
+                  className='loginresponse'
                 ></Typography>
               </Box>
               <Button
