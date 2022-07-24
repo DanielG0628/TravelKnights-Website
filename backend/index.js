@@ -4,20 +4,23 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import postRoutes from './routes/posts.js';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const path = require('path');
 const app = express();
+const filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(filename);
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
-app.use(express.static(path.join(__dirname, 'frontend/build')));
+//app.use(express.static(path.join(__dirname, "frontend/build")));
 
 app.use(express.json());
 app.use(cors());
 
 dotenv.config();
 
-//app.use('/', postRoutes);
+app.use('/', postRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -31,6 +34,7 @@ mongoose
   )
   .catch((error) => console.log(error.message));
 
+//const path = require("path");
 //const { Email } = require("@mui/icons-material");
 
 app.get('/', (req, res) => res.status(200).send('it works!'));

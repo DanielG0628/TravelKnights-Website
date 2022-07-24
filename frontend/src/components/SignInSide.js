@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,27 +12,117 @@ import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ReactGoogleLogin, { GoogleLogin } from 'react-google-login';
 import jwt_decode from 'jwt-decode';
-import { GoogleLoginButton } from 'react-social-login-buttons';
-import { GithubLoginButton } from 'react-social-login-buttons';
 import { useNavigate } from 'react-router-dom';
 import ri from '../images/randomimage';
 import Logo from '../images/logo.png';
-/*client ID: 718876170013-kfsdq4ttfda4gbr0h7fol2cvu79ipucp.apps.googleusercontent.com */
-/*client secret: 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 */
-/*NEW client ID: 527171615531-lir17eijsj2fi41toef1ro3gauenpdnh.apps.googleusercontent.com */
-/*NEW client secret: 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 */
-const theme = createTheme();
+import { useDispatch } from 'react-redux';
+import { getUser } from '../actions/posts';
+import { createUser } from '../actions/posts';
+import { googcreateUser } from '../actions/posts';
+import { googgetUser } from '../actions/posts';
+import { waitUntil } from 'async-wait-until';
+import { sizeHeight } from '@mui/system';
 
+const theme = createTheme();
+var response = 'A';
 export default function SignInSide() {
-  const [user, setUser] = useState({});
+  var changeThis = document.getElementsByClassName('loginresponse');
+
+  const loginresult = '';
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+
+  //console.log(user);
 
   function handleCallbackResponse(response) {
-    console.log('Encoded JWT ID token: ' + response.credential);
+    //console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
-    console.log(userObject);
+    const googuser = { email: '', password: '' };
+    //console.log(userObject);
+    googuser.email = userObject.email;
+    googuser.password = userObject?.sub;
+    googuser.name = userObject.name;
+    googuser.emailVerified = true;
+    //googuser.verified = true;
+    console.log(googuser); //jti is token
+
+    dispatch(getUser(googuser));
+
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem('profile'));
+      console.log(checkuser);
+
+      //dispatch(createUser(googuser));
+
+      if (checkuser.payload.user == null) {
+        dispatch(createUser(googuser));
+        setTimeout(() => {
+          dispatch(getUser(googuser));
+          setTimeout(() => {
+            dispatch(getUser(googuser));
+
+            const checkuser2 = JSON.parse(localStorage.getItem('profile'));
+            console.log(checkuser2);
+            if (checkuser2.payload.user != null) {
+              navigate('/Map');
+            }
+          }, 500);
+        }, 500);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate('/Map');
+      } else {
+        console.log('Else');
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 500);
+
+    /*
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
+
+      if (checkuser.payload == "*User is not registered*") {
+        console.log("no user");
+        dispatch(googcreateUser(googuser));
+        setTimeout(() => {
+          if (checkuser.payload != "*User is not registered*") {
+            dispatch(getUser(googuser));
+          }
+        }, 1000);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 1000);
+*/
+    /*
     setUser(userObject);
+    try {
+      dispatch({ type: "AUTH", data: { result } });
+
+      navigate("/Map");
+    } catch (error) {
+      console.log(error);
+    }
+*/
+    //implement signin logic like getuser and set user for google
+    //users.js has to have a new function for google signin
   }
 
   useEffect(() => {
@@ -46,10 +135,13 @@ export default function SignInSide() {
 
     google.accounts.id.renderButton(document.getElementById('signInDiv'), {
       theme: 'outline',
+      size: 'large',
+      alignItems: 'center',
+      width: 400,
     });
   }, []);
 
-  const randomImage = ri[Math.floor(Math.random() * ri.length)];
+  const randomImage = ri[Math.floor(Math.random() * ri.length - 1)];
   const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
@@ -71,12 +163,47 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    const newuser = { email: '', password: '' };
+    newuser.email = data.get('email');
+    newuser.password = data.get('password');
+    //console.log(newuser);
+
+    dispatch(getUser(newuser));
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem('profile'));
+      console.log(checkuser);
+
+      if (checkuser == null) {
+        if (checkuser.payload != null) console.log(checkuser.payload);
+
+        console.log('payload is not null ');
+        console.log(checkuser);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate('/Map');
+      } else {
+        console.log('Else');
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 1000); //Waits a little bit to grab user
   };
 
+  const clicktest = async (event) => {
+    const checkuser = JSON.parse(localStorage.getItem('profile'));
+    console.log(checkuser);
+  };
+
+  function check() {
+    const checkuser = JSON.parse(localStorage.getItem('profile'));
+    const qwe = JSON.parse(localStorage.getItem('profile'));
+    console.log(qwe);
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component='main' sx={{ height: '100vh' }}>
@@ -97,7 +224,16 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          item
+          sx={{ backgroundColor: '#f8f4e3' }}
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+        >
           <Box
             sx={{
               my: 8,
@@ -110,7 +246,7 @@ export default function SignInSide() {
             <Avatar
               sx={{
                 m: 1,
-                bgcolor: 'white',
+                bgcolor: '#f8f4e3',
                 width: 120,
                 height: 120,
                 fontSize: 70,
@@ -148,10 +284,27 @@ export default function SignInSide() {
                 id='password'
                 autoComplete='current-password'
               />
+
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
                 label='Remember me'
               />
+              <Box
+                sx={{
+                  marginTop: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  style={{ color: 'red' }}
+                  justify='center'
+                  align='center'
+                  sx={{ mt: 0, mb: 0 }}
+                  className='loginresponse'
+                ></Typography>
+              </Box>
               <Button
                 style={{ backgroundColor: '#65743A' }}
                 type='submit'
@@ -191,21 +344,18 @@ export default function SignInSide() {
                   <ColoredLine color='#666666' />
                 </Grid>
               </Grid>
-              <Grid container>
-                <Grid item xs={6} sm={6} md={6}>
-                  <div id='signInDiv'></div>
-                </Grid>
-
-                <Grid item xs={6} sm={6} md={6}>
-                  <GithubLoginButton />
-                </Grid>
-                {user && (
-                  <div>
-                    <img src={user.picture}></img>
-                    <h3>{user.name}</h3>
-                    <h3>{user.email}</h3>
-                  </div>
-                )}
+              <Grid
+                container
+                display='flex'
+                style={{ alignItems: 'center' }}
+                justifyContent='center'
+              >
+                <div
+                  justify='center'
+                  style={{ alignItems: 'center' }}
+                  id='signInDiv'
+                  data-width='328'
+                ></div>
               </Grid>
             </Box>
           </Box>
