@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -21,9 +22,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { createUser } from '../actions/posts';
-
+var response = '';
 const theme = createTheme();
 export default function SignUp() {
+  var changeThis = document.getElementsByClassName('signupresponse');
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -43,16 +45,24 @@ export default function SignUp() {
     console.log({
       email: user.get('email'),
       password: user.get('password'),
+
       name: user.get('name'),
-      phone: user.get('phone'),
     });
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name');
     newuser.email = user.get('email');
     newuser.password = user.get('password');
-    newuser.phone = user.get('phone');
-    dispatch(createUser(newuser));
+
+    if (newuser.password == user.get('confirmpassword')) {
+      console.log('passwords match');
+      dispatch(createUser(newuser));
+      handleClickOpen();
+      changeThis[0].innerHTML = '';
+    } else {
+      console.log('passwords dont match');
+      changeThis[0].innerHTML = '*Passwords do not match*';
+    }
   };
 
   return (
@@ -70,7 +80,7 @@ export default function SignUp() {
           <Avatar
             sx={{
               m: 1,
-              bgcolor: 'white',
+              bgcolor: '#f8f4e3',
               width: 120,
               height: 120,
               fontSize: 70,
@@ -88,25 +98,17 @@ export default function SignUp() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   name='name'
                   required
                   fullWidth
                   id='name'
-                  label='name'
+                  label='Full Name'
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id='phone'
-                  label='phone'
-                  name='phone'
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -128,6 +130,17 @@ export default function SignUp() {
                   autoComplete='new-password'
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name='confirmpassword'
+                  label='Confirm Password'
+                  type='password'
+                  id='confirmpassword'
+                  autoComplete='new-password'
+                />
+              </Grid>
             </Grid>
             <Button
               style={{ backgroundColor: '#65743A' }}
@@ -135,7 +148,7 @@ export default function SignUp() {
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleClickOpen}
+              //onClick={handleClickOpen}
             >
               Sign Up
             </Button>
@@ -143,27 +156,17 @@ export default function SignUp() {
             <Dialog
               open={open}
               onClose={handleClose}
-              onBackdropClick='false'
-              PaperProps={{ sx: { bottom: 350 } }}
+              onBackdropClick={false}
+              PaperProps={{ sx: { bottom: 200 } }}
             >
               <DialogContent>
-                <DialogContentText>
-                  We have sent you a one time password to the email provided.
-                  Please enter password to finish account setup
+                <DialogContentText component='h1' variant='h5'>
+                  We have sent you a link to the email provided. Please check
+                  you email to finish setting up your account
                 </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin='dense'
-                  id='name'
-                  label='Enter one time password'
-                  type='email'
-                  fullWidth
-                  variant='standard'
-                />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Submit</Button>
+                <Button onClick={handleClose}>OK</Button>
               </DialogActions>
             </Dialog>
 
@@ -171,6 +174,22 @@ export default function SignUp() {
               <Link href='/' variant='body2' sx={{ mt: 3 }}>
                 Already have an account? Sign in
               </Link>
+            </Box>
+            <Box
+              sx={{
+                marginTop: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                style={{ color: 'red' }}
+                justifyContent='center'
+                align='center'
+                sx={{ mt: 0, mb: 0 }}
+                className='signupresponse'
+              ></Typography>
             </Box>
           </Box>
         </Box>
