@@ -37,7 +37,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Input from "@mui/material/Input";
 //poop
 import CancelIcon from "@mui/icons-material/Cancel";
-
+import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -493,13 +493,16 @@ function CollapsibleTable() {
   aria-describedby="Add Trip Form">
     <Fade in={open2}>
     <Box sx={{...addStyle, width: "300px", "& > :not(style)" : {m : 1}}} component="form" onSubmit={handleSubmit}>
-      <Button onClick={handleClose2} startIcon={<CancelIcon/>} style={{marginLeft:"auto", color: "#F8F4E3", backgroundColor: "#65743A"}}>Cancel</Button>
       <h3 id="Add Memory">Add Memory</h3>
-
-      <Input type="date" id="date"></Input>
       <Input placeholder="City Name:" id="city" startAdornment={<InputAdornment position="start"><AddLocationIcon/></InputAdornment>}></Input>
       <Input placeholder="Description:" id="description" startAdornment={<InputAdornment position="start"><StickyNote2Icon/></InputAdornment>}></Input>
-    <Button type="submit" fullWidth style={{marginLeft:"auto", color: "#F8F4E3", backgroundColor: "#65743A"}} startIcon={<AddIcon/>}>Submit</Button>
+
+      <Input type="date" id="date"></Input>
+    <Stack direction="row" spacing={1.5} justifyContent="center">
+    <Button type="submit" style={{color: "#F8F4E3", backgroundColor: "#65743A"}}>Submit</Button>
+    <Button onClick={handleClose2} style={{color: "#65743A"}}>Cancel</Button>
+    </Stack>
+
     </Box>
     </Fade>
   </Modal>
