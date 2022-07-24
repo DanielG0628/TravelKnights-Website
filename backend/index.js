@@ -8,12 +8,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(filename);
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
-app.use(express.static(path.join(__dirname, "frontend/build")));
+//app.use(express.static(path.join(__dirname, "frontend/build")));
 
 app.use(express.json());
 app.use(cors());
@@ -33,6 +33,11 @@ mongoose
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )
   .catch((error) => console.log(error.message));
+
+//const path = require("path");
+//const { Email } = require("@mui/icons-material");
+
+app.get('/', (req, res) => res.status(200).send('it works!'));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
