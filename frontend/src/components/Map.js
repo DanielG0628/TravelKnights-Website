@@ -37,6 +37,11 @@ import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { addMemory } from '../actions/posts';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+//I plan on creating a confirm for delete, might not if too time crunched.
+import CheckIcon from "@mui/icons-material/Check";
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
@@ -103,6 +108,7 @@ export default function Map() {
       }
     }
   }
+//For sending memories to backend, use user.payload.user.states[i].cities[j].memories[k]._id
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -194,6 +200,7 @@ export default function Map() {
     px: 4,
     pb: 3  };
   
+
   function CollapsibleTable2() {
     const [open2, setOpen2] = React.useState(false);
     if (itemsnum != 0) {
@@ -266,17 +273,12 @@ export default function Map() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {row.memories.map((historyRow) => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component="th" scope="row">
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell align="center">
-                          {historyRow.description}
-                        </TableCell>
-                        <TableCell align="center">{historyRow.image}</TableCell>
-                      </TableRow>
-                    ))}
+                 
+                  {row.memories.map((row) => (
+                  <Row3 key={row.date} row={row} />))}
+
+
+
                   </TableBody>
                 </Table>
               </Box>
@@ -286,7 +288,39 @@ export default function Map() {
       </React.Fragment>
     );
   }
+  function Row3(props) {
+    const { row } = props;
+    const [edit, setEdit] = React.useState(false);
+    const [deleteRow, setDelete] = React.useState(false);
+return (
+  <TableRow key={row.date}>
+  <TableCell component="th" scope="row">
+    {row.date}
+  </TableCell>
+  <TableCell align="center">
+    {row.description}
+  </TableCell>
+  <TableCell align="center">{row.image}</TableCell>
+<TableCell align="right">
+<IconButton
+aria-label="edit row"
+size="small"
+onClick={() => setEdit(!edit)} >
+{edit ? <CheckIcon/> : <EditIcon/>}
+</IconButton>
+</TableCell>
+<TableCell align="right">
+<IconButton
+aria-label="delete row"
+size="small"
+onClick={() => setDelete(!deleteRow)} >
+{deleteRow ? <DeleteIcon/> : <DeleteOutlineIcon/>}
+</IconButton>
+</TableCell>
+</TableRow>
+);
 
+  }
   function AddTripModal() {
     //Goal is to return userId, State, city, date, desc, image.
     //ID + State are set, image will use temp for now
