@@ -10,7 +10,7 @@ export const getUser = () => async (dispatch) => {
     console.log(error.message);
   }
 };
-
+/*
 export const googgetUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.googUser(user);
@@ -31,12 +31,12 @@ export const googcreateUser = (user) => async (dispatch) => {
     console.log(error.message); //ERROR HERE
   }
 };
-
+*/
 export const createUser = (user) => async (dispatch) => {
   try {
-    const {data} = await api.createUser(user);
-    dispatch({type: 'CREATE', payload: data });
-  }catch(error) {
+    const { data } = await api.createUser(user);
+    dispatch({ type: 'CREATE', payload: data });
+  } catch (error) {
     console.log(error.message); //ERROR HERE
   }
 };
