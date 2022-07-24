@@ -53,7 +53,7 @@ export default function SignUp() {
     newuser.email = user.get('email');
     newuser.password = user.get('password');
 
-    if (newuser.password === user.get('confirmpassword')) {
+    if (newuser.password == user.get('confirmpassword')) {
       console.log('passwords match');
       dispatch(createUser(newuser));
       handleClickOpen();
@@ -155,7 +155,7 @@ export default function SignUp() {
             <Dialog
               open={open}
               onClose={handleClose}
-              onBackdropClick='false'
+              onBackdropClick={false}
               PaperProps={{ sx: { bottom: 200 } }}
             >
               <DialogContent>
@@ -187,7 +187,7 @@ export default function SignUp() {
                 justifyContent='center'
                 align='center'
                 sx={{ mt: 0, mb: 0 }}
-                class='signupresponse'
+                className='signupresponse'
               ></Typography>
             </Box>
           </Box>

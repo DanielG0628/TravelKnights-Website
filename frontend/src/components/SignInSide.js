@@ -26,7 +26,6 @@ import { sizeHeight } from '@mui/system';
 
 const theme = createTheme();
 var response = 'A';
-
 export default function SignInSide() {
   var changeThis = document.getElementsByClassName('loginresponse');
 
@@ -35,13 +34,13 @@ export default function SignInSide() {
   const [formData, setFormData] = useState();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
 
-  console.log(user);
+  //console.log(user);
 
   function handleCallbackResponse(response) {
     //console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
     const googuser = { email: '', password: '' };
-    console.log(userObject);
+    //console.log(userObject);
     googuser.email = userObject.email;
     googuser.password = userObject?.sub;
     googuser.name = userObject.name;
@@ -300,7 +299,7 @@ export default function SignInSide() {
               >
                 <Typography
                   style={{ color: 'red' }}
-                  justifyContent='center'
+                  justify='center'
                   align='center'
                   sx={{ mt: 0, mb: 0 }}
                   className='loginresponse'
@@ -348,12 +347,12 @@ export default function SignInSide() {
               <Grid
                 container
                 display='flex'
+                style={{ alignItems: 'center' }}
                 justifyContent='center'
-                alignItems='center'
               >
                 <div
-                  justifyContent='center'
-                  alignItems='center'
+                  justify='center'
+                  style={{ alignItems: 'center' }}
                   id='signInDiv'
                   data-width='328'
                 ></div>

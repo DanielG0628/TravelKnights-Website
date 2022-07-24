@@ -10,4 +10,3 @@ if (process.env.NODE_ENV === 'production') {
 export const fetchPosts = () => axios.get(url);
 export const createUser = (user) => axios.post(`${url}/register`, user);
 export const getUser = (user) => axios.post(`${url}/login`, user);
-//export const googcreateUser = (user) => axios.post(`${url}/register`, user);
