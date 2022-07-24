@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react';
-import SignInSide from './components/SignInSide';
-import SignUp from './components/SignUp';
-import Forgot from './components/Forgot';
-import Map from './components/Map';
-import { useDispatch } from 'react-redux';
-import { getPosts } from './actions/posts';
+import React, { useEffect } from "react";
+import SignInSide from "./components/SignInSide";
+import SignUp from "./components/SignUp";
+import Forgot from "./components/Forgot";
+import Map from "./components/Map";
+import Verified from "./components/Verified";
+import { useDispatch } from "react-redux";
+import { getUser } from "./actions/posts";
 
 // import Posts from './components/Posts/Posts';
 // import Form from './components/SignInSide';
 //import useStyles from './components/SignInSide';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   //const classes = useStyles();
@@ -18,7 +19,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   /*useEffect(() => {
-    dispatch(getPosts());
+    dispatch(getUser());
   }, [dispatch]);
 */
   return (
@@ -26,10 +27,11 @@ const App = () => {
       {/* use router switch */}
       <Router>
         <Routes>
-          <Route path='/' element={<SignInSide />} />
-          <Route path='/Forgot' element={<Forgot />} />
-          <Route path='/SignUp' element={<SignUp />} />
-          <Route path='/Map' element={<Map />} />
+          <Route path="/" element={<SignInSide />} />
+          <Route path="/Forgot" element={<Forgot />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/Verified" element={<Verified />} />
+          <Route path="/Map" element={<Map />} />
         </Routes>
       </Router>
     </div>

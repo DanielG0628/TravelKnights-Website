@@ -25,9 +25,17 @@ import Menu from '@mui/material/Menu';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
+import Card from '@mui/material/Card';
+import { CardActionArea } from '@mui/material';
+import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CloseIcon from '@mui/icons-material/Close';
+import { styled } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+//poop
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
@@ -103,10 +111,12 @@ export default function Map() {
         itemsnum = 0;
       }
 
-      if (Trips[i].stateAbbrev == ST) {
-        for (var j = 0; j < Trips[i].cities.length; j++) {
-          items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
-          itemsnum++;
+      for (var i = 0; i < Trips.length; i++) {
+        if (Trips[i].stateAbbrev == ST) {
+          for (var j = 0; j < Trips[i].cities.length; j++) {
+            items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
+            itemsnum++;
+          }
         }
       }
     }
@@ -147,6 +157,7 @@ export default function Map() {
 
   const Logout = () => {
     dispatch({ type: 'LOGOUT' });
+    localStorage.clear();
     navigate('/');
   };
 
@@ -234,10 +245,34 @@ export default function Map() {
     minWidth: '480px',
   };
 
+  //After this line and before return is code solely for the table
+  function createData(cityname, state, datestarted, dateended, image) {
+    return {
+      cityname,
+      state,
+      datestarted,
+      dateended,
+      image,
+      history: [
+        {
+          date: 'Jan. 15, 2021',
+          customerId:
+            'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off ',
+          amount: 3,
+        },
+        {
+          date: '01/12/2020',
+          customerId:
+            'According to all known laws of aviation, there is no way that a bee should be able to fly, its wings are too small to get its fat little body off2',
+          amount: 1,
+        },
+      ],
+    };
+  }
+
   /* ALL THIS CODE IS PLANNED TO BE DELETED
 var STABRV;
 function Row(props) {
-
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   return (
@@ -273,7 +308,6 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-
                   {row.memories.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
@@ -281,7 +315,6 @@ function Row(props) {
                       </TableCell>
                       <TableCell align="center">{historyRow.description}</TableCell>
                       <TableCell align="center">{historyRow.image}</TableCell>
-
                     </TableRow>
                   ))}
                 </TableBody>
@@ -307,19 +340,16 @@ function CollapsibleTable() {
         </TableHead>
         <TableBody>
         <React.Fragment>
-
         {Trips.map((row) => (
     <div>
       {STABRV = row.stateAbbrev}
       {row.cities.map((row) => (
-
           <Row key={row.city} row={row} />
       ))}
    
    </div>  
     ))}
    </React.Fragment>
-
         </TableBody>
       </Table>
     </TableContainer>
@@ -356,14 +386,6 @@ function CollapsibleTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                //here we createData with the info from mongo const rows = [
-                createData('Orlando', 'Florida', '10/12/2012', '10/14/2012',
-                'Image'), createData('Kissimmee', 'Florida', '09/12/2021',
-                '10/10/2021', 'Image2'), createData('Atlanta', 'Florida',
-                '10/12/2012', '10/14/2012', 'Image3'), createData('New York',
-                'New York', '12/24/2019', '12/29/2019', 'Image4'),
-                createData('Austin', 'Texas', '10/19/2014', '10/22/2014',
-                'Image5'), ];
                 {items.map((row) => (
                   <Row2 key={row.city} row={row} />
                 ))}
