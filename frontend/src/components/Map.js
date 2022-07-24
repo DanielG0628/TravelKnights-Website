@@ -25,24 +25,17 @@ import Menu from "@mui/material/Menu";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
-import Card from "@mui/material/Card";
-import { CardActionArea } from "@mui/material";
-import PropTypes from "prop-types";
 import Collapse from "@mui/material/Collapse";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import CloseIcon from "@mui/icons-material/Close";
-import { styled} from "@mui/material/styles";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Input from "@mui/material/Input";
-//poop
-import CancelIcon from "@mui/icons-material/Cancel";
 import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
@@ -114,15 +107,12 @@ export default function Map() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      date: data.get("date"),
-      city: data.get("city"),
-      description: data.get("description")
-    });
-    const newTrip = { date: "", city: "", description: ""};
+    //html Element has state
+    const newTrip = { date: "", city: "", description: "", state: ""};
     newTrip.date = data.get("date");
     newTrip.city = data.get("city");
     newTrip.description = data.get("description");
+    newTrip.state = htmlElement;
     console.log(newTrip);
   }
 
@@ -329,9 +319,9 @@ export default function Map() {
     <Box sx={{...addStyle, width: "300px", "& > :not(style)" : {m : 1}}} component="form" onSubmit={handleSubmit}>
       <h3 id="Add Memory">Add Memory to {htmlElement}</h3>
       <Input placeholder="City Name:" id="city" name="city" startAdornment={<InputAdornment position="start"><AddLocationIcon/></InputAdornment>}></Input>
-      <Input placeholder="Description:" id="description" startAdornment={<InputAdornment position="start"><StickyNote2Icon/></InputAdornment>}></Input>
+      <Input placeholder="Description:" id="description" name="description" startAdornment={<InputAdornment position="start"><StickyNote2Icon/></InputAdornment>}></Input>
 
-      <Input type="date" id="date"></Input>
+      <Input type="date" id="date" name="date"></Input>
     <Stack direction="row" spacing={1.5} justifyContent="center">
     <Button type="submit" style={{color: "#F8F4E3", backgroundColor: "#65743A"}}>Submit</Button>
     <Button onClick={handleClose2} style={{color: "#65743A"}}>Cancel</Button>
@@ -419,58 +409,6 @@ export default function Map() {
 
               <CollapsibleTable2 />
             </Grid>
-          </Fade>
-        </Modal>
-
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open_editdel}
-          onClose={editdeleteClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={open_editdel}>
-            <Box sx={style}>
-              <Typography
-                textAlign="center"
-                id="transition-modal-title"
-                variant="h6"
-                component="h2"
-              >
-                Your Trips
-              </Typography>
-
-              <Typography
-                id="transition-modal-description"
-                textAlign="center"
-                sx={{ mt: 2 }}
-              ></Typography>
-              <Button onClick={openForm}>Delete Trip</Button>
-              <Button onClick={openForm}>Edit Trip</Button>
-              <Box type="form" open={open}>
-                <Grid item xs={12} md={10} padding="10px">
-                  <TextField
-                    id="state"
-                    name="state"
-                    label="State Name"
-                    type="text"
-                  />
-                </Grid>
-                <Grid item xs={12} md={10} sx={{ mx: "10px" }}>
-                  <TextField
-                    padding="10px"
-                    id="name"
-                    name="name"
-                    label="ButtonWillOpenBothForm"
-                    type="text"
-                  />
-                </Grid>
-              </Box>
-            </Box>
           </Fade>
         </Modal>
       </Box>
