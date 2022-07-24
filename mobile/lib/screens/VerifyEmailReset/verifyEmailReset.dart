@@ -22,7 +22,7 @@ class VerifyEmailReset extends StatelessWidget {
                 width: size.width * .1)
           ])),
       //resizeToAvoidBottomInset: false,
-      body: Body(email: 'test123@gmail.com'),
+      body: Body(email: UserData.email),
     );
   }
 }
@@ -188,7 +188,7 @@ class _BodyState extends State<Body> {
                     onPressed: () {
                       textEditingController.clear();
                       //Verify Email API
-                      Navigator.pushReplacementNamed(context, '/');
+                      Navigator.pushReplacementNamed(context, '/resetpassword');
                     },
                     child: Center(
                         child: Text(

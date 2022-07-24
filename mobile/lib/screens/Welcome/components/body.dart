@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:travelknights/components/rounded_button.dart';
@@ -15,9 +16,22 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  bool _isObscure = true;
+  bool _isObscure = true, _isLoading = true;
   String message = "", newMessageText = '';
   String email = "", password = "";
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   changeText() {
     setState() {
       message = newMessageText;
@@ -36,29 +50,38 @@ class _BodyState extends State<Body> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
             child: TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(hintText: 'Enter your email'),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
                   }
                   return null;
+                },
+                onChanged: (text) {
+                  email = text;
                 }),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
             child: TextFormField(
+              controller: passwordController,
               obscureText: _isObscure,
               decoration: InputDecoration(
                   hintText: 'Enter your password',
                   suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscure ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      })),
+                    icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  )),
+              onChanged: (text) {
+                password = text;
+              },
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
@@ -74,7 +97,7 @@ class _BodyState extends State<Body> {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    '/passwordreset',
+                    '/emailreset',
                   );
                 },
                 child: Align(
@@ -93,17 +116,20 @@ class _BodyState extends State<Body> {
             children: [
               RoundedButton(
                   text: "REGISTER",
-                  press: () {
+                  press: () async {
                     Navigator.pushNamed(context, '/register');
                   }),
               SizedBox(width: 10),
               RoundedButton(
                   text: "LOGIN",
                   press: () async {
+                    email = emailController.text;
+
+                    debugPrint("Login with $email and $password");
+                    //Navigator.pushNamed(context, '/states');
                     newMessageText = "";
-                    Navigator.pushNamed(context, '/states');
-                    /*                   changeText();
-                    String payload = '{"login":"' +
+                    changeText();
+                    String payload = '{"email":"' +
                         email.trim() +
                         '","password":"' +
                         password.trim() +
@@ -115,6 +141,8 @@ class _BodyState extends State<Body> {
                           ApiConstants.usersEndpoint +
                           '/login';
                       String ret = await LoginData.getJson(url, payload);
+                      debugPrint("Target URL: $url");
+                      debugPrint("Return $ret");
                       jsonObject = json.decode(ret);
                       userId = jsonObject["id"];
                     } catch (e) {
@@ -132,7 +160,7 @@ class _BodyState extends State<Body> {
                       UserData.email = jsonObject["email"];
                       UserData.password = password;
                       Navigator.pushNamed(context, '/states');
-                    }*/
+                    }
                   }),
             ],
           )

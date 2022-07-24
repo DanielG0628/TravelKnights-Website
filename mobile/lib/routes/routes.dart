@@ -9,6 +9,7 @@ import 'package:travelknights/screens/Welcome/sign_in.dart';
 import 'package:travelknights/screens/verifyEmailRegister/verifyEmailReg.dart';
 
 class Routes {
+  static const String state = "";
   static const String LOGINSCREEN = '/login';
   static const STATESSCREEN = '/states';
   static const FORGOTPASSWORDSCREEN = '/forgotpassword';
@@ -25,7 +26,7 @@ class Routes {
         FORGOTPASSWORDSCREEN: (context) => ForgotPassword(),
         PASSWORDRESETSCREEN: (context) => Reset(),
         REGISTERSCREEN: (context) => Register(),
-        TRIPSSCREEN: (context) => Trips(),
+        //: (context) => Trips(state),
         EMAILREGISTERSCREEN: (context) => VerifyEmailRegister(),
         EMAILRESETSCREEN: (context) => VerifyEmailReset(),
       };

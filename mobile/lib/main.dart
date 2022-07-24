@@ -1,13 +1,16 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:async';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travelknights/constants.dart';
+import 'package:travelknights/dbhelper/mongodb.dart';
 import 'package:travelknights/screens/Welcome/sign_in.dart';
 import 'package:travelknights/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
@@ -32,10 +35,4 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInScreen();
   }
-}
-
-class _User {
-  final String name, email, userName, password;
-
-  _User(this.name, this.email, this.userName, this.password);
 }

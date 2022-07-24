@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:travelknights/components/rounded_button.dart';
 import 'package:travelknights/constants.dart';
 import 'package:travelknights/routes/routes.dart';
+import 'package:travelknights/screens/PasswordReset/passwordReset.dart';
+import 'package:travelknights/utils/getAPI.dart';
+import 'dart:convert';
 
 class Register extends StatelessWidget {
   const Register({Key? key}) : super(key: key);
@@ -33,6 +36,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isObscure = true;
+  String message = "", newMessageText = "";
+
   var email, name;
   String? password1, password2, userPassword;
   bool validUser = true;
@@ -40,6 +45,13 @@ class _BodyState extends State<Body> {
   var emailController = TextEditingController();
   var passwordController1 = TextEditingController();
   var passwordController2 = TextEditingController();
+
+  changeText() {
+    setState() {
+      message = newMessageText;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,18 +63,22 @@ class _BodyState extends State<Body> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
           child: TextFormField(
-            decoration: const InputDecoration(
-                hintText: 'Full Name', prefixIcon: Icon(Icons.person)),
-            validator: validateName,
-          ),
+              decoration: const InputDecoration(
+                  hintText: 'Full Name', prefixIcon: Icon(Icons.person)),
+              validator: validateName,
+              onChanged: (text) {
+                name = text;
+              }),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
           child: TextFormField(
-            decoration: const InputDecoration(
-                hintText: 'Email', prefixIcon: Icon(Icons.email)),
-            validator: validateEmail,
-          ),
+              decoration: const InputDecoration(
+                  hintText: 'Email', prefixIcon: Icon(Icons.email)),
+              validator: validateEmail,
+              onChanged: (text) {
+                email = text;
+              }),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
@@ -120,15 +136,51 @@ class _BodyState extends State<Body> {
         ),
         RoundedButton(
             text: "REGISTER",
-            press: () {
+            press: () async {
               UserData.name = nameController.text;
               UserData.email = emailController.text;
               UserData.password = passwordController1.text;
+              changeText();
+
+              String payload = '{ "name":"' +
+                  UserData.name +
+                  '"email":"' +
+                  UserData.email.trim() +
+                  '","password":"' +
+                  UserData.password.trim() +
+                  '"}';
+              var userId = -1;
+              var jsonObject;
+              String? emailResult = validateEmail(UserData.email);
+              String? nameResult = validateName(UserData.name);
+              if (emailResult != null) {
+                newMessageText = emailResult;
+                changeText();
+              } else if (nameResult != null) {
+                newMessageText = nameResult;
+                changeText();
+              } else {
+                try {
+                  String url = ApiConstants.baseUrl +
+                      ApiConstants.usersEndpoint +
+                      '/register';
+                  String ret = await LoginData.getJson(url, payload);
+                  jsonObject = json.decode(ret);
+                  userId = jsonObject["id"];
+                } catch (e) {
+                  newMessageText = e.toString();
+                  changeText();
+                  return;
+                }
+                UserData.userId = userId;
+                UserData.name = jsonObject["name"];
+                UserData.email = jsonObject["email"];
+                UserData.password = passwordController1.text;
+                Navigator.pushNamed(context, '/emailregister');
+              }
               nameController.clear;
               passwordController1.clear;
               passwordController2.clear;
-              // Send verification API
-              Navigator.pushNamed(context, '/emailregister');
             })
       ],
     ));
@@ -153,7 +205,7 @@ String? validateName(String? value) {
     return 'Please enter a Name';
   }
   if (value.length < 3)
-    return 'Name must be more than 2 charater';
+    return 'Name must be more than 2 characters';
   else
     return null;
 }
