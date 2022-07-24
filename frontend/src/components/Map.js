@@ -103,7 +103,6 @@ export default function Map() {
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
       htmlElement = ST;
       handleClickOpen();
-      el.setAttribute("class", "visited");
       if (itemsnum != 0) {
       items = [];
       itemsnum = 0;
