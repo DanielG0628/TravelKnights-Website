@@ -7,5 +7,3 @@ export const createUser = (user) => axios.post(`${url}/register`, user);
 export const getUser = (user) => axios.post(`${url}/login`, user);
 
 // update
-
-export const googUser = (user) => axios.post(`${url}/register`, user);

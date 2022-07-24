@@ -18,6 +18,7 @@ import ri from "../images/randomimage";
 import Logo from "../images/logo.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../actions/posts";
+import { createUser } from "../actions/posts";
 import { googcreateUser } from "../actions/posts";
 import { googgetUser } from "../actions/posts";
 import { waitUntil } from "async-wait-until";
@@ -39,19 +40,64 @@ export default function SignInSide() {
     //console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
     const googuser = { email: "", password: "" };
+    console.log(userObject);
     googuser.email = userObject.email;
-    googuser.password = userObject?.jti;
+    googuser.password = userObject?.sub;
     googuser.name = userObject.name;
     googuser.emailVerified = true;
+    //googuser.verified = true;
     console.log(googuser); //jti is token
 
-    dispatch(googgetUser(googuser));
+    dispatch(getUser(googuser));
+
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem("profile"));
       console.log(checkuser);
 
-      if (checkuser == null) {
+      //dispatch(createUser(googuser));
+
+      if (checkuser.payload.user == null) {
+        console.log("PEEPEEPOOPOO");
+        dispatch(createUser(googuser));
+        setTimeout(() => {
+          dispatch(getUser(googuser));
+          setTimeout(() => {
+            dispatch(getUser(googuser));
+
+            const checkuser2 = JSON.parse(localStorage.getItem("profile"));
+            console.log(checkuser2);
+            if (checkuser2.payload.user != null) {
+              navigate("/Map");
+            }
+          }, 500);
+        }, 500);
+      } else if (checkuser.payload.user) {
+        //console.log(checkuser.payload);
+        navigate("/Map");
+      } else {
+        console.log("Else");
+        console.log(checkuser.payload);
+        response = checkuser.payload;
+
+        changeThis[0].innerHTML = response;
+
+        //figure out how to update and send to div
+      }
+    }, 500);
+
+    /*
+    setTimeout(() => {
+      const checkuser = JSON.parse(localStorage.getItem("profile"));
+      console.log(checkuser);
+
+      if (checkuser.payload == "*User is not registered*") {
+        console.log("no user");
         dispatch(googcreateUser(googuser));
+        setTimeout(() => {
+          if (checkuser.payload != "*User is not registered*") {
+            dispatch(getUser(googuser));
+          }
+        }, 1000);
       } else if (checkuser.payload.user) {
         //console.log(checkuser.payload);
         navigate("/Map");
@@ -65,7 +111,7 @@ export default function SignInSide() {
         //figure out how to update and send to div
       }
     }, 1000);
-
+*/
     /*
     setUser(userObject);
     try {
