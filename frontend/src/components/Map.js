@@ -368,11 +368,11 @@ export default function Map() {
               </Stack>
 
               <Stack direction="column">
-                <Input type="file" justifyContent="center"></Input>
+                <Input type="file" justify="center"></Input>
               </Stack>
 
               <Grid container justifyContent="center">
-                <Input type="date" id="date"></Input>
+                <Input type="date" name="date" id="date"></Input>
               </Grid>
 
               <Stack direction="row" spacing={1.5} justifyContent="center">
