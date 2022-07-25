@@ -39,7 +39,7 @@ export const createUser = async (req, res) => {
         },
         subject: "Email Verification",
         text: "Click below to verify your email!",
-        html: "<head><text>Click below to verify your email!<br></text><button onlick = 'https://travelknights.herokuapp.com/verified' >Verify Email</button></head>",
+        html: "<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified' id= 'click'>Verify Email</a></head>",
       };
 
       sgMail
