@@ -7,7 +7,10 @@ import { generateOTP } from '../utils/mailVer.js';
 import { mailVerification } from '../utils/mailVer.js';
 import { generateEmailTemplate } from '../utils/mailVer.js';
 import bcrypt from 'bcrypt';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
+dotenv.config('../../.env');
 // API Logic
 // FIXME:
 // Implement a expiration for non verified users
@@ -25,15 +28,25 @@ export const createUser = async (req, res) => {
         token: OTP,
       });
 
-      verificationToken.save();
-      /*
-      mailVerification().sendMail({
-        from: 'verifyEmail@email.com',
-        to: user.email,
-        subject: 'Verify your email account',
-        html: generateEmailTemplate(OTP),
-      });
-*/
+      // Email verification
+      sgMail.setApiKey(process.env.API_KEY);
+
+      const message = {
+        to: email,
+        from: {
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
+        },
+        subject: 'Email Verification',
+        text: 'Click below to verify your email!',
+      };
+
+      sgMail
+        .send(message)
+        .then((response) => console.log('Email sent!'))
+        .catch((error) => console.log(error.message));
+
+      // Save user in mongodb
       user.save((err) => {
         if (err) {
           res.status(501).send(err);
@@ -49,31 +62,31 @@ export const createUser = async (req, res) => {
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
   const { email, password, emailVerified } = req.body;
-  console.log(emailVerified);
+  //console.log(emailVerified);
   Users.findOne({ email: email }, (err, user) => {
     //const correctpass = await bcrypt.compare(password, user.password);
     //console.log(password);
 
     if (user) {
       if (user.emailVerified) {
-        console.log('Email Verified');
+        //console.log('Email Verified');
         bcrypt.compare(password, user.password, function (error, isMatch) {
           if (error) {
             throw error;
           } else if (!isMatch) {
-            console.log(password + '        ' + user.password);
-            console.log("Password doesn't match!");
+            //console.log(password + '        ' + user.password);
+            //console.log("Password doesn't match!");
             res.status(401).send({ message: '*Password is Incorrect*' });
           } else {
-            console.log(password + '        ' + user.password);
-            console.log('Password matches!');
+            //console.log(password + '        ' + user.password);
+            //console.log('Password matches!');
             //local storeage send json
             //return res.json(user);
             res.status(202).send({ user: user });
           }
         });
       } else {
-        console.log('Email not Verified');
+        //console.log('Email not Verified');
         res.status(403).send({ message: '*Email is not Verified*' });
       }
     } else {

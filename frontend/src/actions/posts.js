@@ -14,7 +14,7 @@ import * as api from '../api/index';
 export const getUser = (user) => async (dispatch) => {
   try {
     console.log(user.verified);
-    if (user.verified == true) {
+    if (user.verified === true) {
       console.log('YEA');
 
       const { data } = await api.getUser(user);
@@ -62,5 +62,15 @@ export const createUser = (user) => async (dispatch) => {
     dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message); //ERROR HERE
+  }
+};
+
+export const addMemory = (trip) => async (dispatch) => {
+  try {
+    const { data } = await api.addMemory(trip);
+    console.log(data);
+    dispatch({ type: 'CREATE', payload: data });
+  } catch (error) {
+    console.log(error.message);
   }
 };
