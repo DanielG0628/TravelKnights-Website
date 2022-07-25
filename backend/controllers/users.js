@@ -39,6 +39,7 @@ export const createUser = async (req, res) => {
         },
         subject: "Email Verification",
         text: "Click below to verify your email!",
+        html: "<head><text>Click below to verify your email!<br></text><button onlick = 'https://travelknights.herokuapp.com/verified' >Verify Email</button></head>",
       };
 
       sgMail
@@ -313,6 +314,7 @@ export const addMemory = async (req, res) => {
     }
   });
 };
+
 export const getCurrentUser = async (req, res) => {
   const { _id } = req.body;
 
