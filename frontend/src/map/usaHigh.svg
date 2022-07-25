@@ -2,7 +2,7 @@
 <!-- (c) ammap.com | SVG map of USA -->
 <!-- might need to change class-name once visited=true -->
 
-<svg id="USMap" viewbox="100 -5 1200 750" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1">
+<svg id="USMap" viewbox="70 -5 1200 750" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1">
 	<defs>
 		<style type="text/css">
 			svg

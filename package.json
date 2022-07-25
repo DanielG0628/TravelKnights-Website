@@ -9,7 +9,7 @@
     "npm": "8.11.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],

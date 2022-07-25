@@ -35,54 +35,66 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { addMemory } from "../actions/posts";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { getUser } from "../actions/posts";
 
+//I plan on creating a confirm for delete, might not if too time crunched.
+import CheckIcon from "@mui/icons-material/Check";
 const theme = createTheme();
 var htmlElement = "../map/usaHigh.svg";
 
 //temp objects before info is sent This is proper format
 //Everything involving Trips, most likely needs to be in useEffect.
-const Trips = [
-  {
-    stateAbbrev: "FL",
-    cities: [
-      {
-        city: "Orlando",
-        memories: [
-          { date: "12/12/12", description: "desc.", image: "img" },
-          {
-            date: "12/12/13",
-            description: "This is my test description cool",
-            image: "img",
-          },
-        ],
-      },
-      {
-        city: "Tampa",
-        memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
-      },
-    ],
-  },
-  {
-    stateAbbrev: "GA",
-    cities: [
-      {
-        city: "Atlanta",
-        memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
-      },
-    ],
-  },
-];
+// const Trips = [
+//   {
+//     stateAbbrev: "FL",
+//     cities: [
+//       {
+//         city: "Orlando",
+//         memories: [{ date: "12/12/12", description: "desc.", image: "img" }, { date: "12/12/13", description: "This is my test description cool", image: "img" }],
+//       },
+//       {
+//         city: "Tampa",
+//         memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
+//       },
+//     ],
+//   },
+//   {
+//     stateAbbrev: "GA",
+//     cities: [
+//       {
+//         city: "Atlanta",
+//         memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
+//       },
+//     ],
+//   },
+// ];
 var items = [];
 var itemsnum = 0;
 
 // We format List of Trips in this function.
-
 export default function Map() {
+  const dispatch = useDispatch();
+  const userBackup = JSON.parse(localStorage.getItem("profile"));
+  const newUser = { email: "", password: "" };
+  newUser.email = userBackup.payload.user.email;
+  newUser.password = userBackup.payload.user.password;
+  var user;
+  dispatch(getUser(newUser));
+  setTimeout(() => {
+    user = JSON.parse(localStorage.getItem("profile"));
+    console.log(user);
+    userBackup = user;
+  }, 1000);
   //useEffect needed to getElement without NULL result
-
+  const Trips = userBackup.payload.user.states;
   useEffect(() => {
     for (var i = 0; i < Trips.length; i++) {
-      var STVisited = Trips[i].stateAbbrev;
+      var STVisited = Trips[i].stateAbbreviation;
       STVisited = "US-" + STVisited;
       var STCheck = document.getElementById(STVisited);
       STCheck.setAttribute("class", "visited");
@@ -95,34 +107,55 @@ export default function Map() {
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
       htmlElement = ST;
       handleClickOpen();
-      if (itemsnum != 0) {
+      if (itemsnum !== 0) {
         items = [];
         itemsnum = 0;
       }
       for (var i = 0; i < Trips.length; i++) {
-        if (Trips[i].stateAbbrev == ST) {
+        if (Trips[i].stateAbbreviation == ST) {
           for (var j = 0; j < Trips[i].cities.length; j++) {
-            items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
+            items.push(Trips[i].cities[j]); //Array of Trips
             itemsnum++;
           }
         }
       }
     }
   }
+  //For sending memories to backend, use user.payload.user.states[i].cities[j].memories[k]._id
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      date: data.get("date"),
-      city: data.get("city"),
-      description: data.get("description"),
-    });
-    const newTrip = { date: "", city: "", description: "" };
+    //html Element has state
+    const newTrip = {
+      date: "",
+      city: "",
+      description: "",
+      stateAbbreviation: "",
+      image: "",
+      userId: "",
+    };
     newTrip.date = data.get("date");
     newTrip.city = data.get("city");
     newTrip.description = data.get("description");
+    newTrip.stateAbbreviation = htmlElement;
+    newTrip.image = "img";
+    newTrip.userId = user.payload.user._id;
+    console.log(user);
     console.log(newTrip);
+    dispatch(addMemory(newTrip));
+    setTimeout(() => {
+      dispatch(getUser(newUser));
+      setTimeout(() => {
+        user = JSON.parse(localStorage.getItem("profile"));
+        console.log(user);
+        userBackup = user;
+        Trips = userBackup.payload.user.states;
+      }, 1000);
+      setTimeout(() => {}, 1000);
+
+      window.location.reload();
+    }, 1000);
   };
 
   const [open, setOpen] = React.useState(false);
@@ -145,8 +178,6 @@ export default function Map() {
   const openForm = () => setOpen(true);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("profile"));
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [nav, setnav] = React.useState(null);
@@ -201,7 +232,7 @@ export default function Map() {
 
   function CollapsibleTable2() {
     const [open2, setOpen2] = React.useState(false);
-    if (itemsnum != 0) {
+    if (itemsnum !== 0) {
       return (
         <div>
           <Grid style={{ display: "flex" }}>
@@ -231,6 +262,7 @@ export default function Map() {
       return (
         <h3 style={{ textAlign: "center" }}>
           No Trips Found. Would you like to add one?
+          <AddTripModal />
         </h3>
       );
     }
@@ -270,16 +302,8 @@ export default function Map() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {row.memories.map((historyRow) => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component="th" scope="row">
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell align="center">
-                          {historyRow.description}
-                        </TableCell>
-                        <TableCell align="center">{historyRow.image}</TableCell>
-                      </TableRow>
+                    {row.memories.map((row) => (
+                      <Row3 key={row.date} row={row} />
                     ))}
                   </TableBody>
                 </Table>
@@ -290,7 +314,37 @@ export default function Map() {
       </React.Fragment>
     );
   }
+  function Row3(props) {
+    const { row } = props;
+    const [edit, setEdit] = React.useState(false);
+    const [deleteRow, setDelete] = React.useState(false);
+    return (
+      <TableRow key={row.date}>
+        <TableCell component="th" scope="row">
+          {row.date}
+        </TableCell>
+        <TableCell align="center">{row.description}</TableCell>
+        <TableCell align="center">{row.image}</TableCell>
+        <TableCell align="right">
+          <IconButton
+            aria-label="edit row"
+            size="small"
+            onClick={() => setEdit(!edit)}
+          >
+            {edit ? <CheckIcon /> : <EditIcon />}
+          </IconButton>
 
+          <IconButton
+            aria-label="delete row"
+            size="small"
+            onClick={() => setDelete(!deleteRow)}
+          >
+            {deleteRow ? <DeleteIcon /> : <DeleteOutlineIcon />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    );
+  }
   function AddTripModal() {
     //Goal is to return userId, State, city, date, desc, image.
     //ID + State are set, image will use temp for now
@@ -328,11 +382,11 @@ export default function Map() {
         >
           <Fade in={open2}>
             <Box
-              sx={{ ...addStyle, width: 400, "& > :not(style)": { m: 1 } }}
+              sx={{ ...addStyle, width: "300px", "& > :not(style)": { m: 1 } }}
               component="form"
               onSubmit={handleSubmit}
             >
-              <Typography style={{ fontSize: 22 }} align="center">
+              <Typography style={{ fontSize: 18 }} align="center">
                 <b>Add Memory to {htmlElement}</b>
               </Typography>
               <Stack direction="column" justifyContent="center">
@@ -364,17 +418,17 @@ export default function Map() {
                       </InputAdornment>
                     ),
                   }}
-                />{" "}
+                />
               </Stack>
-
-              <Stack direction="column">
-                <Input type="file" justify="center"></Input>
-              </Stack>
-
-              <Grid container justifyContent="center">
-                <Input type="date" name="date" id="date"></Input>
+              <Grid container>
+                <Grid Item xs={7} sm={7} md={7}>
+                  <Input type="file"></Input>
+                </Grid>
+                <Grid Item xs={0.5} sm={0.5} md={0.5}></Grid>
+                <Grid Itemxs={4} sm={4} md={4}>
+                  <Input type="date" name="date" id="date"></Input>
+                </Grid>
               </Grid>
-
               <Stack direction="row" spacing={1.5} justifyContent="center">
                 <Button
                   type="submit"
@@ -400,7 +454,7 @@ export default function Map() {
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
             <AccountCircle sx={{ fontSize: 21, m: 0.4 }} />
             <Typography component="div" sx={{ fontSize: 15 }}>
-              {user.payload.user.name}
+              {userBackup.payload.user.name}
             </Typography>
             <Typography
               variant="h5"

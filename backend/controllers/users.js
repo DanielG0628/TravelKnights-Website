@@ -64,10 +64,10 @@ export const getUser = async (req, res) => {
             if (user.password == password) {
               res.status(202).send({ user: user });
             } else {
+              console.log(password + "        " + user.password);
+              console.log("Password doesn't match!");
               res.status(401).send({ message: "*Password is Incorrect*" });
             }
-            //console.log(password + '        ' + user.password);
-            //console.log("Password doesn't match!");
           } else {
             //console.log(password + '        ' + user.password);
             //console.log('Password matches!');
@@ -293,6 +293,17 @@ export const addMemory = async (req, res) => {
 
   // Save user info to MongoDB
   user.save((err) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+  });
+};
+export const getCurrentUser = async (req, res) => {
+  const { _id } = req.body;
+
+  Users.findOne({ _id: _id }, (err, user) => {
     if (err) {
       res.status(501).send(err);
     } else {
