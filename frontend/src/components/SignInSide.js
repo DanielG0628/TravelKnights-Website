@@ -22,7 +22,7 @@ import { createUser } from '../actions/posts';
 import { googcreateUser } from '../actions/posts';
 import { googgetUser } from '../actions/posts';
 import { waitUntil } from 'async-wait-until';
-import { sizeHeight } from '@mui/system';
+import { alertTitleClasses } from '@mui/material';
 
 const theme = createTheme();
 var response = 'A';
@@ -163,12 +163,9 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     const newuser = { email: '', password: '' };
     newuser.email = data.get('email');
     newuser.password = data.get('password');
-    //console.log(newuser);
-
     dispatch(getUser(newuser));
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem('profile'));
