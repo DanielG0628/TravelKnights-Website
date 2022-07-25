@@ -153,9 +153,9 @@ export default function Map() {
         userBackup = user;
         Trips = userBackup.payload.user.states;
       }, 1000);
-      setTimeout(() => {}, 1000);
-
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }, 1000);
   };
 
@@ -218,11 +218,12 @@ export default function Map() {
   };
   const addStyle = {
     position: "absolute",
+
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    minWidth: "40%",
-    maxWidth: "50%",
+    minWidth: "30%",
+    maxWidth: "40%",
     bgcolor: "#f8f4e3",
     border: "1px solid #000",
     boxShadow: 24,
@@ -386,6 +387,7 @@ export default function Map() {
         </Stack>
         <Modal
           hideBackdrop
+          style={{ backdropFilter: "blur(10px)" }}
           open={open2}
           onClose={handleClose2}
           aria-labelledby="Add Trip"
@@ -430,16 +432,9 @@ export default function Map() {
                     ),
                   }}
                 />
+                <Input type="date" name="date" id="date"></Input>
               </Stack>
-              <Grid container>
-                <Grid Item xs={7} sm={7} md={7}>
-                  <Input type="file"></Input>
-                </Grid>
-                <Grid Item xs={0.5} sm={0.5} md={0.5}></Grid>
-                <Grid Itemxs={4} sm={4} md={4}>
-                  <Input type="date" name="date" id="date"></Input>
-                </Grid>
-              </Grid>
+
               <Stack direction="row" spacing={1.5} justifyContent="center">
                 <Button
                   type="submit"
@@ -510,6 +505,7 @@ export default function Map() {
         <Svg />
 
         <Modal
+          style={{ backdropFilter: "blur(10px)" }}
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={open}
