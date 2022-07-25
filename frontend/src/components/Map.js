@@ -308,7 +308,8 @@ size="small"
 onClick={() => setEdit(!edit)} >
 {edit ? <CheckIcon/> : <EditIcon/>}
 </IconButton>
-
+</TableCell>
+<TableCell align="right">
 <IconButton
 aria-label="delete row"
 size="small"
