@@ -120,6 +120,7 @@ export default function Map() {
         }
       }
     }
+    items.sort();
   }
   //For sending memories to backend, use user.payload.user.states[i].cities[j].memories[k]._id
 
@@ -235,9 +236,9 @@ export default function Map() {
     if (itemsnum !== 0) {
       return (
         <div>
-          <Grid style={{ display: "flex" }}>
+          <Stack direction="row" justifyContent="center">
             <AddTripModal />
-          </Grid>
+          </Stack>
 
           <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
@@ -260,10 +261,18 @@ export default function Map() {
       );
     } else {
       return (
-        <h3 style={{ textAlign: "center" }}>
-          No Trips Found. Would you like to add one?
+        <div>
+          <Typography
+            sx={{ mb: 2 }}
+            textAlign="center"
+            id="transition-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            No Trips Found. Would you like to add one?
+          </Typography>
           <AddTripModal />
-        </h3>
+        </div>
       );
     }
   }
@@ -362,17 +371,19 @@ export default function Map() {
     };
     return (
       <React.Fragment>
-        <Button
-          onClick={handleOpen2}
-          startIcon={<AddIcon />}
-          style={{
-            marginLeft: "auto",
-            color: "#F8F4E3",
-            backgroundColor: "#65743A",
-          }}
-        >
-          Add Memory
-        </Button>
+        <Stack direction="row" justifyContent="center">
+          <Button
+            onClick={handleOpen2}
+            startIcon={<AddIcon />}
+            style={{
+              color: "#F8F4E3",
+              backgroundColor: "#65743A",
+            }}
+            sx={{ mb: 2 }}
+          >
+            Add Memory
+          </Button>
+        </Stack>
         <Modal
           hideBackdrop
           open={open2}
