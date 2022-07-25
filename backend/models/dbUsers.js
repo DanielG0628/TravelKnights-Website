@@ -22,10 +22,19 @@ const userSchema = mongoose.Schema({
       ],
     },
   ],
+  emailToken:{
+    type: String,
+    required: true,
+  },
   emailVerified: {
     type: Boolean,
     default: false,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    expires: 3600,
+    default: Date.now(),
   },
 });
 
