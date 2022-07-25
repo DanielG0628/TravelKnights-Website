@@ -28,13 +28,17 @@ export const createUser = async (req, res) => {
         token: OTP,
       });
 
+      // Email verification
       sgMail.setApiKey(process.env.API_KEY);
 
       const message = {
         to: email,
-        from: 'travelknightsnoreply@gmail.com',
-        subject: 'Hello from TravelKnights',
-        text: 'Hello nerd',
+        from: {
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
+        },
+        subject: 'Email Verification',
+        text: 'Click below to verify your email!',
       };
 
       sgMail
@@ -42,6 +46,7 @@ export const createUser = async (req, res) => {
         .then((response) => console.log('Email sent!'))
         .catch((error) => console.log(error.message));
 
+      // Save user in mongodb
       user.save((err) => {
         if (err) {
           res.status(501).send(err);
