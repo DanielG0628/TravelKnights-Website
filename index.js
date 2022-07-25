@@ -32,8 +32,6 @@ mongoose
   )
   .catch((error) => console.log(error.message));
 
-//app.get('/', (req, res) => res.status(200).send('it works!'));
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
