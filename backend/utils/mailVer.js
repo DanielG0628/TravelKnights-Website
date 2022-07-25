@@ -25,5 +25,5 @@ export const mailVerification = () => {
 // FIXME:
 // Carlos to make template for token
 export const generateEmailTemplate = (code) => {
-  return code;
+  return '<h3>wazzup fool</h3>';
 };
