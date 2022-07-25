@@ -1,12 +1,12 @@
-import pkg from 'mongoose';
+import pkg from "mongoose";
 const { isValidObjectId } = pkg;
-import Users from '../models/dbUsers.js';
-import VerificationToken from '../models/verificationToken.js';
-import { sendError } from '../utils/helper.js';
-import { generateOTP } from '../utils/mailVer.js';
-import { mailVerification } from '../utils/mailVer.js';
-import { generateEmailTemplate } from '../utils/mailVer.js';
-import bcrypt from 'bcrypt';
+import Users from "../models/dbUsers.js";
+import VerificationToken from "../models/verificationToken.js";
+import { sendError } from "../utils/helper.js";
+import { generateOTP } from "../utils/mailVer.js";
+import { mailVerification } from "../utils/mailVer.js";
+import { generateEmailTemplate } from "../utils/mailVer.js";
+import bcrypt from "bcrypt";
 
 // API Logic
 // FIXME:
@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
-      res.status(500).json({ message: 'already an existing user' });
+      res.status(500).json({ message: "already an existing user" });
     } else {
       const user = new Users({ name, email, password, states, emailVerified });
       const OTP = generateOTP();
@@ -61,9 +61,13 @@ export const getUser = async (req, res) => {
           if (error) {
             throw error;
           } else if (!isMatch) {
+            if (user.password == password) {
+              res.status(202).send({ user: user });
+            } else {
+              res.status(401).send({ message: "*Password is Incorrect*" });
+            }
             //console.log(password + '        ' + user.password);
             //console.log("Password doesn't match!");
-            res.status(401).send({ message: '*Password is Incorrect*' });
           } else {
             //console.log(password + '        ' + user.password);
             //console.log('Password matches!');
@@ -74,10 +78,10 @@ export const getUser = async (req, res) => {
         });
       } else {
         //console.log('Email not Verified');
-        res.status(403).send({ message: '*Email is not Verified*' });
+        res.status(403).send({ message: "*Email is not Verified*" });
       }
     } else {
-      res.status(405).send({ message: '*User is not registered*' });
+      res.status(405).send({ message: "*User is not registered*" });
     }
   });
 };
@@ -166,20 +170,20 @@ export const googgetUser = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   const { userId, OTP } = req.body;
   if (!userId || !OTP.trim())
-    return sendError(res, 'Invalid request, missing parameters!');
+    return sendError(res, "Invalid request, missing parameters!");
 
-  if (!isValidObjectId(userId)) return sendError(res, 'Invalid user id! ');
+  if (!isValidObjectId(userId)) return sendError(res, "Invalid user id! ");
 
   const user = await Users.findById(userId);
-  if (!user) return sendError(res, 'User not found!');
+  if (!user) return sendError(res, "User not found!");
 
-  if (user.verified) return sendError(res, 'This account is already verified!');
+  if (user.verified) return sendError(res, "This account is already verified!");
 
   const token = await VerificationToken.findOne({ owner: user._id });
-  if (!token) return sendError(res, 'User not found!');
+  if (!token) return sendError(res, "User not found!");
 
   const isMatched = await token.compareToken(OTP);
-  if (!isMatched) return sendError(res, 'Please provide a valid token!');
+  if (!isMatched) return sendError(res, "Please provide a valid token!");
 
   user.verified = true;
 
@@ -189,7 +193,7 @@ export const verifyEmail = async (req, res) => {
   // If everything is successful
   res.json({
     success: true,
-    message: 'Email verified!',
+    message: "Email verified!",
     user: { name: user.name, email: user.email, id: user._id },
   });
 };
