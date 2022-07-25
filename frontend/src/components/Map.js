@@ -328,6 +328,7 @@ export default function Map() {
     const { row } = props;
     const [edit, setEdit] = React.useState(false);
     const [deleteRow, setDelete] = React.useState(false);
+
     return (
       <TableRow key={row.date}>
         <TableCell component="th" scope="row">

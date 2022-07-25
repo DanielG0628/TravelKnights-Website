@@ -311,3 +311,63 @@ export const getCurrentUser = async (req, res) => {
     }
   });
 };
+
+//function to update an existing memory
+export const updateMemory = async (req, res) => {
+  //receieve memory ObjectID, state index, city index, memory index, date, description, and image
+  const { userId, stateIdx, cityIdx, memoryIdx, date, description, image } =
+    req.body;
+
+  //create user const var
+  const user = await Users.findById(userId);
+
+  //create and populate updated memory
+  const editedMemory =
+    user.states[stateIdx].cities[cityIdx].memories[memoryIdx];
+  editedMemory.date = date;
+  editedMemory.description = description;
+  editedMemory.img = image;
+
+  //update old memory with updated memory
+  user.states[stateIdx].cities[cityIdx].memories[memoryIdx] = editedMemory;
+
+  // Save user info to MongoDB
+  user.save((err) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+  });
+};
+
+//function to delete an existing memory
+export const deleteMemory = async (req, res) => {
+  //receieve memory ObjectID, state index, city index, memory index
+  const { userId, stateIdx, cityIdx, memoryIdx } = req.body;
+
+  //create user const var
+  const user = await Users.findById(userId);
+
+  //delete the memory at the recieved memory index
+  user.states[stateIdx].cities[cityIdx].memories.splice(memoryIdx, 1);
+
+  //if memories is empty, splice city and recieved city index
+  if (user.states[stateIdx].cities[cityIdx].memories.length == 0) {
+    user.states[stateIdx].cities.splice(cityIdx, 1);
+  }
+
+  //if cities is empty, splice state and recieved state index
+  if (user.states[stateIdx].cities.length == 0) {
+    user.states.splice(stateIdx, 1);
+  }
+
+  // Save user info to MongoDB
+  user.save((err) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+  });
+};

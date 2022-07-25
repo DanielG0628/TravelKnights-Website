@@ -83,3 +83,22 @@ export const addMemory = (trip) => async (dispatch) => {
     console.log(error.message);
   }
 };
+
+export const updateMemory = (trip) => async (dispatch) => {
+  try {
+    const { data } = await api.updateMemory(trip);
+    console.log(data);
+    dispatch({ type: "CREATE", payload: data });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+export const deleteMemory = (trip) => async (dispatch) => {
+  try {
+    const { data } = await api.deleteMemory(trip);
+    console.log(data);
+    dispatch({ type: "CREATE", payload: data });
+  } catch (error) {
+    console.log(error.message);
+  }
+};

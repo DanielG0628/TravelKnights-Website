@@ -282,10 +282,6 @@ export default function SignInSide() {
                 autoComplete="current-password"
               />
 
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Box
                 sx={{
                   marginTop: 0,
