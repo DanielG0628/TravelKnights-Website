@@ -7,7 +7,10 @@ import { generateOTP } from '../utils/mailVer.js';
 import { mailVerification } from '../utils/mailVer.js';
 import { generateEmailTemplate } from '../utils/mailVer.js';
 import bcrypt from 'bcrypt';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
+dotenv.config('../../.env');
 // API Logic
 // FIXME:
 // Implement a expiration for non verified users
@@ -25,15 +28,20 @@ export const createUser = async (req, res) => {
         token: OTP,
       });
 
-      verificationToken.save();
-      /*
-      mailVerification().sendMail({
-        from: 'verifyEmail@email.com',
-        to: user.email,
-        subject: 'Verify your email account',
-        html: generateEmailTemplate(OTP),
-      });
-*/
+      sgMail.setApiKey(process.env.API_KEY);
+
+      const message = {
+        to: email,
+        from: 'travelknightsnoreply@gmail.com',
+        subject: 'Hello from TravelKnights',
+        text: 'Hello nerd',
+      };
+
+      sgMail
+        .send(message)
+        .then((response) => console.log('Email sent!'))
+        .catch((error) => console.log(error.message));
+
       user.save((err) => {
         if (err) {
           res.status(501).send(err);
