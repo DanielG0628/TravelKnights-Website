@@ -61,9 +61,14 @@ export const getUser = async (req, res) => {
           if (error) {
             throw error;
           } else if (!isMatch) {
+            if (user.password == password)
+            {res.status(202).send({ user: user});}
+            else
+            {
             console.log(password + '        ' + user.password);
             console.log("Password doesn't match!");
             res.status(401).send({ message: '*Password is Incorrect*' });
+            }
           } else {
             console.log(password + '        ' + user.password);
             console.log('Password matches!');
@@ -294,5 +299,17 @@ export const addMemory = async (req, res) => {
     } else {
       res.status(201).send(user);
     }
+  });
+};
+export const getCurrentUser = async (req, res) => {
+  const { _id } = req.body;
+  
+  Users.findOne({ _id: _id }, (err, user) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+
   });
 };

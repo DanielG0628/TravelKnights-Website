@@ -32,6 +32,15 @@ export const getUser = (user) => async (dispatch) => {
   }
 };
 
+export const getCurrentUser = (user) => async (dispatch) => {
+  try {
+    const {data} = await api.getCurrentUser(user);
+    dispatch({type: 'AUTH', payload: data});
+  } catch (error) {
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
+    console.log(error.response.data.message);
+  }
+}
 /*
 export const googgetUser = (user) => async (dispatch) => {
   try {

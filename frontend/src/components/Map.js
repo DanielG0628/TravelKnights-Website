@@ -40,6 +40,8 @@ import { addMemory } from '../actions/posts';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { getUser } from '../actions/posts';
+
 //I plan on creating a confirm for delete, might not if too time crunched.
 import CheckIcon from "@mui/icons-material/Check";
 const theme = createTheme();
@@ -47,41 +49,52 @@ var htmlElement = "../map/usaHigh.svg";
 
 //temp objects before info is sent This is proper format
 //Everything involving Trips, most likely needs to be in useEffect.
-const Trips = [
-  {
-    stateAbbrev: "FL",
-    cities: [
-      {
-        city: "Orlando",
-        memories: [{ date: "12/12/12", description: "desc.", image: "img" }, { date: "12/12/13", description: "This is my test description cool", image: "img" }],
-      },
-      {
-        city: "Tampa",
-        memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
-      },
-    ],
-  },
-  {
-    stateAbbrev: "GA",
-    cities: [
-      {
-        city: "Atlanta",
-        memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
-      },
-    ],
-  },
-];
+// const Trips = [
+//   {
+//     stateAbbrev: "FL",
+//     cities: [
+//       {
+//         city: "Orlando",
+//         memories: [{ date: "12/12/12", description: "desc.", image: "img" }, { date: "12/12/13", description: "This is my test description cool", image: "img" }],
+//       },
+//       {
+//         city: "Tampa",
+//         memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
+//       },
+//     ],
+//   },
+//   {
+//     stateAbbrev: "GA",
+//     cities: [
+//       {
+//         city: "Atlanta",
+//         memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
+//       },
+//     ],
+//   },
+// ];
 var items = [];
 var itemsnum = 0;
 
 // We format List of Trips in this function.
-
 export default function Map() {
+  const dispatch = useDispatch();
+  const userBackup = JSON.parse(localStorage.getItem('profile')); 
+  const newUser = { email: "", password: ""};
+  newUser.email = userBackup.payload.user.email;
+  newUser.password = userBackup.payload.user.password;
+  var user;
+  dispatch(getUser(newUser));
+  setTimeout(() => {
+    user = JSON.parse(localStorage.getItem('profile'));
+    console.log(user);
+    userBackup = user;
+  }, 1000)
   //useEffect needed to getElement without NULL result
-
+  const Trips = userBackup.payload.user.states;
   useEffect(() => {
     for (var i = 0; i < Trips.length; i++) {
-      var STVisited = Trips[i].stateAbbrev;
+      var STVisited = Trips[i].stateAbbreviation;
       STVisited = "US-" + STVisited;
       var STCheck = document.getElementById(STVisited);
       STCheck.setAttribute("class", "visited");
@@ -94,14 +107,14 @@ export default function Map() {
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
       htmlElement = ST;
       handleClickOpen();
-      if (itemsnum != 0) {
+      if (itemsnum !== 0) {
         items = [];
         itemsnum = 0;
       }
       for (var i = 0; i < Trips.length; i++) {
-        if (Trips[i].stateAbbrev == ST) {
+        if (Trips[i].stateAbbreviation == ST) {
           for (var j = 0; j < Trips[i].cities.length; j++) {
-            items.push(Trips[i].cities[j]); //Array of Trips in FL DOESNT WORK YET
+            items.push(Trips[i].cities[j]); //Array of Trips
             itemsnum++;
           }
         }
@@ -147,8 +160,6 @@ export default function Map() {
   const openForm = () => setOpen(true);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("profile"));
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [nav, setnav] = React.useState(null);
@@ -203,7 +214,7 @@ export default function Map() {
 
   function CollapsibleTable2() {
     const [open2, setOpen2] = React.useState(false);
-    if (itemsnum != 0) {
+    if (itemsnum !== 0) {
       return (
         <div>
           <Grid style={{ display: "flex" }}>
@@ -234,7 +245,10 @@ export default function Map() {
       return (
         <h3 style={{ textAlign: "center" }}>
           No Trips Found. Would you like to add one?
+          <AddTripModal/>
+
         </h3>
+
       );
     }
   }
@@ -308,8 +322,7 @@ size="small"
 onClick={() => setEdit(!edit)} >
 {edit ? <CheckIcon/> : <EditIcon/>}
 </IconButton>
-</TableCell>
-<TableCell align="right">
+
 <IconButton
 aria-label="delete row"
 size="small"
@@ -392,10 +405,17 @@ onClick={() => setDelete(!deleteRow)} >
                       </InputAdornment>
                     ),
                   }}
-                />{' '}
+                />
               </Stack>
-
-              <Input type='date' id='date'></Input>
+              <Grid container>
+                <Grid Item xs={7} sm={7} md={7}>
+                  <Input type='file'></Input>
+                </Grid>
+                <Grid Item xs={0.5} sm={0.5} md={0.5}></Grid>
+                <Grid Itemxs={4} sm={4} md={4}>
+                  <Input type='date' name='date' id='date'></Input>
+                </Grid>
+              </Grid>
               <Stack direction='row' spacing={1.5} justifyContent='center'>
                 <Button
                   type='submit'
@@ -420,7 +440,7 @@ onClick={() => setDelete(!deleteRow)} >
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
             <AccountCircle sx={{ fontSize: 21, m: 0.4 }} />
             <Typography component="div" sx={{ fontSize: 15 }}>
-              {user.payload.user.name}
+              {userBackup.payload.user.name}
             </Typography>
             <Typography
               variant="h5"
