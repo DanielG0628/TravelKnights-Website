@@ -9,6 +9,7 @@ import { generateEmailTemplate } from '../utils/mailVer.js';
 import bcrypt from 'bcrypt';
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
+import multer from 'multer';
 
 dotenv.config('../../.env');
 // API Logic

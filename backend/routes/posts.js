@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 
 import {
   addMemory,
@@ -8,14 +8,14 @@ import {
   getCurrentUser,
   updateMemory,
   deleteMemory,
-} from "../controllers/users.js";
+} from '../controllers/users.js';
 const router = express.Router();
 
-router.post("/api/login", getUser);
-router.post("/api/register", createUser);
-router.post("/api/verifyEmail", verifyEmail);
-router.post("/api/addMemory", addMemory);
-router.post("/api/getCurrentUser", getCurrentUser);
-router.post("/api/updateMemory", updateMemory);
-router.post("/api/deleteMemory", deleteMemory);
+router.post('/api/login', getUser);
+router.post('/api/register', createUser);
+router.post('/api/verifyEmail', verifyEmail);
+router.post('/api/addMemory', addMemory);
+router.post('/api/getCurrentUser', getCurrentUser);
+router.post('/api/updateMemory', updateMemory);
+router.post('/api/deleteMemory', deleteMemory);
 export default router;
