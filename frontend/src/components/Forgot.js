@@ -124,54 +124,9 @@ export default function SignUp() {
               type="submit"
               variant="contained"
               sx={{ mt: 3, mb: 2, width: 500, textTransform: "none" }}
-              onClick={handleClickOpen}
             >
               Send password reset email
             </Button>
-
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              onBackdropClick="false"
-              PaperProps={{ sx: { bottom: 350 } }}
-            >
-              <DialogContent>
-                <DialogContentText variant="h5" sx={{ mb: 3 }}>
-                  We have sent you a one time password reset code to the email
-                  provided. Please enter a new password
-                </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="resetcode"
-                  label="Enter 6-digit password reset code"
-                  fullWidth
-                  variant="standard"
-                />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="newpass"
-                  label="New password"
-                  type="password"
-                  fullWidth
-                  variant="standard"
-                />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="newpassconfirm"
-                  label="Re-enter password"
-                  type="password"
-                  fullWidth
-                  variant="standard"
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Reset Password</Button>
-              </DialogActions>
-            </Dialog>
 
             <Grid container sx={{ mt: 3, mb: 3 }}>
               <Grid item xs={5} sm={5} md={5}>
