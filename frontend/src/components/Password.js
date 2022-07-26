@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Alert, SpeedDialIcon } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
-import LockOutlined from "@mui/icons-material/LockOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -23,35 +22,19 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import { useParams } from "react-router-dom";
-import { getUser2 } from "../actions/posts";
+import { resetPassword } from "../actions/posts";
 import { verifyEmail } from "../actions/posts";
-
+import LockOutlined from "@mui/icons-material/LockOutlined";
 import { createUser2 } from "../actions/posts";
 import { useDispatch } from "react-redux";
+
 const theme = createTheme();
 
-export default function Verified() {
+export default function Password() {
   const dispatch = useDispatch();
 
-  let { id } = useParams();
   const [open, setOpen] = React.useState(false);
-  console.log(window.location.pathname);
-  const temp = window.location.pathname;
-  const user = { email: "" };
-  const correct = temp.replace("/Verified/", "");
-  console.log(correct);
-  user.email = correct;
-  //user.emailVerified = true;
 
-  setTimeout(() => {
-    console.log(user.email);
-
-    setTimeout(() => {
-      dispatch(verifyEmail(user));
-    }, 2000);
-
-    setTimeout(() => {}, 500);
-  }, 2000);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -71,11 +54,28 @@ export default function Verified() {
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const user = { email: "", password: "" };
+    console.log(data.get("password"));
+    console.log(window.location.pathname);
+    const temp = window.location.pathname;
+    const correct = temp.replace("/Password/", "");
+    console.log(correct);
+
+    user.password = data.get("password");
+    user.email = correct;
+    //user.emailVerified = true;
+
+    setTimeout(() => {
+      console.log(user.email);
+
+      setTimeout(() => {
+        dispatch(resetPassword(user));
+      }, 2000);
+
+      setTimeout(() => {}, 500);
+    }, 2000);
   };
 
   return (
@@ -83,12 +83,14 @@ export default function Verified() {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
+          component="form"
           sx={{
             marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
+          onSubmit={handleSubmit}
         >
           <Avatar
             sx={{
@@ -100,40 +102,48 @@ export default function Verified() {
               fontSize: 54,
             }}
           >
-            <MarkEmailReadIcon fontSize="70px" />
+            <LockOutlined fontSize="70px" />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Email Verified
-          </Typography>
           <Typography
             component="h1"
             variant="body2"
             align="center"
             sx={{ m: 3 }}
           >
-            Please use the link below to sign in to your account
+            Enter a new password for your account
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="password"
+                label="New Password"
+                name="password"
+                autoComplete="password"
+                type="password"
+              />
+            </Grid>
+
+            <Grid item xs={12}></Grid>
+          </Grid>
+          <Button
+            style={{ backgroundColor: "#65743A" }}
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 2, width: 500, textTransform: "none" }}
           >
+            Set new password
+          </Button>
+          <Box display="flex" justifyContent="center" alignItems="center">
             <Button
+              href="/"
               style={{ backgroundColor: "#65743A" }}
               type="submit"
               variant="contained"
-              href="/"
-              sx={{
-                mt: 3,
-                mb: 2,
-                height: 50,
-                width: 500,
-                textTransform: "none",
-              }}
-              onClick={handleClickOpen}
+              sx={{ mt: 3, mb: 2, width: 500, textTransform: "none" }}
             >
-              Go to Sign In page
+              back to login
             </Button>
           </Box>
         </Box>

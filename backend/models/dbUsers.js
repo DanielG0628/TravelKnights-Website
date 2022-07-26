@@ -27,6 +27,11 @@ const userSchema = mongoose.Schema({
     default: false,
     required: true,
   },
+  createdAt: {
+    type: Date,
+    expires: 3600,
+    default: Date.now(),
+  },
 });
 
 userSchema.pre("save", async function (next) {
