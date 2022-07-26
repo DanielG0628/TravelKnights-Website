@@ -333,31 +333,35 @@ export const updateMemory = async (req, res) => {
   const { userId, stateIdx, cityId, memoryId, date, description, image } =
     req.body;
 
-  let cityIdx = 0;
-  let memoryIdx = 0;
+  let cityIdx = -1;
+  let memoryIdx = -1;
 
   //create user const var
   const user = await Users.findById(userId);
-  for (let i = 0; i < user.states[stateIdx].cities.length; i++) {
-    if (user.states[stateIdx].cities[i].city == cityId) {
+  for (var i = 0; i < user.states[stateIdx].cities.length; i++) {
+    if (user.states[stateIdx].cities[i]._id == cityId) {
       cityIdx = i;
       break;
     }
   }
+
+  console.log(cityIdx);
   for (
-    let j = 0;
+    var j = 0;
     j < user.states[stateIdx].cities[cityIdx].memories.length;
     j++
   ) {
-    if (user.states[stateIdx].cities[cityIdx].memories[j]._id === memoryId) {
+    if (user.states[stateIdx].cities[cityIdx].memories[j]._id == memoryId) {
       memoryIdx = j;
       break;
     }
   }
+  console.log(memoryIdx);
 
   //create and populate updated memory
   const editedMemory =
     user.states[stateIdx].cities[cityIdx].memories[memoryIdx];
+
   editedMemory.date = date;
   editedMemory.description = description;
   editedMemory.img = image;
@@ -377,11 +381,31 @@ export const updateMemory = async (req, res) => {
 
 //function to delete an existing memory
 export const deleteMemory = async (req, res) => {
-  //receieve memory ObjectID, state index, city index, memory index
-  const { userId, stateIdx, cityIdx, memoryIdx } = req.body;
+  const { userId, stateIdx, cityId, memoryId } = req.body;
+
+  let cityIdx = -1;
+  let memoryIdx = -1;
 
   //create user const var
   const user = await Users.findById(userId);
+
+  for (var i = 0; i < user.states[stateIdx].cities.length; i++) {
+    if (user.states[stateIdx].cities[i]._id == cityId) {
+      cityIdx = i;
+      break;
+    }
+  }
+
+  for (
+    var j = 0;
+    j < user.states[stateIdx].cities[cityIdx].memories.length;
+    j++
+  ) {
+    if (user.states[stateIdx].cities[cityIdx].memories[j]._id == memoryId) {
+      memoryIdx = j;
+      break;
+    }
+  }
 
   //delete the memory at the recieved memory index
   user.states[stateIdx].cities[cityIdx].memories.splice(memoryIdx, 1);
