@@ -44,42 +44,20 @@ import { getUser } from '../actions/posts';
 
 //I plan on creating a confirm for delete, might not if too time crunched.
 import CheckIcon from '@mui/icons-material/Check';
+import { updateMemory } from '../actions/posts';
+import { deleteMemory } from '../actions/posts';
 const theme = createTheme();
 var htmlElement = '../map/usaHigh.svg';
 
-//temp objects before info is sent This is proper format
-//Everything involving Trips, most likely needs to be in useEffect.
-// const Trips = [
-//   {
-//     stateAbbrev: "FL",
-//     cities: [
-//       {
-//         city: "Orlando",
-//         memories: [{ date: "12/12/12", description: "desc.", image: "img" }, { date: "12/12/13", description: "This is my test description cool", image: "img" }],
-//       },
-//       {
-//         city: "Tampa",
-//         memories: [{ date: "02/10/22", description: "desc.2", image: "img" }],
-//       },
-//     ],
-//   },
-//   {
-//     stateAbbrev: "GA",
-//     cities: [
-//       {
-//         city: "Atlanta",
-//         memories: [{ date: "12/12/02", description: "desc.3", image: "img" }],
-//       },
-//     ],
-//   },
-// ];
 var items = [];
 var itemsnum = 0;
-
+var cityIdx = '';
+var memoryIdx = '';
+var stateindex = '';
 // We format List of Trips in this function.
 export default function Map() {
   const dispatch = useDispatch();
-  const userBackup = JSON.parse(localStorage.getItem('profile'));
+  var userBackup = JSON.parse(localStorage.getItem('profile'));
   const newUser = { email: '', password: '' };
   newUser.email = userBackup.payload.user.email;
   newUser.password = userBackup.payload.user.password;
@@ -91,7 +69,8 @@ export default function Map() {
     userBackup = user;
   }, 1000);
   //useEffect needed to getElement without NULL result
-  const Trips = userBackup.payload.user.states;
+  var Trips = userBackup.payload.user.states;
+  const userIdx = userBackup.payload.user._id;
   useEffect(() => {
     for (var i = 0; i < Trips.length; i++) {
       var STVisited = Trips[i].stateAbbreviation;
@@ -113,6 +92,7 @@ export default function Map() {
       }
       for (var i = 0; i < Trips.length; i++) {
         if (Trips[i].stateAbbreviation == ST) {
+          stateindex = i;
           for (var j = 0; j < Trips[i].cities.length; j++) {
             items.push(Trips[i].cities[j]); //Array of Trips
             itemsnum++;
@@ -123,6 +103,62 @@ export default function Map() {
     items.sort();
   }
   //For sending memories to backend, use user.payload.user.states[i].cities[j].memories[k]._id
+  const handleEdit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const updateTrip = {
+      userId: '',
+      stateIdx: '',
+      cityId: '',
+      memoryId: '',
+      date: '',
+      description: '',
+      image: '',
+    };
+    updateTrip.date = data.get('date');
+    updateTrip.description = data.get('description');
+    updateTrip.image = data.get('image');
+    updateTrip.memoryId = memoryIdx;
+    updateTrip.cityId = cityIdx;
+    updateTrip.stateIdx = stateindex;
+    updateTrip.userId = user.payload.user._id;
+    console.log(updateTrip);
+    dispatch(updateMemory(updateTrip));
+
+    setTimeout(() => {
+      dispatch(getUser(newUser));
+      setTimeout(() => {
+        user = JSON.parse(localStorage.getItem('profile'));
+        console.log(user);
+        userBackup = user;
+        Trips = userBackup.payload.user.states;
+      }, 1000);
+      setTimeout(() => {}, 1000);
+
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handleDelete = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const deleteTrip = {
+      userId: '',
+      stateIdx: '',
+      cityId: '',
+      memoryId: '',
+      date: '',
+      description: '',
+      image: '',
+    };
+    deleteTrip.memoryId = memoryIdx;
+    deleteTrip.cityId = cityIdx;
+    deleteTrip.stateIdx = stateindex;
+    deleteTrip.userId = user.payload.user._id;
+    console.log(deleteTrip);
+    dispatch(deleteMemory(deleteTrip));
+    window.location.reload();
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -140,10 +176,11 @@ export default function Map() {
     newTrip.city = data.get('city');
     newTrip.description = data.get('description');
     newTrip.stateAbbreviation = htmlElement;
-    newTrip.image = 'img';
+    newTrip.image = '';
     newTrip.userId = user.payload.user._id;
     console.log(user);
     console.log(newTrip);
+
     dispatch(addMemory(newTrip));
     setTimeout(() => {
       dispatch(getUser(newUser));
@@ -153,9 +190,9 @@ export default function Map() {
         userBackup = user;
         Trips = userBackup.payload.user.states;
       }, 1000);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      setTimeout(() => {}, 1000);
+
+      window.location.reload();
     }, 1000);
   };
 
@@ -218,12 +255,11 @@ export default function Map() {
   };
   const addStyle = {
     position: 'absolute',
-
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    minWidth: '30%',
-    maxWidth: '40%',
+    minWidth: '40%',
+    maxWidth: '50%',
     bgcolor: '#f8f4e3',
     border: '1px solid #000',
     boxShadow: 24,
@@ -231,7 +267,6 @@ export default function Map() {
     px: 4,
     pb: 3,
   };
-
   function CollapsibleTable2() {
     const [open2, setOpen2] = React.useState(false);
     if (itemsnum !== 0) {
@@ -280,6 +315,8 @@ export default function Map() {
   function Row2(props) {
     const { row } = props;
     const [open2, setOpen2] = React.useState(false);
+    const cityname = row.city;
+    cityIdx = row._id;
     return (
       <React.Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -308,12 +345,14 @@ export default function Map() {
                     <TableRow>
                       <TableCell>Date</TableCell>
                       <TableCell align='center'>Description:</TableCell>
-                      <TableCell align='center'>Image</TableCell>
+                      <TableCell align='center'></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {row.memories.map((row) => (
-                      <Row3 key={row.date} row={row} />
+                      <React.Fragment>
+                        <Row3 key={row.date} row={row} cityname={cityname} />
+                      </React.Fragment>
                     ))}
                   </TableBody>
                 </Table>
@@ -324,47 +363,154 @@ export default function Map() {
       </React.Fragment>
     );
   }
+
   function Row3(props) {
     const { row } = props;
     const [edit, setEdit] = React.useState(false);
     const [deleteRow, setDelete] = React.useState(false);
-
+    const cityname = props.cityname;
+    const handleClose2 = () => {
+      setEdit(false);
+    };
+    const handleClose3 = () => {
+      setDelete(false);
+    };
+    memoryIdx = row._id;
     return (
-      <TableRow key={row.date}>
-        <TableCell component='th' scope='row'>
-          {row.date}
-        </TableCell>
-        <TableCell align='center'>{row.description}</TableCell>
-        <TableCell align='center'>{row.image}</TableCell>
-        <TableCell align='right'>
-          <IconButton
-            aria-label='edit row'
-            size='small'
-            onClick={() => setEdit(!edit)}
-          >
-            {edit ? <CheckIcon /> : <EditIcon />}
-          </IconButton>
+      <React.Fragment>
+        <Modal
+          aria-labelledby='transition-modal-title'
+          aria-describedby='transition-modal-description'
+          open={edit}
+          onClose={handleClose2}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={edit}>
+            <Grid sx={style} component='form' onSubmit={handleEdit}>
+              <Typography
+                sx={{ mb: 2 }}
+                textAlign='center'
+                id='transition-modal-title'
+                variant='h6'
+                component='h2'
+              >
+                Edit your Trip on {row.date} in {cityname}!
+              </Typography>
+              <TextField
+                placeholder='Description:'
+                id='standard-multiline-flexible'
+                multiline
+                name='description'
+                required='required'
+                maxRows={4}
+                variant='standard'
+                inputProps={{
+                  maxLength: 145,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <StickyNote2Icon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Grid Item xs={4} sm={4} md={4} margin={1}>
+                <Input
+                  type='date'
+                  name='date'
+                  id='date'
+                  required='required'
+                ></Input>
+              </Grid>
+              <Grid container justifyContent='flex-end'>
+                <Button
+                  type='submit'
+                  style={{ color: '#F8F4E3', backgroundColor: '#65743A' }}
+                >
+                  Submit
+                </Button>
+                <Button onClick={handleClose2} style={{ color: '#65743A' }}>
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
+          </Fade>
+        </Modal>
 
-          <IconButton
-            aria-label='delete row'
-            size='small'
-            onClick={() => setDelete(!deleteRow)}
-          >
-            {deleteRow ? <DeleteIcon /> : <DeleteOutlineIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
+        <Modal
+          aria-labelledby='transition-modal-title'
+          aria-describedby='transition-modal-description'
+          open={deleteRow}
+          onClose={handleClose3}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={deleteRow}>
+            <Grid sx={style} component='form' onSubmit={handleDelete}>
+              <Typography
+                sx={{ mb: 2 }}
+                textAlign='center'
+                id='transition-modal-title'
+                variant='h6'
+                component='h2'
+              >
+                Would you like you delete your trip in {cityname} on {row.date}?
+              </Typography>
+              <Grid container justifyContent='center'>
+                <Button
+                  onClick={handleDelete}
+                  style={{ color: '#F8F4E3', backgroundColor: '#65743A' }}
+                >
+                  Submit
+                </Button>
+                <Button onClick={handleClose3} style={{ color: '#65743A' }}>
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
+          </Fade>
+        </Modal>
+
+        <TableRow key={row.date}>
+          <TableCell component='th' scope='row'>
+            {row.date}
+          </TableCell>
+          <TableCell align='center'>{row.description}</TableCell>
+          <TableCell align='right'>
+            <IconButton
+              aria-label='edit row'
+              size='small'
+              onClick={() => setEdit(!edit)}
+            >
+              {edit ? <CheckIcon /> : <EditIcon />}
+            </IconButton>
+
+            <IconButton
+              aria-label='delete row'
+              size='small'
+              onClick={() => setDelete(!deleteRow)}
+            >
+              {deleteRow ? <DeleteIcon /> : <DeleteOutlineIcon />}
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
     );
   }
+
   function AddTripModal() {
     //Goal is to return userId, State, city, date, desc, image.
     //ID + State are set, image will use temp for now
-    const [month, setMonth] = useState('Jan.');
     const [open2, setOpen2] = React.useState(false);
 
-    const handleChange = (event) => {
-      setMonth(event.target.value);
-    };
     const handleOpen2 = () => {
       setOpen2(true);
     };
@@ -388,7 +534,6 @@ export default function Map() {
         </Stack>
         <Modal
           hideBackdrop
-          style={{ backdropFilter: 'blur(10px)' }}
           open={open2}
           onClose={handleClose2}
           aria-labelledby='Add Trip'
@@ -404,23 +549,31 @@ export default function Map() {
                 <b>Add Memory to {htmlElement}</b>
               </Typography>
               <Stack direction='column' justifyContent='center'>
-                <Input
+                <TextField
                   placeholder='City Name:'
                   id='city'
+                  variant='standard'
+                  required='required'
+                  inputProps={{
+                    minLength: 3,
+                    maxLength: 33,
+                  }}
                   name='city'
-                  startAdornment={
-                    <InputAdornment position='start'>
-                      <AddLocationIcon />
-                    </InputAdornment>
-                  }
-                ></Input>
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <AddLocationIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                ></TextField>
                 <TextField
                   placeholder='Description:'
                   id='standard-multiline-flexible'
                   multiline
                   name='description'
                   maxRows={4}
-                  onChange={handleChange}
+                  required='required'
                   variant='standard'
                   inputProps={{
                     maxLength: 145,
@@ -433,9 +586,21 @@ export default function Map() {
                     ),
                   }}
                 />
-                <Input type='date' name='date' id='date'></Input>
               </Stack>
-
+              <Grid container>
+                <Grid Item xs={7} sm={7} md={7}>
+                  <Input type='file'></Input>
+                </Grid>
+                <Grid Item xs={0.5} sm={0.5} md={0.5}></Grid>
+                <Grid Itemxs={4} sm={4} md={4}>
+                  <Input
+                    type='date'
+                    name='date'
+                    id='date'
+                    required='required'
+                  ></Input>
+                </Grid>
+              </Grid>
               <Stack direction='row' spacing={1.5} justifyContent='center'>
                 <Button
                   type='submit'
@@ -506,7 +671,6 @@ export default function Map() {
         <Svg />
 
         <Modal
-          style={{ backdropFilter: 'blur(10px)' }}
           aria-labelledby='transition-modal-title'
           aria-describedby='transition-modal-description'
           open={open}

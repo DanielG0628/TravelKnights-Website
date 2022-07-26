@@ -338,6 +338,8 @@ export const updateMemory = async (req, res) => {
 
   //create user const var
   const user = await Users.findById(userId);
+
+  // find city idx, we'll find a better way to do this some other day, it works for now
   for (var i = 0; i < user.states[stateIdx].cities.length; i++) {
     if (user.states[stateIdx].cities[i]._id == cityId) {
       cityIdx = i;
@@ -345,7 +347,7 @@ export const updateMemory = async (req, res) => {
     }
   }
 
-  console.log(cityIdx);
+  // find memory idx, we'll find a better way to do this some other day, it works for now
   for (
     var j = 0;
     j < user.states[stateIdx].cities[cityIdx].memories.length;
@@ -356,7 +358,6 @@ export const updateMemory = async (req, res) => {
       break;
     }
   }
-  console.log(memoryIdx);
 
   //create and populate updated memory
   const editedMemory =
