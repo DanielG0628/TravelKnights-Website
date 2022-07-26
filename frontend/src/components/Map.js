@@ -65,7 +65,7 @@ export default function Map() {
   dispatch(getUser(newUser));
   setTimeout(() => {
     user = JSON.parse(localStorage.getItem('profile'));
-    console.log(user);
+
     userBackup = user;
   }, 1000);
   //useEffect needed to getElement without NULL result
@@ -122,34 +122,26 @@ export default function Map() {
     updateTrip.cityId = cityIdx;
     updateTrip.stateIdx = stateindex;
     updateTrip.userId = user.payload.user._id;
-    console.log(updateTrip);
     dispatch(updateMemory(updateTrip));
 
     setTimeout(() => {
       dispatch(getUser(newUser));
       setTimeout(() => {
         user = JSON.parse(localStorage.getItem('profile'));
-        console.log(user);
         userBackup = user;
         Trips = userBackup.payload.user.states;
-      }, 1000);
-      setTimeout(() => {}, 1000);
-
+      }, 500);
       window.location.reload();
-    }, 1000);
+    }, 500);
   };
 
   const handleDelete = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     const deleteTrip = {
       userId: '',
       stateIdx: '',
       cityId: '',
       memoryId: '',
-      date: '',
-      description: '',
-      image: '',
     };
     deleteTrip.memoryId = memoryIdx;
     deleteTrip.cityId = cityIdx;
@@ -157,7 +149,16 @@ export default function Map() {
     deleteTrip.userId = user.payload.user._id;
     console.log(deleteTrip);
     dispatch(deleteMemory(deleteTrip));
-    window.location.reload();
+
+    setTimeout(() => {
+      dispatch(getUser(newUser));
+      setTimeout(() => {
+        user = JSON.parse(localStorage.getItem('profile'));
+        userBackup = user;
+        Trips = userBackup.payload.user.states;
+      }, 800);
+      window.location.reload();
+    }, 800);
   };
 
   const handleSubmit = (event) => {
@@ -189,11 +190,11 @@ export default function Map() {
         console.log(user);
         userBackup = user;
         Trips = userBackup.payload.user.states;
-      }, 1000);
-      setTimeout(() => {}, 1000);
-
-      window.location.reload();
-    }, 1000);
+      }, 500);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }, 500);
   };
 
   const [open, setOpen] = React.useState(false);
