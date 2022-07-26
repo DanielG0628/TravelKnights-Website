@@ -1,15 +1,8 @@
-import pkg from 'mongoose';
-const { isValidObjectId } = pkg;
 import Users from '../models/dbUsers.js';
-import VerificationToken from '../models/verificationToken.js';
-import { sendError } from '../utils/helper.js';
-import { generateOTP } from '../utils/mailVer.js';
-import { mailVerification } from '../utils/mailVer.js';
-import { generateEmailTemplate } from '../utils/mailVer.js';
 import bcrypt from 'bcrypt';
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
-import multer from 'multer';
+//import multer from 'multer';
 
 dotenv.config('../../.env');
 // API Logic
@@ -37,7 +30,6 @@ export const createUser = async (req, res) => {
         text: 'Click below to verify your email!',
         html: `<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified/${user.email}' id= 'click'>Verify Email</a></head>`,
       };
-      console.log(user);
 
       sgMail
         .send(message)
@@ -63,9 +55,6 @@ export const createUser2 = async (req, res) => {
     const user2 = new Users({ name, email, password, states, emailVerified });
 
     // Email verification
-
-    console.log(user2);
-
     sgMail
       .send(message)
       .then((response) => console.log('Email sent!'))
@@ -86,14 +75,10 @@ export const createUser2 = async (req, res) => {
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
-  //console.log(emailVerified);
-  Users.findOne({ email: email }, (err, user) => {
-    //const correctpass = await bcrypt.compare(password, user.password);
-    //console.log(password);
 
+  Users.findOne({ email: email }, (err, user) => {
     if (user) {
       if (user.emailVerified) {
-        //console.log('Email Verified');
         bcrypt.compare(password, user.password, function (error, isMatch) {
           if (error) {
             throw error;
@@ -101,21 +86,13 @@ export const getUser = async (req, res) => {
             if (user.password == password) {
               res.status(202).send({ user: user });
             } else {
-              console.log(password + '        ' + user.password);
-              console.log("Password doesn't match!");
               res.status(401).send({ message: '*Password is Incorrect*' });
             }
           } else {
-            //console.log(password + '        ' + user.password);
-            //console.log('Password matches!');
-            //local storeage send json
-            //return res.json(user);
-
             res.status(202).send({ user: user });
           }
         });
       } else {
-        //console.log('Email not Verified');
         res.status(403).send({ message: '*Email is not Verified*' });
       }
     } else {
@@ -126,34 +103,21 @@ export const getUser = async (req, res) => {
 
 export const getUser2 = async (req, res) => {
   const { email, password, emailVerified } = req.body;
-  //console.log(emailVerified);
   Users.findOne({ email: email }, (err, user) => {
-    //const correctpass = await bcrypt.compare(password, user.password);
-    //console.log(password);
-
     if (user) {
       if (user.emailVerified) {
-        //console.log('Email Verified');
         bcrypt.compare(password, user.password, function (error, isMatch) {
           if (!isMatch) {
             if (user.password == password) {
               res.status(202).send({ user: user });
             } else {
-              console.log(password + '        ' + user.password);
-              console.log("Password doesn't match!");
               res.status(401).send({ message: '*Password is Incorrect*' });
             }
           } else {
-            //console.log(password + '        ' + user.password);
-            //console.log('Password matches!');
-            //local storeage send json
-            //return res.json(user);
-
             res.status(202).send({ user: user });
           }
         });
       } else {
-        //console.log('Email not Verified');
         res.status(201).send({ user: user });
       }
     } else {
@@ -161,94 +125,13 @@ export const getUser2 = async (req, res) => {
     }
   });
 };
-/*
-export const googcreateUser = async (req, res) => {
-  const { name, email, password, states } = req.body;
 
-  Users.findOne({ email: email }, (err, user) => {
-    if (user) {
-      res.status(500).json({ message: "already an existing user" });
-    } else {
-      const user = new Users({ name, email, password, states });
-      const OTP = generateOTP();
-      const verificationToken = new VerificationToken({
-        owner: user._id,
-        token: OTP,
-      });
-
-      verificationToken.save();*/
-/*
-      mailVerification().sendMail({
-        from: 'verifyEmail@email.com',
-        to: user.email,
-        subject: 'Verify your email account',
-        html: generateEmailTemplate(OTP),
-      });
-*/
-/*
-      user.save((err) => {
-        if (err) {
-          res.status(501).send(err);
-        } else {
-          res.status(201).send(user);
-        }
-      });
-    }
-  });
-};
-
-// FIXME:
-// Implement if user is not verified, they cannot log in
-export const googgetUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  Users.findOne({ email: email }, (err, user) => {
-    //const correctpass = await bcrypt.compare(password, user.password);
-    //console.log(password);
-    //console.log(user.password);
-    if (user) {
-      if (user.emailVerified) {
-        console.log("Email Verified");
-        bcrypt.compare(password, user.password, function (error, isMatch) {
-          if (error) {
-            throw error;
-          } else if (!isMatch) {
-            console.log("ye" + password + user.password);
-            console.log("Password doesn't match!");
-            res.status(401).send({ message: "*Password is Incorrect*" });
-          } else {
-            console.log("Password matches!");
-            //local storeage send json
-            //return res.json(user);
-            res.status(202).send({ user: user });
-          }
-        });
-      } else {
-        console.log("Email not Verified");
-        res.status(403).send({ message: "*Email is not Verified*" });
-      }
-    } else {
-      res.status(405).send({ message: "*User is not registered*" });
-    }
-  });
-};
-
-//create userGoogle that checks if database has email
-//if not then use the creatUser funct and utilize jti token
-//if so then use get user funct and utilize jti token
-
-// This function verifies that the user has inputted
-// the correct token and CAN send a confirmation email
-// FIXME:
-// Implement button instead of token for verify email
-*/
 export const verifyEmail = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await Users.findOne({ email: email });
     if (!user) {
       res.status(405).send({ message: 'Token is invalid' });
-      //return res.redirect("/");
     } else {
       user.emailVerified = true;
       user.createdAt = null;
@@ -257,7 +140,6 @@ export const verifyEmail = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    //res.redirect("/");
   }
 };
 
@@ -486,13 +368,10 @@ export const resetPasswordSent = async (req, res) => {
     const user = await Users.findOne({ email: email });
 
     if (!user) {
-      console.log('if');
       res.status(404).send({ message: 'User does not exist' });
       return res.redirect('/');
     } else {
-      console.log('else');
-      console.log(email);
-      // Email verification
+      // Reset password email sent
       sgMail.setApiKey(process.env.API_KEY);
 
       const message = {
@@ -505,7 +384,6 @@ export const resetPasswordSent = async (req, res) => {
         text: 'Click below to reset your password',
         html: `<head><text>Click below to reset your password!<br></text><a href='https://travelknights.herokuapp.com/Password/${user.email}' id= 'click'>Reset Password</a></head>`,
       };
-      console.log(user);
 
       sgMail
         .send(message)
@@ -516,7 +394,6 @@ export const resetPasswordSent = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    //res.redirect("/");
   }
 };
 
@@ -527,15 +404,12 @@ export const resetPassword = async (req, res) => {
 
     if (!user) {
       res.status(404).send({ message: 'User does not exist' });
-      //return res.redirect("/");
     } else {
       user.password = password;
-      console.log(password);
       await user.save();
       res.status(201).send({ user: user });
     }
   } catch (error) {
     console.log(error);
-    //res.redirect("/");
   }
 };

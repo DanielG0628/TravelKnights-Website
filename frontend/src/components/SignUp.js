@@ -1,28 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
 import Logo from '../images/logo.png';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { createUser } from '../actions/posts';
-var response = '';
+
 const theme = createTheme();
 export default function SignUp() {
   var changeThis = document.getElementsByClassName('signupresponse');
@@ -38,28 +32,21 @@ export default function SignUp() {
 
   const dispatch = useDispatch();
 
-  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
-    console.log({
-      email: user.get('email'),
-      password: user.get('password'),
-      name: user.get('name'),
-    });
+
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name');
     newuser.email = user.get('email');
     newuser.password = user.get('password');
 
-    if (newuser.password == user.get('confirmpassword')) {
-      console.log('passwords match');
+    if (newuser.password === user.get('confirmpassword')) {
       dispatch(createUser(newuser));
       handleClickOpen();
       changeThis[0].innerHTML = '';
     } else {
-      console.log('passwords dont match');
       changeThis[0].innerHTML = '*Passwords do not match*';
     }
   };

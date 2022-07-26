@@ -11,13 +11,12 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Svg } from '../map/usaHigh.svg';
 import AppBar from '@mui/material/AppBar';
 import { useDispatch } from 'react-redux';
 import Toolbar from '@mui/material/Toolbar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -35,7 +34,6 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { addMemory } from '../actions/posts';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -46,7 +44,7 @@ import { getUser } from '../actions/posts';
 import CheckIcon from '@mui/icons-material/Check';
 import { updateMemory } from '../actions/posts';
 import { deleteMemory } from '../actions/posts';
-const theme = createTheme();
+
 var htmlElement = '../map/usaHigh.svg';
 
 var items = [];
@@ -70,7 +68,7 @@ export default function Map() {
   }, 1000);
   //useEffect needed to getElement without NULL result
   var Trips = userBackup.payload.user.states;
-  const userIdx = userBackup.payload.user._id;
+
   useEffect(() => {
     for (var i = 0; i < Trips.length; i++) {
       var STVisited = Trips[i].stateAbbreviation;
@@ -79,7 +77,7 @@ export default function Map() {
       STCheck.setAttribute('class', 'visited');
       //Possibly add Trip Table code here.
     }
-  }, []);
+  });
   function sayHello(el) {
     if (el.id.startsWith('US-')) {
       htmlElement = el.id;
@@ -91,7 +89,7 @@ export default function Map() {
         itemsnum = 0;
       }
       for (var i = 0; i < Trips.length; i++) {
-        if (Trips[i].stateAbbreviation == ST) {
+        if (Trips[i].stateAbbreviation === ST) {
           stateindex = i;
           for (var j = 0; j < Trips[i].cities.length; j++) {
             items.push(Trips[i].cities[j]); //Array of Trips
@@ -203,7 +201,6 @@ export default function Map() {
   };
 
   const [open, setOpen] = React.useState(false);
-  const [open_editdel, setOpeneditdelete] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -211,26 +208,12 @@ export default function Map() {
   const handleClose = () => {
     setOpen(false);
   };
-  const editdeleteOpen = () => {
-    setOpeneditdelete(true);
-  };
-
-  const editdeleteClose = () => {
-    setOpeneditdelete(false);
-  };
-  const openEditDelete = () => setOpeneditdelete(true);
-  const openForm = () => setOpen(true);
 
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [nav, setnav] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-  const navMenu = (event) => {
-    setnav(event.currentTarget);
   };
 
   const Logout = () => {
@@ -242,10 +225,6 @@ export default function Map() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const navclose = () => {
-    setnav(null);
-  };
-  const [openList, setOpenList] = React.useState(false);
 
   //This styles the modals
   const style = {
@@ -274,7 +253,6 @@ export default function Map() {
     pb: 3,
   };
   function CollapsibleTable2() {
-    const [open2, setOpen2] = React.useState(false);
     if (itemsnum !== 0) {
       return (
         <div>

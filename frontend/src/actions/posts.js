@@ -1,62 +1,41 @@
-import {
-  FETCH_ALL,
-  CREATE,
-  UPDATE,
-  DELETE,
-  AUTH,
-  LOGOUT,
-  GOOGAUTH,
-  GOOGCREATE,
-} from "../constants/actionTypes";
-
-import * as api from "../api/index";
+import * as api from '../api/index';
 
 export const getUser = (user) => async (dispatch) => {
   try {
     console.log(user.verified);
-    if (user.verified == true) {
-      console.log("YEA");
-
+    if (user.verified === true) {
       const { data } = await api.getUser(user);
-      //data.user.verified == true;
-      console.log(data);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     } else {
       const { data } = await api.getUser(user);
-      //console.log(error.message);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     }
   } catch (error) {
-    if (user.password != "aaa") {
-      dispatch({ type: "AUTH", payload: error.response.data.message });
+    // CARSON????
+    if (user.password !== 'aaa') {
+      dispatch({ type: 'AUTH', payload: error.response.data.message });
       console.log(error.response.data.message);
     }
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
 
 export const getUser2 = (user) => async (dispatch) => {
   try {
-    console.log(user.verified);
-    if (user.verified == true) {
-      console.log("YEA");
-
+    if (user.verified === true) {
       const { data } = await api.getUser2(user);
-      //data.user.verified == true;
-      console.log(data);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     } else {
       const { data } = await api.getUser2(user);
-      //console.log(error.message);
-      dispatch({ type: "AUTH", payload: data });
+      dispatch({ type: 'AUTH', payload: data });
     }
   } catch (error) {
-    if (user.password != "aaa") {
-      dispatch({ type: "AUTH", payload: error.response.data.message });
+    if (user.password !== 'aaa') {
+      dispatch({ type: 'AUTH', payload: error.response.data.message });
       console.log(error.response.data.message);
     }
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
@@ -64,9 +43,9 @@ export const getUser2 = (user) => async (dispatch) => {
 export const getCurrentUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.getCurrentUser(user);
-    dispatch({ type: "AUTH", payload: data });
+    dispatch({ type: 'AUTH', payload: data });
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
@@ -74,59 +53,36 @@ export const getCurrentUser = (user) => async (dispatch) => {
 export const verifyEmail = (user) => async (dispatch) => {
   try {
     const { data } = await api.verifyEmail(user);
-    dispatch({ type: "AUTH", payload: data });
+    dispatch({ type: 'AUTH', payload: data });
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
 export const resetPasswordSent = (user) => async (dispatch) => {
   try {
     const { data } = await api.resetPasswordSent(user);
-    dispatch({ type: "AUTH", payload: data });
+    dispatch({ type: 'AUTH', payload: data });
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
 export const resetPassword = (user) => async (dispatch) => {
   try {
     const { data } = await api.resetPassword(user);
-    dispatch({ type: "AUTH", payload: data });
+    dispatch({ type: 'AUTH', payload: data });
   } catch (error) {
-    dispatch({ type: "AUTH", payload: error.response.data.message });
+    dispatch({ type: 'AUTH', payload: error.response.data.message });
     console.log(error.response.data.message);
   }
 };
 
-/*
-export const googgetUser = (user) => async (dispatch) => {
-  try {
-    const { data } = await api.googgetUser(user);
-    console.log(data);
-    //console.log(error.message);
-    dispatch({ type: "GOOGAUTH", payload: data });
-  } catch (error) {
-    dispatch({ type: "GOOGAUTH", payload: error.response.data.message });
-    console.log(error.response.data.message);
-  }
-};
-
-export const googcreateUser = (user) => async (dispatch) => {
-  try {
-    const { data } = await api.googcreateUser(user);
-    console.log(data);
-    dispatch({ type: "GOOGCREATE", payload: data });
-  } catch (error) {
-    console.log(error.message); //ERROR HERE
-  }
-};
-*/
 export const createUser = (user) => async (dispatch) => {
   try {
     const { data } = await api.createUser(user);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -135,7 +91,7 @@ export const createUser2 = (user) => async (dispatch) => {
   try {
     const { data } = await api.createUser2(user);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -145,7 +101,7 @@ export const addMemory = (trip) => async (dispatch) => {
   try {
     const { data } = await api.addMemory(trip);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -155,7 +111,7 @@ export const updateMemory = (trip) => async (dispatch) => {
   try {
     const { data } = await api.updateMemory(trip);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -164,7 +120,7 @@ export const deleteMemory = (trip) => async (dispatch) => {
   try {
     const { data } = await api.deleteMemory(trip);
     console.log(data);
-    dispatch({ type: "CREATE", payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
