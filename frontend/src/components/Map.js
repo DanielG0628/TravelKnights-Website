@@ -123,15 +123,19 @@ export default function Map() {
     updateTrip.stateIdx = stateindex;
     updateTrip.userId = user.payload.user._id;
     dispatch(updateMemory(updateTrip));
-
     setTimeout(() => {
       dispatch(getUser(newUser));
       setTimeout(() => {
-        user = JSON.parse(localStorage.getItem('profile'));
-        userBackup = user;
-        Trips = userBackup.payload.user.states;
+        dispatch(getUser(newUser));
+        setTimeout(() => {
+          user = JSON.parse(localStorage.getItem('profile'));
+          userBackup = user;
+          Trips = userBackup.payload.user.states;
+        }, 500);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }, 500);
-      window.location.reload();
     }, 500);
   };
 
@@ -149,15 +153,16 @@ export default function Map() {
     deleteTrip.userId = user.payload.user._id;
     console.log(deleteTrip);
     dispatch(deleteMemory(deleteTrip));
-
     setTimeout(() => {
-      dispatch(getUser(newUser));
       setTimeout(() => {
-        user = JSON.parse(localStorage.getItem('profile'));
-        userBackup = user;
-        Trips = userBackup.payload.user.states;
+        dispatch(getUser(newUser));
+        setTimeout(() => {
+          user = JSON.parse(localStorage.getItem('profile'));
+          userBackup = user;
+          Trips = userBackup.payload.user.states;
+        }, 800);
+        window.location.reload();
       }, 800);
-      window.location.reload();
     }, 800);
   };
 
@@ -534,6 +539,7 @@ export default function Map() {
           </Button>
         </Stack>
         <Modal
+          style={{ backdropFilter: 'blur(10px)' }}
           hideBackdrop
           open={open2}
           onClose={handleClose2}
@@ -550,6 +556,24 @@ export default function Map() {
                 <b>Add Memory to {htmlElement}</b>
               </Typography>
               <Stack direction='column' justifyContent='center'>
+                <TextField
+                  placeholder='City Name:'
+                  id='city'
+                  variant='standard'
+                  required='required'
+                  inputProps={{
+                    minLength: 3,
+                    maxLength: 33,
+                  }}
+                  name='city'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <AddLocationIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                ></TextField>
                 <TextField
                   placeholder='City Name:'
                   id='city'

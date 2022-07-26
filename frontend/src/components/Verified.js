@@ -22,11 +22,36 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import { useParams } from "react-router-dom";
+import { getUser2 } from "../actions/posts";
+import { verifyEmail } from "../actions/posts";
+
+import { createUser2 } from "../actions/posts";
+import { useDispatch } from "react-redux";
 const theme = createTheme();
 
 export default function Verified() {
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
+  let { id } = useParams();
+  const [open, setOpen] = React.useState(false);
+  console.log(window.location.pathname);
+  const temp = window.location.pathname;
+  const user = { email: "" };
+  const correct = temp.replace("/Verified/", "");
+  console.log(correct);
+  user.email = correct;
+  //user.emailVerified = true;
+
+  setTimeout(() => {
+    console.log(user.email);
+
+    setTimeout(() => {
+      dispatch(verifyEmail(user));
+    }, 2000);
+
+    setTimeout(() => {}, 500);
+  }, 2000);
   const handleClickOpen = () => {
     setOpen(true);
   };

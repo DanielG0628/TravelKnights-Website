@@ -23,11 +23,6 @@ export const createUser = async (req, res) => {
       res.status(500).json({ message: 'already an existing user' });
     } else {
       const user = new Users({ name, email, password, states, emailVerified });
-      const OTP = generateOTP();
-      const verificationToken = new VerificationToken({
-        owner: user._id,
-        token: OTP,
-      });
 
       // Email verification
       sgMail.setApiKey(process.env.API_KEY);
@@ -40,8 +35,9 @@ export const createUser = async (req, res) => {
         },
         subject: 'Email Verification',
         text: 'Click below to verify your email!',
-        html: "<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified' id= 'click'>Verify Email</a></head>",
+        html: `<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified/${user.email}' id= 'click'>Verify Email</a></head>`,
       };
+      console.log(user);
 
       sgMail
         .send(message)
@@ -60,10 +56,36 @@ export const createUser = async (req, res) => {
   });
 };
 
+export const createUser2 = async (req, res) => {
+  const { name, email, password, states, emailVerified } = req.body;
+
+  Users.findOne({ email: email }, (err, user) => {
+    const user2 = new Users({ name, email, password, states, emailVerified });
+
+    // Email verification
+
+    console.log(user2);
+
+    sgMail
+      .send(message)
+      .then((response) => console.log('Email sent!'))
+      .catch((error) => console.log(error.message));
+
+    // Save user in mongodb
+    user.save((err) => {
+      if (err) {
+        res.status(501).send(err);
+      } else {
+        res.status(201).send(user2);
+      }
+    });
+  });
+};
+
 // FIXME:
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
-  const { email, password, emailVerified } = req.body;
+  const { email, password } = req.body;
   //console.log(emailVerified);
   Users.findOne({ email: email }, (err, user) => {
     //const correctpass = await bcrypt.compare(password, user.password);
@@ -88,6 +110,7 @@ export const getUser = async (req, res) => {
             //console.log('Password matches!');
             //local storeage send json
             //return res.json(user);
+
             res.status(202).send({ user: user });
           }
         });
@@ -101,6 +124,43 @@ export const getUser = async (req, res) => {
   });
 };
 
+export const getUser2 = async (req, res) => {
+  const { email, password, emailVerified } = req.body;
+  //console.log(emailVerified);
+  Users.findOne({ email: email }, (err, user) => {
+    //const correctpass = await bcrypt.compare(password, user.password);
+    //console.log(password);
+
+    if (user) {
+      if (user.emailVerified) {
+        //console.log('Email Verified');
+        bcrypt.compare(password, user.password, function (error, isMatch) {
+          if (!isMatch) {
+            if (user.password == password) {
+              res.status(202).send({ user: user });
+            } else {
+              console.log(password + '        ' + user.password);
+              console.log("Password doesn't match!");
+              res.status(401).send({ message: '*Password is Incorrect*' });
+            }
+          } else {
+            //console.log(password + '        ' + user.password);
+            //console.log('Password matches!');
+            //local storeage send json
+            //return res.json(user);
+
+            res.status(202).send({ user: user });
+          }
+        });
+      } else {
+        //console.log('Email not Verified');
+        res.status(201).send({ user: user });
+      }
+    } else {
+      res.status(405).send({ message: '*User is not registered*' });
+    }
+  });
+};
 /*
 export const googcreateUser = async (req, res) => {
   const { name, email, password, states } = req.body;
@@ -183,34 +243,22 @@ export const googgetUser = async (req, res) => {
 // Implement button instead of token for verify email
 */
 export const verifyEmail = async (req, res) => {
-  const { userId, OTP } = req.body;
-  if (!userId || !OTP.trim())
-    return sendError(res, 'Invalid request, missing parameters!');
-
-  if (!isValidObjectId(userId)) return sendError(res, 'Invalid user id! ');
-
-  const user = await Users.findById(userId);
-  if (!user) return sendError(res, 'User not found!');
-
-  if (user.verified) return sendError(res, 'This account is already verified!');
-
-  const token = await VerificationToken.findOne({ owner: user._id });
-  if (!token) return sendError(res, 'User not found!');
-
-  const isMatched = await token.compareToken(OTP);
-  if (!isMatched) return sendError(res, 'Please provide a valid token!');
-
-  user.verified = true;
-
-  await VerificationToken.findByIdAndDelete(token._id);
-  await user.save();
-
-  // If everything is successful
-  res.json({
-    success: true,
-    message: 'Email verified!',
-    user: { name: user.name, email: user.email, id: user._id },
-  });
+  const { email } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+    if (!user) {
+      res.status(405).send({ message: 'Token is invalid' });
+      //return res.redirect("/");
+    } else {
+      user.emailVerified = true;
+      user.createdAt = null;
+      await user.save();
+      res.status(201).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
+    //res.redirect("/");
+  }
 };
 
 // Function to add memory to a user's state's array of object
@@ -430,4 +478,64 @@ export const deleteMemory = async (req, res) => {
       res.status(201).send(user);
     }
   });
+};
+
+export const resetPasswordSent = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+
+    if (!user) {
+      console.log('if');
+      res.status(404).send({ message: 'User does not exist' });
+      return res.redirect('/');
+    } else {
+      console.log('else');
+      console.log(email);
+      // Email verification
+      sgMail.setApiKey(process.env.API_KEY);
+
+      const message = {
+        to: email,
+        from: {
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
+        },
+        subject: 'Password Reset',
+        text: 'Click below to reset your password',
+        html: `<head><text>Click below to reset your password!<br></text><a href='https://travelknights.herokuapp.com/Password/${user.email}' id= 'click'>Reset Password</a></head>`,
+      };
+      console.log(user);
+
+      sgMail
+        .send(message)
+        .then((response) => console.log('Email sent! PAssword'))
+        .catch((error) => console.log(error.message));
+
+      res.status(200).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
+    //res.redirect("/");
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+
+    if (!user) {
+      res.status(404).send({ message: 'User does not exist' });
+      //return res.redirect("/");
+    } else {
+      user.password = password;
+      console.log(password);
+      await user.save();
+      res.status(201).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
+    //res.redirect("/");
+  }
 };
