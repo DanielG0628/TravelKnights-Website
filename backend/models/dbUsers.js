@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const userSchema = mongoose.Schema({
   name: { type: String },
@@ -29,8 +29,8 @@ const userSchema = mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
     const hash = await bcrypt.hash(this.password, 8);
     this.password = hash;
   }
@@ -43,4 +43,4 @@ userSchema.methods.comparePassword = async function (password) {
   return result;
 };
 
-export default mongoose.model("Users", userSchema);
+export default mongoose.model('Users', userSchema);
