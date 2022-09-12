@@ -1,3 +1,8 @@
+/*
+  1. Check if valid email format 
+  2. Modal to confirm sent email
+*/
+
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -33,13 +38,13 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      email: data.get('email').trim(),
     });
-    user.email = data.get('email');
+    user.email = data.get('email').trim();
 
     dispatch(resetPasswordSent(user));
     console.log({
-      email: data.get('email'),
+      email: data.get('email').trim(),
     });
   };
 

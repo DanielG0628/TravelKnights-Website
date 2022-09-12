@@ -1,3 +1,9 @@
+/*
+  1. Only submit on valid input fields
+  2. Red outlines for missing input fields
+  3. Better modal for confirmation on submit
+*/
+
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
@@ -38,11 +44,11 @@ export default function SignUp() {
 
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
-    newuser.name = user.get('name');
-    newuser.email = user.get('email');
-    newuser.password = user.get('password');
+    newuser.name = user.get('name').trim();
+    newuser.email = user.get('email').trim();
+    newuser.password = user.get('password').trim();
 
-    if (newuser.password === user.get('confirmpassword')) {
+    if (newuser.password === user.get('confirmpassword').trim()) {
       dispatch(createUser(newuser));
       handleClickOpen();
       changeThis[0].innerHTML = '';

@@ -25,12 +25,10 @@ export default function Password() {
     const temp = window.location.pathname;
     const correct = temp.replace('/Password/', '');
 
-    user.password = data.get('password');
+    user.password = data.get('password').trim();
     user.email = correct;
 
     setTimeout(() => {
-      console.log(user.email);
-
       setTimeout(() => {
         dispatch(resetPassword(user));
       }, 2000);
