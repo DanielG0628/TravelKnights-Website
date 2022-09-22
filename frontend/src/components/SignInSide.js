@@ -102,10 +102,13 @@ export default function SignInSide() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const newuser = { email: '', password: '' };
+
     newuser.email = data.get('email').trim();
     newuser.password = data.get('password').trim();
 
-    dispatch(getUser(newuser));
+    console.log(newuser.email.length);
+    if (newuser.email.length === 0)
+      if (newuser.password.length === 0) dispatch(getUser(newuser));
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem('profile'));
 
