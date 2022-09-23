@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { alpha, styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../images/logo.png';
 import Dialog from '@mui/material/Dialog';
@@ -57,6 +58,21 @@ export default function SignUp() {
     }
   };
 
+  const ValidationTextField = styled(TextField)({
+    '& input:empty + fieldset': {
+      borderColor: 'grey'
+    },
+    '& input:valid + fieldset': {
+      borderColor: 'green'
+    },
+    '& input:invalid:not(:focus):not(:placeholder-shown) + fieldset': {
+      borderColor: 'red'
+    },
+    '& input:valid:focus + fieldset':{
+      borderLeftWidth: 3,
+      padding: '4px !important',
+    },
+  });
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
@@ -91,28 +107,33 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                <ValidationTextField
                   name='name'
                   required
                   fullWidth
                   id='name'
                   label='Full Name'
                   autoFocus
-                />
+                  inputProps={{minLength: 3}}
+                  placeholder=" "
+                  variant="outlined"
+                  />
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <ValidationTextField
                   required
                   fullWidth
                   id='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
+                  inputProps={{minLength: 3}}
+                  placeholder=" "
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <ValidationTextField
                   required
                   fullWidth
                   name='password'
@@ -120,10 +141,12 @@ export default function SignUp() {
                   type='password'
                   id='password'
                   autoComplete='new-password'
+                  inputProps={{minLength: 3}}
+                  placeholder=" "
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <ValidationTextField
                   required
                   fullWidth
                   name='confirmpassword'
@@ -131,6 +154,8 @@ export default function SignUp() {
                   type='password'
                   id='confirmpassword'
                   autoComplete='new-password'
+                  inputProps={{minLength: 3}}
+                  placeholder=" "
                 />
               </Grid>
             </Grid>
