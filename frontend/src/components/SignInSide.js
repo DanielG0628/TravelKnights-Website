@@ -106,9 +106,8 @@ export default function SignInSide() {
     newuser.email = data.get('email').trim();
     newuser.password = data.get('password').trim();
 
-    console.log(newuser.email.length);
-    if (newuser.email.length === 0)
-      if (newuser.password.length === 0) dispatch(getUser(newuser));
+    //Got rid of check for empty email/password for dispatch
+    dispatch(getUser(newuser));
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem('profile'));
 

@@ -9,7 +9,7 @@ dotenv.config("../../.env");
 // Implement a expiration for non verified users
 export const createUser = async (req, res) => {
   const { name, email, password, states, emailVerified } = req.body;
-
+  console.log("poo1");
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
       res.status(500).json({ message: "already an existing user" });
@@ -74,7 +74,10 @@ export const createUser2 = async (req, res) => {
 // Implement if user is not verified, they cannot log in
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email);
 
+  //FIXME:
+  //findOne function taking 10ish seconds + Not returning value in Database 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
       if (user.emailVerified) {
@@ -95,6 +98,7 @@ export const getUser = async (req, res) => {
         res.status(403).send({ message: "*Email is not Verified*" });
       }
     } else {
+      console.log("Email was " + email);
       res.status(405).send({ message: "*User is not registered*" });
     }
   });
