@@ -24,6 +24,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { createUser } from '../actions/posts';
+import { $CombinedState } from "redux";
 
 const theme = createTheme();
 export default function SignUp() {
@@ -51,11 +52,17 @@ export default function SignUp() {
     newuser.confirmPassword = user.get('confirmpassword').trim();
     var invalidInput = false;
 
-    //ONLY CHANGES ONCE HOVERING OVER TEXTFIELD
-    //var classChange = document.getElementById("password");
-    //classChange.placeholder = "";
-
-
+   
+ 
+    if(newuser.name.length === 0)
+    {
+      changeThis[0].innerHTML = '*Please Enter all Input Fields*';
+      invalidInput = true;  
+      const el = document.getElementById("name");
+      el.required = "required";
+      var label = document.querySelector('label[for="name"]');
+      label.textContent = "Full Name*";
+    }
     if(newuser.confirmPassword.length === 0 || newuser.password.length === 0 || newuser.email.length === 0 || newuser.name.length === 0) {
       changeThis[0].innerHTML = '*Please Enter all Input Fields*';
       invalidInput = true;  
@@ -80,7 +87,7 @@ export default function SignUp() {
     }
   };
 
-  const ValidationTextField = styled(TextField)({
+  /* const ValidationTextField = styled(TextField)({
     '& input:empty + fieldset': {
       borderColor: 'grey'
     },
@@ -95,6 +102,24 @@ export default function SignUp() {
       padding: '4px !important',
     },
   });
+*/
+const ValidationTextField = styled(TextField)({
+  '& input:valid:placeholder-shown + fieldset': {
+    borderColor: 'grey'
+  },
+  '& input:valid:not(:placeholder-shown) + fieldset': {
+    borderColor: 'green'
+  },
+  '& input:empty + fieldset': {
+    borderColor: 'red'
+  },
+  '& input:valid:focus + fieldset':{
+    borderLeftWidth: 3,
+    padding: '4px !important',
+  },
+});
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -132,12 +157,10 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <ValidationTextField
                   name='name'
-                  required="required"
                   fullWidth
                   id='name'
                   label='Full Name'
                   autoFocus
-                  inputProps={{minLength: 3}}
                   placeholder=" "
                   variant="outlined"
                   />
@@ -145,7 +168,7 @@ export default function SignUp() {
 
               <Grid item xs={12}>
                 <ValidationTextField
-                  required
+                  
                   fullWidth
                   id='email'
                   type="email"
@@ -158,27 +181,25 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <ValidationTextField
-                  required
+                  
                   fullWidth
                   name='password'
                   label='Password'
                   type='password'
                   id='password'
                   autoComplete='new-password'
-                  inputProps={{minLength: 3}}
                   placeholder=" "
                 />
               </Grid>
               <Grid item xs={12}>
                 <ValidationTextField
-                  required
+                  
                   fullWidth
                   name='confirmpassword'
                   label='Confirm Password'
                   type='password'
                   id='confirmpassword'
                   autoComplete='new-password'
-                  inputProps={{minLength: 3}}
                   placeholder=" "
                 />
               </Grid>
