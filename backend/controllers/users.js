@@ -1,9 +1,9 @@
-import Users from "../models/dbUsers.js";
-import bcrypt from "bcrypt";
-import sgMail from "@sendgrid/mail";
-import dotenv from "dotenv";
+import Users from '../models/dbUsers.js';
+import bcrypt from 'bcrypt';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
-dotenv.config("../../.env");
+dotenv.config('../../.env');
 // API Logic
 // FIXME:
 // Implement a expiration for non verified users
@@ -12,7 +12,7 @@ export const createUser = async (req, res) => {
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
-      res.status(500).json({ message: "already an existing user" });
+      res.status(500).json({ message: 'already an existing user' });
     } else {
       const user = new Users({ name, email, password, states, emailVerified });
 
@@ -22,17 +22,17 @@ export const createUser = async (req, res) => {
       const message = {
         to: email,
         from: {
-          email: "travelknightsnoreply@gmail.com",
-          name: "TravelKnights",
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
         },
-        subject: "Email Verification",
-        text: "Click below to verify your email!",
+        subject: 'Email Verification',
+        text: 'Click below to verify your email!',
         html: `<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified/${user.email}' id= 'click'>Verify Email</a></head>`,
       };
 
       sgMail
         .send(message)
-        .then((response) => console.log("Email sent!"))
+        .then((response) => console.log('Email sent!'))
         .catch((error) => console.log(error.message));
 
       // Save user in mongodb
@@ -52,7 +52,7 @@ export const createUser2 = async (req, res) => {
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
-      res.status(500).json({ message: "already an existing user" });
+      res.status(500).json({ message: 'already an existing user' });
     } else {
       const user = new Users({ name, email, password, states, emailVerified });
 
@@ -72,9 +72,40 @@ export const createUser2 = async (req, res) => {
 
 // FIXME:
 // Implement if user is not verified, they cannot log in
+// export const getUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   Users.findOne({ email: email }, (err, user) => {
+//     if (user) {
+//       if (user.emailVerified) {
+//         bcrypt.compare(password, user.password, function (error, isMatch) {
+//           if (error) {
+//             throw error;
+//           } else if (!isMatch) {
+//             if (user.password == password) {
+//               res.status(202).send({ user: user });
+//             } else {
+//               res.status(401).send({ message: "*Password is Incorrect*" });
+//             }
+//           } else {
+//             res.status(202).send({ user: user });
+//           }
+//         });
+//       } else {
+//         res.status(403).send({ message: "*Email is not Verified*" });
+//       }
+//     } else {
+//       res.status(405).send({ message: "*User is not registered*" });
+//     }
+//   });
+// };
+
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email);
 
+  //FIXME:
+  //findOne function taking 10ish seconds + Not returning value in Database
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
       if (user.emailVerified) {
@@ -85,17 +116,19 @@ export const getUser = async (req, res) => {
             if (user.password == password) {
               res.status(202).send({ user: user });
             } else {
-              res.status(401).send({ message: "*Password is Incorrect*" });
+              res.status(401).send({ message: '*Password is Incorrect*' });
             }
           } else {
             res.status(202).send({ user: user });
           }
         });
       } else {
-        res.status(403).send({ message: "*Email is not Verified*" });
+        res.status(403).send({ message: '*Email is not Verified*' });
       }
     } else {
-      res.status(405).send({ message: "*User is not registered*" });
+      //405 is returned before this is run. Always gives this result
+      console.log('Email was ' + email);
+      res.status(405).send({ message: '*User is not registered*' });
     }
   });
 };
@@ -110,7 +143,7 @@ export const getUser2 = async (req, res) => {
             if (user.password == password) {
               res.status(202).send({ user: user });
             } else {
-              res.status(401).send({ message: "*Password is Incorrect*" });
+              res.status(401).send({ message: '*Password is Incorrect*' });
             }
           } else {
             res.status(202).send({ user: user });
@@ -120,7 +153,7 @@ export const getUser2 = async (req, res) => {
         res.status(201).send({ user: user });
       }
     } else {
-      res.status(405).send({ message: "*User is not registered*" });
+      res.status(405).send({ message: '*User is not registered*' });
     }
   });
 };
@@ -130,7 +163,7 @@ export const verifyEmail = async (req, res) => {
   try {
     const user = await Users.findOne({ email: email });
     if (!user) {
-      res.status(405).send({ message: "Token is invalid" });
+      res.status(405).send({ message: 'Token is invalid' });
     } else {
       user.emailVerified = true;
       user.createdAt = null;
@@ -367,8 +400,8 @@ export const resetPasswordSent = async (req, res) => {
     const user = await Users.findOne({ email: email });
 
     if (!user) {
-      res.status(404).send({ message: "User does not exist" });
-      return res.redirect("/");
+      res.status(404).send({ message: 'User does not exist' });
+      return res.redirect('/');
     } else {
       // Reset password email sent
       sgMail.setApiKey(process.env.API_KEY);
@@ -376,17 +409,17 @@ export const resetPasswordSent = async (req, res) => {
       const message = {
         to: email,
         from: {
-          email: "travelknightsnoreply@gmail.com",
-          name: "TravelKnights",
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
         },
-        subject: "Password Reset",
-        text: "Click below to reset your password",
+        subject: 'Password Reset',
+        text: 'Click below to reset your password',
         html: `<head><text>Click below to reset your password!<br></text><a href='https://travelknights.herokuapp.com/Password/${user.email}' id= 'click'>Reset Password</a></head>`,
       };
 
       sgMail
         .send(message)
-        .then((response) => console.log("Email sent! PAssword"))
+        .then((response) => console.log('Email sent! PAssword'))
         .catch((error) => console.log(error.message));
 
       res.status(200).send({ user: user });
@@ -402,7 +435,7 @@ export const resetPassword = async (req, res) => {
     const user = await Users.findOne({ email: email });
 
     if (!user) {
-      res.status(404).send({ message: "User does not exist" });
+      res.status(404).send({ message: 'User does not exist' });
     } else {
       user.password = password;
       await user.save();

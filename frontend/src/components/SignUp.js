@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { alpha, styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../images/logo.png';
 import Dialog from '@mui/material/Dialog';
@@ -24,9 +25,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { createUser } from '../actions/posts';
 
 const theme = createTheme();
+
 export default function SignUp() {
   var changeThis = document.getElementsByClassName('signupresponse');
   const [open, setOpen] = React.useState(false);
+  const [text, setText] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -36,26 +40,74 @@ export default function SignUp() {
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    // Set errorMessage only if text is equal or bigger than MAX_LENGTH
+    if (text.length === 0) {
+      setErrorMessage('required*');
+    }
+  }, [text]);
+
+  React.useEffect(() => {
+    // Set empty erroMessage only if text is less than MAX_LENGTH
+    // and errorMessage is not empty.
+    // avoids setting empty errorMessage if the errorMessage is already empty
+    if (text.length > 0 && errorMessage) {
+      setErrorMessage('');
+    }
+  }, [text, errorMessage]);
+
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
 
+    console.log(event.currentTarget.email);
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name').trim();
     newuser.email = user.get('email').trim();
     newuser.password = user.get('password').trim();
+    newuser.confirmPassword = user.get('confirmpassword').trim();
 
-    if (newuser.password === user.get('confirmpassword').trim()) {
+    if (
+      newuser.name.length > 0 &&
+      newuser.email.length > 0 &&
+      newuser.password.length > 0 &&
+      newuser.password === user.get('confirmpassword').trim()
+    ) {
       dispatch(createUser(newuser));
-      handleClickOpen();
       changeThis[0].innerHTML = '';
+
+      handleClickOpen();
     } else {
-      changeThis[0].innerHTML = '*Passwords do not match*';
+      if (
+        newuser.name.length === 0 ||
+        newuser.email.length === 0 ||
+        newuser.password.length === 0 ||
+        newuser.confirmPassword.length === 0
+      )
+        changeThis[0].innerHTML = '*Please fill in required text*';
+      else if (newuser.password !== newuser.confirmPassword)
+        changeThis[0].innerHTML = '*Passwords do not match*';
     }
   };
+
+  const ValidationTextField = styled(TextField)({
+    '& input:empty + fieldset': {
+      borderColor: 'grey',
+    },
+    '& input:valid + fieldset': {
+      borderColor: 'green',
+    },
+    '& input:invalid:not(:focus):not(:placeholder-shown) + fieldset': {
+      borderColor: 'red',
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 3,
+      padding: '4px !important',
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,24 +143,43 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  name='name'
-                  required
+                <ValidationTextField
                   fullWidth
-                  id='name'
+                  name='name'
                   label='Full Name'
+                  id='name'
                   autoFocus
+                  inputProps={{ minLength: 3 }}
+                  placeholder=''
+                  variant='outlined'
                 />
               </Grid>
-
               <Grid item xs={12}>
+                {/* BRIAN'S 
                 <TextField
                   required
                   fullWidth
                   id='email'
+                  type='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
+                  placeholder=' '
+                  error={text === ''}
+                  helperText={text === '' ? 'Empty!' : ' '}
+                />  */}
+                <TextField
+                  key='test'
+                  fullWidth
+                  error={text.length === 0}
+                  id='email'
+                  type='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
+                  placeholder=' '
+                  onChange={(e) => setText(e.target.value)}
+                  value={text}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -120,6 +191,8 @@ export default function SignUp() {
                   type='password'
                   id='password'
                   autoComplete='new-password'
+                  inputProps={{ minLength: 3 }}
+                  placeholder=' '
                 />
               </Grid>
               <Grid item xs={12}>
@@ -131,6 +204,8 @@ export default function SignUp() {
                   type='password'
                   id='confirmpassword'
                   autoComplete='new-password'
+                  inputProps={{ minLength: 3 }}
+                  placeholder=' '
                 />
               </Grid>
             </Grid>
@@ -144,7 +219,6 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-
             <Dialog
               open={open}
               onClose={handleClose}
