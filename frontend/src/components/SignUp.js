@@ -60,12 +60,15 @@ export default function SignUp() {
       invalidInput = true;  
       const el = document.getElementById("name");
       el.required = "required";
-      var label = document.querySelector('label[for="name"]');
-      label.textContent = "Full Name*";
+      document.querySelector('label[for="name"]').textContent = "Full Name*";
     }
-    if(newuser.confirmPassword.length === 0 || newuser.password.length === 0 || newuser.email.length === 0 || newuser.name.length === 0) {
+    if(newuser.email.length === 0)
+    {
       changeThis[0].innerHTML = '*Please Enter all Input Fields*';
       invalidInput = true;  
+      const el2 = document.getElementById("email");
+      el2.required = "required";
+      document.querySelector('label[for="email"]').textContent = "Email Address*";
     }
     else {
       const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
@@ -75,6 +78,27 @@ export default function SignUp() {
         invalidInput = true;
       }
     }
+    if(newuser.password.length === 0)
+    {
+      changeThis[0].innerHTML = '*Please Enter all Input Fields*';
+      invalidInput = true;  
+      const el3 = document.getElementById("password");
+      el3.required = "required";
+      document.querySelector('label[for="password"]').textContent = "Password*";
+    }
+    if(newuser.confirmPassword.length === 0)
+    {
+      changeThis[0].innerHTML = '*Please Enter all Input Fields*';
+      invalidInput = true;  
+      const el = document.getElementById("confirmpassword");
+      el.required = "required";
+      document.querySelector('label[for="confirmpassword"]').textContent = "Confirm Password*";
+    }
+    if(newuser.confirmPassword.length === 0 || newuser.password.length === 0 || newuser.email.length === 0 || newuser.name.length === 0) {
+      changeThis[0].innerHTML = '*Please Enter all Input Fields*';
+      invalidInput = true;  
+    }
+    
     if (newuser.password === user.get('confirmpassword').trim()) {
       if (invalidInput == false) {
       dispatch(createUser(newuser));
@@ -111,7 +135,7 @@ const ValidationTextField = styled(TextField)({
     borderColor: 'green'
   },
   '& input:empty + fieldset': {
-    borderColor: 'red'
+    borderColor: 'red',
   },
   '& input:valid:focus + fieldset':{
     borderLeftWidth: 3,
