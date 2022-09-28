@@ -50,7 +50,12 @@ export default function SignUp() {
     newuser.password = user.get('password').trim();
     newuser.confirmPassword = user.get('confirmpassword').trim();
     var invalidInput = false;
-  
+
+    //ONLY CHANGES ONCE HOVERING OVER TEXTFIELD
+    //var classChange = document.getElementById("password");
+    //classChange.placeholder = "";
+
+
     if(newuser.confirmPassword.length === 0 ) {
       changeThis[0].innerHTML = '*Empty Confirm Password*';
       invalidInput = true;  
