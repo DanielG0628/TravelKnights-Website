@@ -3,6 +3,7 @@
   2. Red outlines for missing input fields
   3. Better modal for confirmation on submit
 */
+import Input from "@mui/material/Input";
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -38,21 +39,42 @@ export default function SignUp() {
   };
 
   const dispatch = useDispatch();
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
-
+    console.log(event.currentTarget.email);
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name').trim();
     newuser.email = user.get('email').trim();
     newuser.password = user.get('password').trim();
+    newuser.confirmPassword = user.get('confirmpassword').trim();
+    var invalidInput = false;
+  
+    if(newuser.confirmPassword.length === 0 ) {
+      changeThis[0].innerHTML = '*Empty Confirm Password*';
+      invalidInput = true;  
+    }
+    if(newuser.password.length === 0) {
+      changeThis[0].innerHTML = '*Empty Password*';
+      invalidInput = true;  
+    }
+    if(newuser.email.length === 0) {
+      changeThis[0].innerHTML = '*Empty Email*';
+      invalidInput = true;  
+    }
+    if(newuser.name.length === 0) {
+      changeThis[0].innerHTML = '*Empty Name*';
+    invalidInput = true;  
+    }
 
     if (newuser.password === user.get('confirmpassword').trim()) {
+      if (invalidInput == false) {
       dispatch(createUser(newuser));
+       changeThis[0].innerHTML = '';
+      
       handleClickOpen();
-      changeThis[0].innerHTML = '';
+      }
     } else {
       changeThis[0].innerHTML = '*Passwords do not match*';
     }
@@ -73,6 +95,7 @@ export default function SignUp() {
       padding: '4px !important',
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
@@ -109,7 +132,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <ValidationTextField
                   name='name'
-                  required
+                  required="required"
                   fullWidth
                   id='name'
                   label='Full Name'
@@ -125,11 +148,12 @@ export default function SignUp() {
                   required
                   fullWidth
                   id='email'
+                  type="email"
                   label='Email Address'
                   name='email'
                   autoComplete='email'
-                  inputProps={{minLength: 3}}
                   placeholder=" "
+                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -169,7 +193,6 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-
             <Dialog
               open={open}
               onClose={handleClose}

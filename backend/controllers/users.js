@@ -75,7 +75,7 @@ export const createUser2 = async (req, res) => {
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
   console.log(email);
-
+  console.log(password);
   //FIXME:
   //findOne function taking 10ish seconds + Not returning value in Database 
   Users.findOne({ email: email }, (err, user) => {
@@ -98,7 +98,8 @@ export const getUser = async (req, res) => {
         res.status(403).send({ message: "*Email is not Verified*" });
       }
     } else {
-      console.log("Email was " + email);
+      //405 is returned before this is run. Always gives this result
+      console.log("Email was " + email + "password was " + password);
       res.status(405).send({ message: "*User is not registered*" });
     }
   });
