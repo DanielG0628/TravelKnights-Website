@@ -56,23 +56,18 @@ export default function SignUp() {
     //classChange.placeholder = "";
 
 
-    if(newuser.confirmPassword.length === 0 ) {
-      changeThis[0].innerHTML = '*Empty Confirm Password*';
+    if(newuser.confirmPassword.length === 0 || newuser.password.length === 0 || newuser.email.length === 0 || newuser.name.length === 0) {
+      changeThis[0].innerHTML = '*Please Enter all Input Fields*';
       invalidInput = true;  
     }
-    if(newuser.password.length === 0) {
-      changeThis[0].innerHTML = '*Empty Password*';
-      invalidInput = true;  
+    else {
+      const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+      if(!regexExp.test(newuser.email))
+      {
+        changeThis[0].innerHTML = '*Invalid Email*'
+        invalidInput = true;
+      }
     }
-    if(newuser.email.length === 0) {
-      changeThis[0].innerHTML = '*Empty Email*';
-      invalidInput = true;  
-    }
-    if(newuser.name.length === 0) {
-      changeThis[0].innerHTML = '*Empty Name*';
-    invalidInput = true;  
-    }
-
     if (newuser.password === user.get('confirmpassword').trim()) {
       if (invalidInput == false) {
       dispatch(createUser(newuser));
