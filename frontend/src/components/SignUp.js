@@ -1,32 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+/*
+  1. Only submit on valid input fields
+  2. Red outlines for missing input fields
+  3. Better modal for confirmation on submit
+*/
+
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { alpha, styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
 import Logo from '../images/logo.png';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { createUser } from '../actions/posts';
-var response = '';
+
 const theme = createTheme();
+
 export default function SignUp() {
   var changeThis = document.getElementsByClassName('signupresponse');
   const [open, setOpen] = React.useState(false);
+  const [text1, setText1] = React.useState('');
+  const [text2, setText2] = React.useState('');
+  const [text3, setText3] = React.useState('');
+  const [text4, setText4] = React.useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,31 +44,82 @@ export default function SignUp() {
 
   const dispatch = useDispatch();
 
-  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
-    console.log({
-      email: user.get('email'),
-      password: user.get('password'),
-      name: user.get('name'),
-    });
+
+    console.log(event.currentTarget.email);
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
-    newuser.name = user.get('name');
-    newuser.email = user.get('email');
-    newuser.password = user.get('password');
+    newuser.name = user.get('name').trim();
+    newuser.email = user.get('email').trim();
+    newuser.password = user.get('password').trim();
+    newuser.confirmPassword = user.get('confirmpassword').trim();
 
-    if (newuser.password == user.get('confirmpassword')) {
-      console.log('passwords match');
+    if (
+      newuser.name.length > 0 &&
+      newuser.email.length > 0 &&
+      newuser.password.length > 0 &&
+      newuser.password === user.get('confirmpassword').trim()
+    ) {
       dispatch(createUser(newuser));
-      handleClickOpen();
       changeThis[0].innerHTML = '';
+
+      handleClickOpen();
     } else {
-      console.log('passwords dont match');
-      changeThis[0].innerHTML = '*Passwords do not match*';
+      if (
+        newuser.name.length === 0 ||
+        newuser.email.length === 0 ||
+        newuser.password.length === 0 ||
+        newuser.confirmPassword.length === 0
+      ) {
+        if (newuser.name.length === 0) {
+          document.getElementById('name').required = 'required';
+          document.querySelector('label[for="name"]').textContent =
+            'Full Name *';
+          document.querySelector('label[for="name"]').style.color = 'red';
+        }
+        if (newuser.email.length === 0) {
+          document.getElementById('email').required = 'required';
+          document.querySelector('label[for="email"]').textContent =
+            'Email Address *';
+          document.querySelector('label[for="email"]').style.color = 'red';
+        }
+        if (newuser.password.length === 0) {
+          document.getElementById('password').required = 'required';
+          document.querySelector('label[for="password"]').textContent =
+            'Password *';
+          document.querySelector('label[for="password"]').style.color = 'red';
+        }
+        if (newuser.confirmPassword.length === 0) {
+          document.getElementById('confirmpassword').required = 'required';
+          document.querySelector('label[for="confirmpassword"]').textContent =
+            'Confirm Password *';
+          document.querySelector('label[for="confirmpassword"]').style.color =
+            'red';
+        }
+
+        changeThis[0].innerHTML = '*Please fill in required text*';
+      } else if (newuser.password !== newuser.confirmPassword)
+        changeThis[0].innerHTML = '*Passwords do not match*';
     }
   };
+
+  const ValidationTextField = styled(TextField)({
+    '& input:valid:placeholder-shown + fieldset': {
+      borderColor: '#d9dce3',
+    },
+    '& input:valid:not(:placeholder-shown) + fieldset': {
+      borderColor: '#d9dce3',
+    },
+    '& input:empty + fieldset': {
+      borderColor: 'red',
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 2,
+      padding: '3px !important',
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -98,49 +155,86 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  name='name'
-                  required
+                <ValidationTextField
+                  key='text1'
                   fullWidth
-                  id='name'
+                  name='name'
                   label='Full Name'
+                  id='name'
                   autoFocus
+                  placeholder=' '
+                  variant='outlined'
+                  onChange={(e) => setText1(e.target.value)}
+                  value={text1}
                 />
               </Grid>
-
               <Grid item xs={12}>
+                {/* BRIAN'S 
                 <TextField
                   required
                   fullWidth
                   id='email'
+                  type='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
+                  placeholder=' '
+                  error={text === ''}
+                  helperText={text === '' ? 'Empty!' : ' '}
+                />  */}
+                <ValidationTextField
+                  key='text2'
+                  fullWidth
+                  id='email'
+                  type='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
+                  placeholder=' '
+                  onChange={(e) => setText2(e.target.value)}
+                  value={text2}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <ValidationTextField
+                  key='text3'
                   fullWidth
                   name='password'
                   label='Password'
                   type='password'
                   id='password'
                   autoComplete='new-password'
+                  inputProps={{ minLength: 3 }}
+                  placeholder=' '
+                  onChange={(e) => setText3(e.target.value)}
+                  value={text3}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <ValidationTextField
+                  key='text4'
                   fullWidth
                   name='confirmpassword'
                   label='Confirm Password'
                   type='password'
                   id='confirmpassword'
                   autoComplete='new-password'
+                  inputProps={{ minLength: 3 }}
+                  placeholder=' '
+                  onChange={(e) => setText4(e.target.value)}
+                  value={text4}
                 />
               </Grid>
             </Grid>
+
+            <Typography
+              style={{ color: 'red' }}
+              justifyContent='center'
+              align='center'
+              sx={{ mt: 0, mb: 0 }}
+              className='signupresponse'
+            ></Typography>
+
             <Button
               style={{ backgroundColor: '#65743A' }}
               type='submit'
@@ -151,7 +245,6 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-
             <Dialog
               open={open}
               onClose={handleClose}
@@ -181,15 +274,7 @@ export default function SignUp() {
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
-            >
-              <Typography
-                style={{ color: 'red' }}
-                justifyContent='center'
-                align='center'
-                sx={{ mt: 0, mb: 0 }}
-                className='signupresponse'
-              ></Typography>
-            </Box>
+            ></Box>
           </Box>
         </Box>
       </Container>

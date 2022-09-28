@@ -1,10 +1,9 @@
-import { GOOGAUTH, AUTH, LOGOUT } from "../constants/actionTypes";
+import { AUTH, LOGOUT } from '../constants/actionTypes';
 
 const authReducer = (state = { authData: null }, action) => {
   switch (action.type) {
     case AUTH:
-      console.log(action);
-      localStorage.setItem("profile", JSON.stringify({ ...action }));
+      localStorage.setItem('profile', JSON.stringify({ ...action }));
 
       return { ...state, authData: action?.payload?.user };
 

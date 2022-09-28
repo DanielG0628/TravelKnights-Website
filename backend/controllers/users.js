@@ -1,8 +1,9 @@
-import pkg from 'mongoose';
-const { isValidObjectId } = pkg;
 import Users from '../models/dbUsers.js';
+<<<<<<< HEAD
 import { sendError } from '../utils/helper.js';
 import { generateEmailTemplate } from '../utils/mailVer.js';
+=======
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
 import bcrypt from 'bcrypt';
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
@@ -20,6 +21,7 @@ export const createUser = async (req, res) => {
     if (user) {
       res.status(500).json({ message: 'already an existing user' });
     } else {
+<<<<<<< HEAD
       const user = new Users({ 
         name, 
         email, 
@@ -27,6 +29,9 @@ export const createUser = async (req, res) => {
         states,
         emailToken: crypto.randomBytes(64).toString('hex'),
       });
+=======
+      const user = new Users({ name, email, password, states, emailVerified });
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
 
       // Email verification
       sgMail.setApiKey(process.env.API_KEY);
@@ -38,6 +43,7 @@ export const createUser = async (req, res) => {
           name: 'TravelKnights',
         },
         subject: 'Email Verification',
+<<<<<<< HEAD
         text: `
         Hello, thanks for registering on our site.
         Click below to verify your email!
@@ -49,6 +55,10 @@ export const createUser = async (req, res) => {
         <p>Please click the link below to verify your account.</p>
         <a herf="https://${req.headers.host}/api/verifyEmail?token=${user.token}">Verify your account</a>
         `
+=======
+        text: 'Click below to verify your email!',
+        html: `<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified/${user.email}' id= 'click'>Verify Email</a></head>`,
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
       };
       
       try{
@@ -64,18 +74,86 @@ export const createUser = async (req, res) => {
   });
 };
 
+<<<<<<< HEAD
 //function to login user
 export const getUser = async (req, res) => {
   const { email, password, emailVerified } = req.body;
   Users.findOne({ email: email }, (err, user) => {
 
+=======
+export const createUser2 = async (req, res) => {
+  const { name, email, password, states, emailVerified } = req.body;
+
+  Users.findOne({ email: email }, (err, user) => {
+    if (user) {
+      res.status(500).json({ message: 'already an existing user' });
+    } else {
+      const user = new Users({ name, email, password, states, emailVerified });
+
+      user.createdAt = null;
+
+      // Save user in mongodb
+      user.save((err) => {
+        if (err) {
+          res.status(501).send(err);
+        } else {
+          res.status(201).send(user);
+        }
+      });
+    }
+  });
+};
+
+// FIXME:
+// Implement if user is not verified, they cannot log in
+// export const getUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   Users.findOne({ email: email }, (err, user) => {
+//     if (user) {
+//       if (user.emailVerified) {
+//         bcrypt.compare(password, user.password, function (error, isMatch) {
+//           if (error) {
+//             throw error;
+//           } else if (!isMatch) {
+//             if (user.password == password) {
+//               res.status(202).send({ user: user });
+//             } else {
+//               res.status(401).send({ message: "*Password is Incorrect*" });
+//             }
+//           } else {
+//             res.status(202).send({ user: user });
+//           }
+//         });
+//       } else {
+//         res.status(403).send({ message: "*Email is not Verified*" });
+//       }
+//     } else {
+//       res.status(405).send({ message: "*User is not registered*" });
+//     }
+//   });
+// };
+
+export const getUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  Users.findOne({ email: email }, (err, user) => {
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
     if (user) {
       if (user.emailVerified) {
         bcrypt.compare(password, user.password, function (error, isMatch) {
           if (error) {
             throw error;
           } else if (!isMatch) {
+<<<<<<< HEAD
             res.status(401).send({ message: '*Password is Incorrect*' });
+=======
+            if (user.password == password) {
+              res.status(202).send({ user: user });
+            } else {
+              res.status(401).send({ message: '*Password is Incorrect*' });
+            }
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
           } else {
             res.status(202).send({ user: user });
           }
@@ -89,6 +167,7 @@ export const getUser = async (req, res) => {
   });
 };
 
+<<<<<<< HEAD
 // This function verifies that the user has inputted
 // the correct token and CAN send a confirmation email
 export const verifyEmail = async (req, res) => {
@@ -114,6 +193,48 @@ export const verifyEmail = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.redirect('/'); 
+  }
+=======
+export const getUser2 = async (req, res) => {
+  const { email, password, emailVerified } = req.body;
+  Users.findOne({ email: email }, (err, user) => {
+    if (user) {
+      if (user.emailVerified) {
+        bcrypt.compare(password, user.password, function (error, isMatch) {
+          if (!isMatch) {
+            if (user.password == password) {
+              res.status(202).send({ user: user });
+            } else {
+              res.status(401).send({ message: '*Password is Incorrect*' });
+            }
+          } else {
+            res.status(202).send({ user: user });
+          }
+        });
+      } else {
+        res.status(201).send({ user: user });
+      }
+    } else {
+      res.status(405).send({ message: '*User is not registered*' });
+    }
+  });
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
+};
+
+export const verifyEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+    if (!user) {
+      res.status(405).send({ message: 'Token is invalid' });
+    } else {
+      user.emailVerified = true;
+      user.createdAt = null;
+      await user.save();
+      res.status(201).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -220,23 +341,77 @@ export const addMemory = async (req, res) => {
   });
 };
 
+<<<<<<< HEAD
 //function to update an existing memory
 export const updateMemory = async (req, res) => {
   //receieve memory ObjectID, state index, city index, memory index, date, description, and image
   const { userId, stateIdx, cityIdx, memoryIdx, date, description, image } = req.body;
+=======
+export const getCurrentUser = async (req, res) => {
+  const { _id } = req.body;
+
+  Users.findOne({ _id: _id }, (err, user) => {
+    if (err) {
+      res.status(501).send(err);
+    } else {
+      res.status(201).send(user);
+    }
+  });
+};
+
+//function to update an existing memory
+export const updateMemory = async (req, res) => {
+  //receieve memory ObjectID, state index, city index, memory index, date, description, and image
+  const { userId, stateIdx, cityId, memoryId, date, description, image } =
+    req.body;
+
+  let cityIdx = -1;
+  let memoryIdx = -1;
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
 
   //create user const var
   const user = await Users.findById(userId);
 
+<<<<<<< HEAD
   //create and populate updated memory
   const editedMemory = user.states[stateIdx].cities[cityIdx].memories[memoryIdx];
+=======
+  // find city idx, we'll find a better way to do this some other day, it works for now
+  for (var i = 0; i < user.states[stateIdx].cities.length; i++) {
+    if (user.states[stateIdx].cities[i]._id == cityId) {
+      cityIdx = i;
+      break;
+    }
+  }
+
+  // find memory idx, we'll find a better way to do this some other day, it works for now
+  for (
+    var j = 0;
+    j < user.states[stateIdx].cities[cityIdx].memories.length;
+    j++
+  ) {
+    if (user.states[stateIdx].cities[cityIdx].memories[j]._id == memoryId) {
+      memoryIdx = j;
+      break;
+    }
+  }
+
+  //create and populate updated memory
+  const editedMemory =
+    user.states[stateIdx].cities[cityIdx].memories[memoryIdx];
+
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
   editedMemory.date = date;
   editedMemory.description = description;
   editedMemory.img = image;
 
   //update old memory with updated memory
   user.states[stateIdx].cities[cityIdx].memories[memoryIdx] = editedMemory;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
   // Save user info to MongoDB
   user.save((err) => {
     if (err) {
@@ -245,20 +420,53 @@ export const updateMemory = async (req, res) => {
       res.status(201).send(user);
     }
   });
+<<<<<<< HEAD
 }
 
 //function to delete an existing memory
 export const deleteMemory = async (req, res) => {
   //receieve memory ObjectID, state index, city index, memory index
   const { userId, stateIdx, cityIdx, memoryIdx } = req.body;
+=======
+};
+
+//function to delete an existing memory
+export const deleteMemory = async (req, res) => {
+  const { userId, stateIdx, cityId, memoryId } = req.body;
+
+  let cityIdx = -1;
+  let memoryIdx = -1;
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
 
   //create user const var
   const user = await Users.findById(userId);
 
+<<<<<<< HEAD
+=======
+  for (var i = 0; i < user.states[stateIdx].cities.length; i++) {
+    if (user.states[stateIdx].cities[i]._id == cityId) {
+      cityIdx = i;
+      break;
+    }
+  }
+
+  for (
+    var j = 0;
+    j < user.states[stateIdx].cities[cityIdx].memories.length;
+    j++
+  ) {
+    if (user.states[stateIdx].cities[cityIdx].memories[j]._id == memoryId) {
+      memoryIdx = j;
+      break;
+    }
+  }
+
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
   //delete the memory at the recieved memory index
   user.states[stateIdx].cities[cityIdx].memories.splice(memoryIdx, 1);
 
   //if memories is empty, splice city and recieved city index
+<<<<<<< HEAD
   if(user.states[stateIdx].cities[cityIdx].memories.length == 0)
   {
     user.states[stateIdx].cities.splice(cityIdx, 1);
@@ -267,6 +475,14 @@ export const deleteMemory = async (req, res) => {
   //if cities is empty, splice state and recieved state index
   if(user.states[stateIdx].cities.length == 0)
   {
+=======
+  if (user.states[stateIdx].cities[cityIdx].memories.length == 0) {
+    user.states[stateIdx].cities.splice(cityIdx, 1);
+  }
+
+  //if cities is empty, splice state and recieved state index
+  if (user.states[stateIdx].cities.length == 0) {
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
     user.states.splice(stateIdx, 1);
   }
 
@@ -277,6 +493,63 @@ export const deleteMemory = async (req, res) => {
     } else {
       res.status(201).send(user);
     }
+<<<<<<< HEAD
   }); 
 }
 
+=======
+  });
+};
+
+export const resetPasswordSent = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+
+    if (!user) {
+      res.status(404).send({ message: 'User does not exist' });
+      return res.redirect('/');
+    } else {
+      // Reset password email sent
+      sgMail.setApiKey(process.env.API_KEY);
+
+      const message = {
+        to: email,
+        from: {
+          email: 'travelknightsnoreply@gmail.com',
+          name: 'TravelKnights',
+        },
+        subject: 'Password Reset',
+        text: 'Click below to reset your password',
+        html: `<head><text>Click below to reset your password!<br></text><a href='https://travelknights.herokuapp.com/Password/${user.email}' id= 'click'>Reset Password</a></head>`,
+      };
+
+      sgMail
+        .send(message)
+        .then((response) => console.log('Email sent! PAssword'))
+        .catch((error) => console.log(error.message));
+
+      res.status(200).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await Users.findOne({ email: email });
+
+    if (!user) {
+      res.status(404).send({ message: 'User does not exist' });
+    } else {
+      user.password = password;
+      await user.save();
+      res.status(201).send({ user: user });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+>>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
