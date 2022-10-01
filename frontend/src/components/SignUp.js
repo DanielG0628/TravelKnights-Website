@@ -1,7 +1,10 @@
 /*
-  1. Only submit on valid input fields
-  2. Red outlines for missing input fields
-  3. Better modal for confirmation on submit
+  1. Only submit on valid input fields. DONE!
+  2. Red outlines for missing input fields. DONE!
+  3. Better modal for confirmation on submit.
+  4. Add ErrorOutlineOutlinedIcon to inputadornment??? when error 
+  5. Fix useState error attribute for textfields. Only accepting 1 char at a time 
+      for email
 */
 
 import React from 'react';
@@ -23,6 +26,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { createUser } from '../actions/posts';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const theme = createTheme();
 
@@ -63,7 +67,7 @@ export default function SignUp() {
       newuser.password === user.get('confirmpassword').trim()
     ) {
       dispatch(createUser(newuser));
-      changeThis[0].innerHTML = '';
+      changeThis[0].innerHTML = ' ';
 
       handleClickOpen();
     } else {
@@ -99,25 +103,35 @@ export default function SignUp() {
             'red';
         }
 
-        changeThis[0].innerHTML = '*Please fill in required text*';
+        changeThis[0].innerHTML = '* Please fill in required text *';
       } else if (newuser.password !== newuser.confirmPassword)
-        changeThis[0].innerHTML = '*Passwords do not match*';
+        changeThis[0].innerHTML = '* Passwords do not match *';
     }
   };
 
   const ValidationTextField = styled(TextField)({
     '& input:valid:placeholder-shown + fieldset': {
-      borderColor: '#d9dce3',
+      borderColor: '#1976d2',
+      borderWidth: '1.3px',
     },
     '& input:valid:not(:placeholder-shown) + fieldset': {
-      borderColor: '#d9dce3',
+      borderColor: '#1976d2',
+      borderWidth: '1.3px',
     },
     '& input:empty + fieldset': {
       borderColor: 'red',
+      borderWidth: '1.3px',
     },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 2,
-      padding: '3px !important',
+    '& input:invalid:hover + fieldset': {
+      borderColor: 'red',
+      borderWidth: '2.5px',
+    },
+    '& input:invalid:focus + fieldset': {
+      borderColor: 'red',
+      borderWidth: '2.5px',
+    },
+    '& input:valid:hover + fieldset': {
+      borderWidth: '2.5px',
     },
   });
 
@@ -169,19 +183,6 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* BRIAN'S 
-                <TextField
-                  required
-                  fullWidth
-                  id='email'
-                  type='email'
-                  label='Email Address'
-                  name='email'
-                  autoComplete='email'
-                  placeholder=' '
-                  error={text === ''}
-                  helperText={text === '' ? 'Empty!' : ' '}
-                />  */}
                 <ValidationTextField
                   key='text2'
                   fullWidth
@@ -227,13 +228,15 @@ export default function SignUp() {
               </Grid>
             </Grid>
 
-            <Typography
-              style={{ color: 'red' }}
-              justifyContent='center'
-              align='center'
-              sx={{ mt: 0, mb: 0 }}
-              className='signupresponse'
-            ></Typography>
+            <Container>
+              <Typography
+                style={{ color: 'red' }}
+                justifyContent='center'
+                align='center'
+                sx={{ mt: 1, mb: 0 }}
+                className='signupresponse'
+              ></Typography>
+            </Container>
 
             <Button
               style={{ backgroundColor: '#65743A' }}
