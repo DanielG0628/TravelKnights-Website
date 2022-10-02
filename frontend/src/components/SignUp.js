@@ -78,29 +78,29 @@ export default function SignUp() {
         newuser.confirmPassword.length === 0
       ) {
         if (newuser.name.length === 0) {
-          document.getElementById('name').required = 'required';
-          document.querySelector('label[for="name"]').textContent =
-            'Full Name *';
-          document.querySelector('label[for="name"]').style.color = 'red';
+          // document.getElementById('name').required = 'required';
+          // document.querySelector('label[for="name"]').textContent =
+          //   'Full Name *';
+          // document.querySelector('label[for="name"]').style.color = 'red';
         }
         if (newuser.email.length === 0) {
-          document.getElementById('email').required = 'required';
-          document.querySelector('label[for="email"]').textContent =
-            'Email Address *';
-          document.querySelector('label[for="email"]').style.color = 'red';
+          // document.getElementById('email').required = 'required';
+          // document.querySelector('label[for="email"]').textContent =
+          //   'Email Address *';
+          // document.querySelector('label[for="email"]').style.color = 'red';
         }
         if (newuser.password.length === 0) {
-          document.getElementById('password').required = 'required';
-          document.querySelector('label[for="password"]').textContent =
-            'Password *';
-          document.querySelector('label[for="password"]').style.color = 'red';
+          // document.getElementById('password').required = 'required';
+          // document.querySelector('label[for="password"]').textContent =
+          //   'Password *';
+          // document.querySelector('label[for="password"]').style.color = 'red';
         }
         if (newuser.confirmPassword.length === 0) {
-          document.getElementById('confirmpassword').required = 'required';
-          document.querySelector('label[for="confirmpassword"]').textContent =
-            'Confirm Password *';
-          document.querySelector('label[for="confirmpassword"]').style.color =
-            'red';
+          // document.getElementById('confirmpassword').required = 'required';
+          // document.querySelector('label[for="confirmpassword"]').textContent =
+          //   'Confirm Password *';
+          // document.querySelector('label[for="confirmpassword"]').style.color =
+          //   'red';
         }
 
         changeThis[0].innerHTML = '* Please fill in required text *';
@@ -109,31 +109,31 @@ export default function SignUp() {
     }
   };
 
-  const ValidationTextField = styled(TextField)({
-    '& input:valid:placeholder-shown + fieldset': {
-      borderColor: '#1976d2',
-      borderWidth: '1.3px',
-    },
-    '& input:valid:not(:placeholder-shown) + fieldset': {
-      borderColor: '#1976d2',
-      borderWidth: '1.3px',
-    },
-    '& input:empty + fieldset': {
-      borderColor: 'red',
-      borderWidth: '1.3px',
-    },
-    '& input:invalid:hover + fieldset': {
-      borderColor: 'red',
-      borderWidth: '2.5px',
-    },
-    '& input:invalid:focus + fieldset': {
-      borderColor: 'red',
-      borderWidth: '2.5px',
-    },
-    '& input:valid:hover + fieldset': {
-      borderWidth: '2.5px',
-    },
-  });
+  // const ValidationTextField = styled(TextField)({
+  //   '& input:valid:placeholder-shown + fieldset': {
+  //     borderColor: '#1976d2',
+  //     borderWidth: '1.3px',
+  //   },
+  //   '& input:valid:not(:placeholder-shown) + fieldset': {
+  //     borderColor: '#1976d2',
+  //     borderWidth: '1.3px',
+  //   },
+  //   '& input:empty + fieldset': {
+  //     borderColor: 'red',
+  //     borderWidth: '1.3px',
+  //   },
+  //   '& input:invalid:hover + fieldset': {
+  //     borderColor: 'red',
+  //     borderWidth: '2.5px',
+  //   },
+  //   '& input:invalid:focus + fieldset': {
+  //     borderColor: 'red',
+  //     borderWidth: '2.5px',
+  //   },
+  //   '& input:valid:hover + fieldset': {
+  //     borderWidth: '2.5px',
+  //   },
+  // });
 
   return (
     <ThemeProvider theme={theme}>
@@ -169,7 +169,8 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <ValidationTextField
+                {/* <ValidationTextField */}
+                <TextField
                   key='text1'
                   fullWidth
                   name='name'
@@ -178,26 +179,28 @@ export default function SignUp() {
                   autoFocus
                   placeholder=' '
                   variant='outlined'
-                  onChange={(e) => setText1(e.target.value)}
-                  value={text1}
+                  // onChange={(e) => setText1(e.target.value)}
+                  // value={text1}
                 />
               </Grid>
               <Grid item xs={12}>
-                <ValidationTextField
+                {/* <ValidationTextField */}
+                <TextField
                   key='text2'
                   fullWidth
                   id='email'
-                  type='email'
+                  // type='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
                   placeholder=' '
-                  onChange={(e) => setText2(e.target.value)}
-                  value={text2}
+                  // onChange={(e) => setText2(e.target.value)}
+                  // value={text2}
                 />
               </Grid>
               <Grid item xs={12}>
-                <ValidationTextField
+                {/* <ValidationTextField */}
+                <TextField
                   key='text3'
                   fullWidth
                   name='password'
@@ -207,12 +210,13 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText3(e.target.value)}
-                  value={text3}
+                  // onChange={(e) => setText3(e.target.value)}
+                  // value={text3}
                 />
               </Grid>
               <Grid item xs={12}>
-                <ValidationTextField
+                {/* <ValidationTextField */}
+                <TextField
                   key='text4'
                   fullWidth
                   name='confirmpassword'
@@ -222,8 +226,8 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText4(e.target.value)}
-                  value={text4}
+                  // onChange={(e) => setText4(e.target.value)}
+                  // value={text4}
                 />
               </Grid>
             </Grid>
