@@ -1,15 +1,21 @@
+/*
+  FIXME:
+
+  1. Scaling for sign in
+  2. Red outline for empty inputs
+  3. Do not allow leading/trailing space input for text fields
+
+*/
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import jwt_decode from 'jwt-decode';
@@ -18,111 +24,50 @@ import ri from '../images/randomimage';
 import Logo from '../images/logo.png';
 import { useDispatch } from 'react-redux';
 import { getUser } from '../actions/posts';
-import { createUser } from '../actions/posts';
-import { googcreateUser } from '../actions/posts';
-import { googgetUser } from '../actions/posts';
-import { waitUntil } from 'async-wait-until';
-import { sizeHeight } from '@mui/system';
+import { createUser2 } from '../actions/posts';
 
 const theme = createTheme();
 var response = 'A';
 export default function SignInSide() {
   var changeThis = document.getElementsByClassName('loginresponse');
 
-  const loginresult = '';
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-
-  //console.log(user);
 
   function handleCallbackResponse(response) {
-    //console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
     const googuser = { email: '', password: '' };
-    //console.log(userObject);
+
     googuser.email = userObject.email;
     googuser.password = userObject?.sub;
     googuser.name = userObject.name;
     googuser.emailVerified = true;
-    //googuser.verified = true;
-    console.log(googuser); //jti is token
 
     dispatch(getUser(googuser));
 
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem('profile'));
-      console.log(checkuser);
-
-      //dispatch(createUser(googuser));
 
       if (checkuser.payload.user == null) {
-        dispatch(createUser(googuser));
+        dispatch(createUser2(googuser));
         setTimeout(() => {
           dispatch(getUser(googuser));
           setTimeout(() => {
             dispatch(getUser(googuser));
 
             const checkuser2 = JSON.parse(localStorage.getItem('profile'));
-            console.log(checkuser2);
+
             if (checkuser2.payload.user != null) {
               navigate('/Map');
             }
           }, 500);
         }, 500);
       } else if (checkuser.payload.user) {
-        //console.log(checkuser.payload);
         navigate('/Map');
       } else {
-        console.log('Else');
-        console.log(checkuser.payload);
         response = checkuser.payload;
-
         changeThis[0].innerHTML = response;
-
-        //figure out how to update and send to div
       }
     }, 500);
-
-    /*
-    setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem("profile"));
-      console.log(checkuser);
-
-      if (checkuser.payload == "*User is not registered*") {
-        console.log("no user");
-        dispatch(googcreateUser(googuser));
-        setTimeout(() => {
-          if (checkuser.payload != "*User is not registered*") {
-            dispatch(getUser(googuser));
-          }
-        }, 1000);
-      } else if (checkuser.payload.user) {
-        //console.log(checkuser.payload);
-        navigate("/Map");
-      } else {
-        console.log("Else");
-        console.log(checkuser.payload);
-        response = checkuser.payload;
-
-        changeThis[0].innerHTML = response;
-
-        //figure out how to update and send to div
-      }
-    }, 1000);
-*/
-    /*
-    setUser(userObject);
-    try {
-      dispatch({ type: "AUTH", data: { result } });
-
-      navigate("/Map");
-    } catch (error) {
-      console.log(error);
-    }
-*/
-    //implement signin logic like getuser and set user for google
-    //users.js has to have a new function for google signin
   }
 
   useEffect(() => {
@@ -139,9 +84,9 @@ export default function SignInSide() {
       alignItems: 'center',
       width: 400,
     });
-  }, []);
+  });
 
-  const randomImage = ri[Math.floor(Math.random() * ri.length - 1)];
+  const randomImage = ri[Math.floor(Math.random() * (ri.length - 1))];
   const navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
@@ -152,58 +97,31 @@ export default function SignInSide() {
       }}
     />
   );
-  const handleFailure = (result) => {
-    alert(result);
-  };
-  const handleLogin = (googleData) => {
-    alert(googleData);
-  };
-  const onSuccess = (response) => console.log(response);
-  const onFailure = (response) => console.error(response);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     const newuser = { email: '', password: '' };
-    newuser.email = data.get('email');
-    newuser.password = data.get('password');
-    //console.log(newuser);
+
+    newuser.email = data.get('email').trim();
+    newuser.password = data.get('password').trim();
+
+    //console.log(newuser.email.length);
 
     dispatch(getUser(newuser));
     setTimeout(() => {
       const checkuser = JSON.parse(localStorage.getItem('profile'));
-      console.log(checkuser);
 
       if (checkuser == null) {
-        if (checkuser.payload != null) console.log(checkuser.payload);
-
-        console.log('payload is not null ');
-        console.log(checkuser);
       } else if (checkuser.payload.user) {
-        //console.log(checkuser.payload);
         navigate('/Map');
       } else {
-        console.log('Else');
-        console.log(checkuser.payload);
         response = checkuser.payload;
-
         changeThis[0].innerHTML = response;
-
-        //figure out how to update and send to div
       }
     }, 1000); //Waits a little bit to grab user
   };
 
-  const clicktest = async (event) => {
-    const checkuser = JSON.parse(localStorage.getItem('profile'));
-    console.log(checkuser);
-  };
-
-  function check() {
-    const checkuser = JSON.parse(localStorage.getItem('profile'));
-    const qwe = JSON.parse(localStorage.getItem('profile'));
-    console.log(qwe);
-  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component='main' sx={{ height: '100vh' }}>
@@ -285,10 +203,6 @@ export default function SignInSide() {
                 autoComplete='current-password'
               />
 
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Remember me'
-              />
               <Box
                 sx={{
                   marginTop: 0,

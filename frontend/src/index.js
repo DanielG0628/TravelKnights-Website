@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom/client';
-import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import reducers from './reducers';

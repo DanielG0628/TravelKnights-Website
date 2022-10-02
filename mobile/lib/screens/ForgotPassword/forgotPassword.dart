@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travelknights/components/rounded_button.dart';
-import 'package:travelknights/constants.dart';
-import 'package:travelknights/routes/routes.dart';
 
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -11,14 +9,12 @@ class ForgotPassword extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: kThirdColor,
           title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text("Travel \n Knights",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontFamily: 'UCF')),
-            Image.asset("assets/images/travelknightslogo.png",
-                width: size.width * .1)
-          ])),
+        Text("Travel \n Knights",
+            style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'UCF')),
+        Image.asset("assets/images/travelknightslogo.png",
+            width: size.width * .1)
+      ])),
       body: Center(child: Body()),
     );
   }
@@ -37,7 +33,7 @@ class _BodyState extends State<Body> {
   @override
   void dispose() {
     myController.dispose;
-    super.dispose();
+    super.dispose;
   }
 
   @override
@@ -47,8 +43,7 @@ class _BodyState extends State<Body> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text('Forgot Password?', style: TextStyle(fontSize: 20)),
-          SizedBox(height: 10),
-          Text('Please enter email associated with your account',
+          Text('Please enter email assoaciated with your account',
               style: TextStyle(fontSize: 10)),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 100),
@@ -59,13 +54,8 @@ class _BodyState extends State<Body> {
               validator: validateEmail,
             ),
           ),
-          RoundedButton(
-              text: 'SEND EMAIL',
-              press: () {
-                myController.clear;
-                // Reset password email
-                Navigator.pushNamed(context, '/emailreset');
-              }),
+          TextButton(child: Text("Resend email"), onPressed: () {}),
+          RoundedButton(text: 'SEND EMAIL', press: () {}),
         ],
       ),
     );

@@ -1,39 +1,28 @@
+/*
+  1. Check if valid email format 
+  2. Modal to confirm sent email
+*/
+
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { Alert, SpeedDialIcon } from '@mui/material';
-import ErrorIcon from '@mui/icons-material/Error';
 import LockOutlined from '@mui/icons-material/LockOutlined';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { resetPasswordSent } from '../actions/posts';
+import { useDispatch } from 'react-redux';
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -43,13 +32,19 @@ export default function SignUp() {
       }}
     />
   );
-  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
+    const user = { email: '' };
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: data.get('email').trim(),
+    });
+    user.email = data.get('email').trim();
+
+    dispatch(resetPasswordSent(user));
+    console.log({
+      email: data.get('email').trim(),
     });
   };
 
@@ -113,54 +108,9 @@ export default function SignUp() {
               type='submit'
               variant='contained'
               sx={{ mt: 3, mb: 2, width: 500, textTransform: 'none' }}
-              onClick={handleClickOpen}
             >
               Send password reset email
             </Button>
-
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              onBackdropClick='false'
-              PaperProps={{ sx: { bottom: 350 } }}
-            >
-              <DialogContent>
-                <DialogContentText variant='h5' sx={{ mb: 3 }}>
-                  We have sent you a one time password reset code to the email
-                  provided. Please enter a new password
-                </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin='dense'
-                  id='resetcode'
-                  label='Enter 6-digit password reset code'
-                  fullWidth
-                  variant='standard'
-                />
-                <TextField
-                  autoFocus
-                  margin='dense'
-                  id='newpass'
-                  label='New password'
-                  type='password'
-                  fullWidth
-                  variant='standard'
-                />
-                <TextField
-                  autoFocus
-                  margin='dense'
-                  id='newpassconfirm'
-                  label='Re-enter password'
-                  type='password'
-                  fullWidth
-                  variant='standard'
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Reset Password</Button>
-              </DialogActions>
-            </Dialog>
 
             <Grid container sx={{ mt: 3, mb: 3 }}>
               <Grid item xs={5} sm={5} md={5}>
