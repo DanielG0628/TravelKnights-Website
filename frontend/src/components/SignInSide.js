@@ -33,6 +33,7 @@ export default function SignInSide() {
 
   const dispatch = useDispatch();
 
+
   function handleCallbackResponse(response) {
     var userObject = jwt_decode(response.credential);
     const googuser = { email: '', password: '' };
@@ -42,33 +43,14 @@ export default function SignInSide() {
     googuser.name = userObject.name;
     googuser.emailVerified = true;
     console.log(googuser);
-    dispatch(getUser(googuser));
+    console.log("1");
+    dispatchGoogle(googuser);
+}
 
-    setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem('profile'));
 
-      if (checkuser.payload.user == null) {
-        dispatch(createUser2(googuser));
-        setTimeout(() => {
-          dispatch(getUser(googuser));
-          setTimeout(() => {
-            dispatch(getUser(googuser));
 
-            const checkuser2 = JSON.parse(localStorage.getItem('profile'));
 
-            if (checkuser2.payload.user != null) {
-              navigate('/Map');
-            }
-          }, 500);
-        }, 500);
-      } else if (checkuser.payload.user) {
-        navigate('/Map');
-      } else {
-        response = checkuser.payload;
-        changeThis[0].innerHTML = response;
-      }
-    }, 500);
-  }
+
 
   useEffect(() => {
     /* global google */
@@ -99,7 +81,27 @@ export default function SignInSide() {
   );
 
 
-  
+  const dispatchGoogle = async (googuser) => {
+    await dispatch(getUser(googuser));
+    const checkuser = await JSON.parse(localStorage.getItem('profile'));
+    if (checkuser.payload.user == null) {
+      await dispatch(createUser2(googuser));
+          await dispatch(getUser(googuser));
+          await dispatch(getUser(googuser));
+          const checkuser2 = await JSON.parse(localStorage.getItem('profile'));
+
+            if (checkuser2.payload.user != null) {
+              navigate('/Map');
+            }
+          
+        
+      } else if (checkuser.payload.user) {
+        navigate('/Map');
+      } else {
+        response = checkuser.payload;
+        changeThis[0].innerHTML = response;
+      }
+};
   const dispatchFunction = async (newuser) => {
     await dispatch(getUser(newuser));
     const checkuser = await JSON.parse(localStorage.getItem('profile'));
