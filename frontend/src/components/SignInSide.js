@@ -41,7 +41,7 @@ export default function SignInSide() {
     googuser.password = userObject?.sub;
     googuser.name = userObject.name;
     googuser.emailVerified = true;
-
+    console.log(googuser);
     dispatch(getUser(googuser));
 
     setTimeout(() => {
@@ -98,6 +98,19 @@ export default function SignInSide() {
     />
   );
 
+
+  
+  const dispatchFunction = async (newuser) => {
+    await dispatch(getUser(newuser));
+    const checkuser = await JSON.parse(localStorage.getItem('profile'));
+    if (checkuser == null) {
+    } else if (checkuser.payload.user) {
+      navigate('/Map');
+    } else {
+      response = checkuser.payload;
+      changeThis[0].innerHTML = response;
+    }  
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -107,20 +120,14 @@ export default function SignInSide() {
     newuser.password = data.get('password').trim();
 
     //Got rid of check for empty email/password for dispatch
-    dispatch(getUser(newuser));
-    setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem('profile'));
 
-      if (checkuser == null) {
-      } else if (checkuser.payload.user) {
-        navigate('/Map');
-      } else {
-        response = checkuser.payload;
-        changeThis[0].innerHTML = response;
-      }
-    }, 1000); //Waits a little bit to grab user
-  };
-
+      dispatchFunction(newuser);
+    
+    }
+    
+    
+  
+  
   return (
     <ThemeProvider theme={theme}>
       <Grid container component='main' sx={{ height: '100vh' }}>
