@@ -1,10 +1,8 @@
 /*
   FIXME:
-
   1. Scaling for sign in
   2. Red outline for empty inputs
   3. Do not allow leading/trailing space input for text fields
-
 */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -42,32 +40,7 @@ export default function SignInSide() {
     googuser.name = userObject.name;
     googuser.emailVerified = true;
 
-    dispatch(getUser(googuser));
-
-    setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem('profile'));
-
-      if (checkuser.payload.user == null) {
-        dispatch(createUser2(googuser));
-        setTimeout(() => {
-          dispatch(getUser(googuser));
-          setTimeout(() => {
-            dispatch(getUser(googuser));
-
-            const checkuser2 = JSON.parse(localStorage.getItem('profile'));
-
-            if (checkuser2.payload.user != null) {
-              navigate('/Map');
-            }
-          }, 500);
-        }, 500);
-      } else if (checkuser.payload.user) {
-        navigate('/Map');
-      } else {
-        response = checkuser.payload;
-        changeThis[0].innerHTML = response;
-      }
-    }, 500);
+    dispatchGoogle(googuser);
   }
 
   useEffect(() => {
@@ -98,6 +71,39 @@ export default function SignInSide() {
     />
   );
 
+  const dispatchGoogle = async (googuser) => {
+    await dispatch(getUser(googuser));
+    const checkuser = await JSON.parse(localStorage.getItem('profile'));
+
+    if (checkuser.payload.user == null) {
+      await dispatch(createUser2(googuser));
+      await dispatch(getUser(googuser));
+      await dispatch(getUser(googuser));
+      const checkuser2 = await JSON.parse(localStorage.getItem('profile'));
+
+      if (checkuser2.payload.user != null) {
+        navigate('/Map');
+      }
+    } else if (checkuser.payload.user) {
+      navigate('/Map');
+    } else {
+      response = checkuser.payload;
+      changeThis[0].innerHTML = response;
+    }
+  };
+
+  const dispatchFunction = async (newuser) => {
+    await dispatch(getUser(newuser));
+    const checkuser = await JSON.parse(localStorage.getItem('profile'));
+    if (checkuser == null) {
+    } else if (checkuser.payload.user) {
+      navigate('/Map');
+    } else {
+      response = checkuser.payload;
+      changeThis[0].innerHTML = response;
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -106,20 +112,8 @@ export default function SignInSide() {
     newuser.email = data.get('email').trim();
     newuser.password = data.get('password').trim();
 
-    //console.log(newuser.email.length);
-
-    dispatch(getUser(newuser));
-    setTimeout(() => {
-      const checkuser = JSON.parse(localStorage.getItem('profile'));
-
-      if (checkuser == null) {
-      } else if (checkuser.payload.user) {
-        navigate('/Map');
-      } else {
-        response = checkuser.payload;
-        changeThis[0].innerHTML = response;
-      }
-    }, 1000); //Waits a little bit to grab user
+    // Got rid of check for empty email/password for dispatch
+    dispatchFunction(newuser);
   };
 
   return (
