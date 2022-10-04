@@ -4,9 +4,7 @@ import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 
 dotenv.config('../../.env');
-// API Logic
-// FIXME:
-// Implement a expiration for non verified users
+
 export const createUser = async (req, res) => {
   const { name, email, password, states, emailVerified } = req.body;
 
@@ -69,36 +67,6 @@ export const createUser2 = async (req, res) => {
     }
   });
 };
-
-// FIXME:
-// Implement if user is not verified, they cannot log in
-// export const getUser = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   Users.findOne({ email: email }, (err, user) => {
-//     if (user) {
-//       if (user.emailVerified) {
-//         bcrypt.compare(password, user.password, function (error, isMatch) {
-//           if (error) {
-//             throw error;
-//           } else if (!isMatch) {
-//             if (user.password == password) {
-//               res.status(202).send({ user: user });
-//             } else {
-//               res.status(401).send({ message: "*Password is Incorrect*" });
-//             }
-//           } else {
-//             res.status(202).send({ user: user });
-//           }
-//         });
-//       } else {
-//         res.status(403).send({ message: "*Email is not Verified*" });
-//       }
-//     } else {
-//       res.status(405).send({ message: "*User is not registered*" });
-//     }
-//   });
-// };
 
 export const getUser = async (req, res) => {
   const { email, password } = req.body;
