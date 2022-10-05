@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import postRoutes from './backend/routes/posts.js';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-=======
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -17,7 +6,6 @@ import postRoutes from "./backend/routes/posts.js";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
->>>>>>> 60d0a1dfafb905849eee463ed9ba2091e25e3cbc
 dotenv.config();
 
 const app = express();

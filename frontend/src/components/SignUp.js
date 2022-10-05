@@ -3,7 +3,7 @@
   2. Red outlines for missing input fields. DONE!
   3. Better modal for confirmation on submit.
   4. Fix useState error attribute for textfields. Only accepting 1 char at a time 
-      for email
+      for email. DONE!
 */
 
 import React from 'react';
@@ -28,6 +28,32 @@ import { createUser } from '../actions/posts';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const theme = createTheme();
+
+const ValidationTextField = styled(TextField)({
+  '& input:valid:placeholder-shown + fieldset': {
+    borderColor: '#1976d2',
+    borderWidth: '1.3px',
+  },
+  '& input:valid:not(:placeholder-shown) + fieldset': {
+    borderColor: '#1976d2',
+    borderWidth: '1.3px',
+  },
+  '& input:empty + fieldset': {
+    borderColor: 'red',
+    borderWidth: '1.3px',
+  },
+  '& input:invalid:hover + fieldset': {
+    borderColor: 'red',
+    borderWidth: '2.5px',
+  },
+  '& input:invalid:focus + fieldset': {
+    borderColor: 'red',
+    borderWidth: '2.5px',
+  },
+  '& input:valid:hover + fieldset': {
+    borderWidth: '2.5px',
+  },
+});
 
 export default function SignUp() {
   var changeThis = document.getElementsByClassName('signupresponse');
@@ -114,32 +140,6 @@ export default function SignUp() {
     }
   };
 
-  const ValidationTextField = styled(TextField)({
-    '& input:valid:placeholder-shown + fieldset': {
-      borderColor: '#1976d2',
-      borderWidth: '1.3px',
-    },
-    '& input:valid:not(:placeholder-shown) + fieldset': {
-      borderColor: '#1976d2',
-      borderWidth: '1.3px',
-    },
-    '& input:empty + fieldset': {
-      borderColor: 'red',
-      borderWidth: '1.3px',
-    },
-    '& input:invalid:hover + fieldset': {
-      borderColor: 'red',
-      borderWidth: '2.5px',
-    },
-    '& input:invalid:focus + fieldset': {
-      borderColor: 'red',
-      borderWidth: '2.5px',
-    },
-    '& input:valid:hover + fieldset': {
-      borderWidth: '2.5px',
-    },
-  });
-
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
@@ -180,7 +180,6 @@ export default function SignUp() {
                   name='name'
                   label='Full Name'
                   id='name'
-                  autoFocus
                   placeholder=' '
                   variant='outlined'
                   onChange={(e1) => setText1(e1.target.value)}
@@ -209,7 +208,6 @@ export default function SignUp() {
                   type='password'
                   id='password'
                   autoComplete='new-password'
-                  inputProps={{ minLength: 3 }}
                   placeholder=' '
                   onChange={(e3) => setText3(e3.target.value)}
                   value={text3}
@@ -224,7 +222,6 @@ export default function SignUp() {
                   type='password'
                   id='confirmpassword'
                   autoComplete='new-password'
-                  inputProps={{ minLength: 3 }}
                   placeholder=' '
                   onChange={(e4) => setText4(e4.target.value)}
                   value={text4}
