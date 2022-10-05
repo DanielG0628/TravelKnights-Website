@@ -2,8 +2,7 @@
   1. Only submit on valid input fields. DONE!
   2. Red outlines for missing input fields. DONE!
   3. Better modal for confirmation on submit.
-  4. Add ErrorOutlineOutlinedIcon to inputadornment??? when error 
-  5. Fix useState error attribute for textfields. Only accepting 1 char at a time 
+  4. Fix useState error attribute for textfields. Only accepting 1 char at a time 
       for email
 */
 
@@ -52,7 +51,7 @@ export default function SignUp() {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
 
-    console.log(event.currentTarget.email);
+    //console.log(event.currentTarget.email);
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name').trim();
@@ -66,10 +65,16 @@ export default function SignUp() {
       newuser.password.length > 0 &&
       newuser.password === user.get('confirmpassword').trim()
     ) {
-      dispatch(createUser(newuser));
-      changeThis[0].innerHTML = ' ';
+      const regexExp =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+      if (!regexExp.test(newuser.email))
+        changeThis[0].innerHTML = '* Invalid Email *';
+      else {
+        dispatch(createUser(newuser));
+        changeThis[0].innerHTML = ' ';
 
-      handleClickOpen();
+        handleClickOpen();
+      }
     } else {
       if (
         newuser.name.length === 0 ||
@@ -178,7 +183,7 @@ export default function SignUp() {
                   autoFocus
                   placeholder=' '
                   variant='outlined'
-                  onChange={(e) => setText1(e.target.value)}
+                  onChange={(e1) => setText1(e1.target.value)}
                   value={text1}
                 />
               </Grid>
@@ -187,12 +192,11 @@ export default function SignUp() {
                   key='text2'
                   fullWidth
                   id='email'
-                  type='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
                   placeholder=' '
-                  onChange={(e) => setText2(e.target.value)}
+                  onChange={(e2) => setText2(e2.target.value)}
                   value={text2}
                 />
               </Grid>
@@ -207,7 +211,7 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText3(e.target.value)}
+                  onChange={(e3) => setText3(e3.target.value)}
                   value={text3}
                 />
               </Grid>
@@ -222,7 +226,7 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText4(e.target.value)}
+                  onChange={(e4) => setText4(e4.target.value)}
                   value={text4}
                 />
               </Grid>
