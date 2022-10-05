@@ -2,11 +2,13 @@ import Users from '../models/dbUsers.js';
 import bcrypt from 'bcrypt';
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
+import { appendFile } from 'fs';
 
 dotenv.config('../../.env');
 
 export const createUser = async (req, res) => {
-  const { name, email, password, states, emailVerified } = req.body;
+  const { name, email, password, states } = req.body;
 
   Users.findOne({ email: email }, (err, user) => {
     if (user) {
@@ -27,20 +29,16 @@ export const createUser = async (req, res) => {
         text: 'Click below to verify your email!',
         html: `<head><text>Click below to verify your email!<br></text><a href='https://travelknights.herokuapp.com/Verified/${user.email}' id= 'click'>Verify Email</a></head>`,
       };
-
-      sgMail
-        .send(message)
-        .then((response) => console.log('Email sent!'))
-        .catch((error) => console.log(error.message));
+      
+      try{
+        sgMail.send(message);
+        res.status(500).json({ message: 'Success! Thanks for registering. Please check your email to verify your account.' });
+      } catch(error) {
+        res.status(500).json(error);
+      }
 
       // Save user in mongodb
-      user.save((err) => {
-        if (err) {
-          res.status(501).send(err);
-        } else {
-          res.status(201).send(user);
-        }
-      });
+      user.save();
     }
   });
 };
@@ -295,7 +293,6 @@ export const updateMemory = async (req, res) => {
 
   //update old memory with updated memory
   user.states[stateIdx].cities[cityIdx].memories[memoryIdx] = editedMemory;
-
   // Save user info to MongoDB
   user.save((err) => {
     if (err) {
