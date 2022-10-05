@@ -78,7 +78,6 @@ export default function Map() {
       //Possibly add Trip Table code here.
     }
   });
-
   function sayHello(el) {
     if (el.id.startsWith('US-')) {
       htmlElement = el.id;

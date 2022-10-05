@@ -345,6 +345,7 @@ export const deleteMemory = async (req, res) => {
   //if cities is empty, splice state and recieved state index
   if (user.states[stateIdx].cities.length == 0) {
     user.states.splice(stateIdx, 1);
+    //res.status(201).send({ message: 'stateIdx' });
   }
 
   // Save user info to MongoDB
