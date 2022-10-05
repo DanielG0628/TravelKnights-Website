@@ -75,7 +75,6 @@ export default function SignInSide() {
     await dispatch(getUser(googuser));
     const checkuser = await JSON.parse(localStorage.getItem('profile'));
 
-    console.log(checkuser.payload);
     if (checkuser.payload.user == null) {
       await dispatch(createUser2(googuser));
       await dispatch(getUser(googuser));
@@ -84,16 +83,16 @@ export default function SignInSide() {
       if (checkuser2.payload.user != null) {
         navigate('/Map');
       }
-    } else {
+    } else if (checkuser.payload.user) {
       navigate('/Map');
+    } else {
+      response = checkuser.payload;
+      changeThis[0].innerHTML = response;
     }
   };
-
   const dispatchFunction = async (newuser) => {
     await dispatch(getUser(newuser));
     const checkuser = await JSON.parse(localStorage.getItem('profile'));
-
-    // User exists successful login
     if (checkuser.payload.user) {
       navigate('/Map');
     }
