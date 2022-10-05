@@ -1,7 +1,9 @@
 /*
-  1. Only submit on valid input fields
-  2. Red outlines for missing input fields
-  3. Better modal for confirmation on submit
+  1. Only submit on valid input fields. DONE!
+  2. Red outlines for missing input fields. DONE!
+  3. Better modal for confirmation on submit.
+  4. Fix useState error attribute for textfields. Only accepting 1 char at a time 
+      for email
 */
 
 import React from 'react';
@@ -23,6 +25,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { createUser } from '../actions/posts';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const theme = createTheme();
 
@@ -48,7 +51,7 @@ export default function SignUp() {
     event.preventDefault();
     const user = new FormData(event.currentTarget);
 
-    console.log(event.currentTarget.email);
+    //console.log(event.currentTarget.email);
     //using user results in empty req.body
     const newuser = { name: '', email: '', phone: '', password: '' };
     newuser.name = user.get('name').trim();
@@ -62,10 +65,16 @@ export default function SignUp() {
       newuser.password.length > 0 &&
       newuser.password === user.get('confirmpassword').trim()
     ) {
-      dispatch(createUser(newuser));
-      changeThis[0].innerHTML = '';
+      const regexExp =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+      if (!regexExp.test(newuser.email))
+        changeThis[0].innerHTML = '* Invalid Email *';
+      else {
+        dispatch(createUser(newuser));
+        changeThis[0].innerHTML = ' ';
 
-      handleClickOpen();
+        handleClickOpen();
+      }
     } else {
       if (
         newuser.name.length === 0 ||
@@ -99,25 +108,35 @@ export default function SignUp() {
             'red';
         }
 
-        changeThis[0].innerHTML = '*Please fill in required text*';
+        changeThis[0].innerHTML = '* Please fill in required text *';
       } else if (newuser.password !== newuser.confirmPassword)
-        changeThis[0].innerHTML = '*Passwords do not match*';
+        changeThis[0].innerHTML = '* Passwords do not match *';
     }
   };
 
   const ValidationTextField = styled(TextField)({
     '& input:valid:placeholder-shown + fieldset': {
-      borderColor: '#d9dce3',
+      borderColor: '#1976d2',
+      borderWidth: '1.3px',
     },
     '& input:valid:not(:placeholder-shown) + fieldset': {
-      borderColor: '#d9dce3',
+      borderColor: '#1976d2',
+      borderWidth: '1.3px',
     },
     '& input:empty + fieldset': {
       borderColor: 'red',
+      borderWidth: '1.3px',
     },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 2,
-      padding: '3px !important',
+    '& input:invalid:hover + fieldset': {
+      borderColor: 'red',
+      borderWidth: '2.5px',
+    },
+    '& input:invalid:focus + fieldset': {
+      borderColor: 'red',
+      borderWidth: '2.5px',
+    },
+    '& input:valid:hover + fieldset': {
+      borderWidth: '2.5px',
     },
   });
 
@@ -164,34 +183,20 @@ export default function SignUp() {
                   autoFocus
                   placeholder=' '
                   variant='outlined'
-                  onChange={(e) => setText1(e.target.value)}
+                  onChange={(e1) => setText1(e1.target.value)}
                   value={text1}
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* BRIAN'S 
-                <TextField
-                  required
-                  fullWidth
-                  id='email'
-                  type='email'
-                  label='Email Address'
-                  name='email'
-                  autoComplete='email'
-                  placeholder=' '
-                  error={text === ''}
-                  helperText={text === '' ? 'Empty!' : ' '}
-                />  */}
                 <ValidationTextField
                   key='text2'
                   fullWidth
                   id='email'
-                  type='email'
                   label='Email Address'
                   name='email'
                   autoComplete='email'
                   placeholder=' '
-                  onChange={(e) => setText2(e.target.value)}
+                  onChange={(e2) => setText2(e2.target.value)}
                   value={text2}
                 />
               </Grid>
@@ -206,7 +211,7 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText3(e.target.value)}
+                  onChange={(e3) => setText3(e3.target.value)}
                   value={text3}
                 />
               </Grid>
@@ -221,19 +226,21 @@ export default function SignUp() {
                   autoComplete='new-password'
                   inputProps={{ minLength: 3 }}
                   placeholder=' '
-                  onChange={(e) => setText4(e.target.value)}
+                  onChange={(e4) => setText4(e4.target.value)}
                   value={text4}
                 />
               </Grid>
             </Grid>
 
-            <Typography
-              style={{ color: 'red' }}
-              justifyContent='center'
-              align='center'
-              sx={{ mt: 0, mb: 0 }}
-              className='signupresponse'
-            ></Typography>
+            <Container>
+              <Typography
+                style={{ color: 'red' }}
+                justifyContent='center'
+                align='center'
+                sx={{ mt: 1, mb: 0 }}
+                className='signupresponse'
+              ></Typography>
+            </Container>
 
             <Button
               style={{ backgroundColor: '#65743A' }}
