@@ -11,49 +11,22 @@ import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { alpha, styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ValidationTextField } from './Posts/styles';
 import Logo from '../images/logo.png';
 import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { createUser } from '../actions/posts';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const theme = createTheme();
-
-const ValidationTextField = styled(TextField)({
-  '& input:valid:placeholder-shown + fieldset': {
-    borderColor: '#1976d2',
-    borderWidth: '1.3px',
-  },
-  '& input:valid:not(:placeholder-shown) + fieldset': {
-    borderColor: '#1976d2',
-    borderWidth: '1.3px',
-  },
-  '& input:empty + fieldset': {
-    borderColor: 'red',
-    borderWidth: '1.3px',
-  },
-  '& input:invalid:hover + fieldset': {
-    borderColor: 'red',
-    borderWidth: '2.5px',
-  },
-  '& input:invalid:focus + fieldset': {
-    borderColor: 'red',
-    borderWidth: '2.5px',
-  },
-  '& input:valid:hover + fieldset': {
-    borderWidth: '2.5px',
-  },
-});
 
 export default function SignUp() {
   var changeThis = document.getElementsByClassName('signupresponse');
@@ -252,13 +225,15 @@ export default function SignUp() {
             <Dialog
               open={open}
               onClose={handleClose}
-              onBackdropClick={false}
               PaperProps={{ sx: { bottom: 200 } }}
+              color='grey'
             >
+              <DialogTitle id='alert-dialog-title'>
+                {'Account Successfully Created!'}
+              </DialogTitle>
               <DialogContent>
-                <DialogContentText component='h1' variant='h5'>
-                  We have sent you a link to the email provided. Please check
-                  you email to finish setting up your account
+                <DialogContentText id='alert-dialog-description'>
+                  Please check your inbox to confirm your account.
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
