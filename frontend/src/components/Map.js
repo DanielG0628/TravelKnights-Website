@@ -1,3 +1,8 @@
+//dispatches should directly assign a value to a variable rather than using localstorage
+//populateMap() needs to be utilized
+//page reload needs to be removed entirely
+//userBackup and any other unnecessary code needs to be removed
+
 import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -60,25 +65,35 @@ export default function Map() {
   newUser.email = userBackup.payload.user.email;
   newUser.password = userBackup.payload.user.password;
   var user;
-  dispatch(getUser(newUser));
-  setTimeout(() => {
-    user = JSON.parse(localStorage.getItem("profile"));
-
-    userBackup = user;
-  }, 1000);
-  //useEffect needed to getElement without NULL result
   var Trips = userBackup.payload.user.states;
+  //userBackup will most likely be removed, currently focusing on main issues first
+  //We want to call this in useEffect and whenever we had a reload.
+  const dispatchMap = async (newUser) => {
+    await dispatch(getUser(newUser));
+    user = await JSON.parse(localStorage.getItem("profile"));
+    userBackup = user;
+    Trips = userBackup.payload.user.states;
 
+  }
+  //useEffect needed to getElement without NULL result
+
+//useEffect should call another function to populate Map;
   useEffect(() => {
+    dispatchMap(newUser);
+    populateMap();
+    }
+  );
+
+  //setting a state to unvisited will be done in delete function rather than here.
+  function populateMap() {
     for (var i = 0; i < Trips.length; i++) {
       var STVisited = Trips[i].stateAbbreviation;
       STVisited = "US-" + STVisited;
       var STCheck = document.getElementById(STVisited);
       STCheck.setAttribute("class", "visited");
-      //Possibly add Trip Table code here.
-    }
-  });
-  function sayHello(el) {
+  }
+  }
+  function openElement(el) {
     if (el.id.startsWith("US-")) {
       htmlElement = el.id;
       var ST = htmlElement.substring(htmlElement.length - 2); //We'd actually check the stateabbrev. object, see if we find it, then push all cities from there along with however we want to display memories.
@@ -101,7 +116,8 @@ export default function Map() {
     items.sort();
   }
   //For sending memories to backend, use user.payload.user.states[i].cities[j].memories[k]._id
-  const handleEdit = (event) => {
+  //seems like all handle functions should be async
+  const handleEdit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const updateTrip = {
@@ -120,24 +136,22 @@ export default function Map() {
     updateTrip.cityId = cityIdx;
     updateTrip.stateIdx = stateindex;
     updateTrip.userId = user.payload.user._id;
-    dispatch(updateMemory(updateTrip));
-    setTimeout(() => {
-      dispatch(getUser(newUser));
-      setTimeout(() => {
-        dispatch(getUser(newUser));
-        setTimeout(() => {
-          user = JSON.parse(localStorage.getItem("profile"));
+    await dispatch(updateMemory(updateTrip));
+    
+    await dispatch(getUser(newUser));
+  
+    //dispatch(getUser(newUser)); WHY IS THIS HERE??? this is the only function in Map that was another getUser
+    //Going to delete above comment, however I want to be 100% sure it doesnt mess with anything. 
+        
+          user = await JSON.parse(localStorage.getItem("profile"));
           userBackup = user;
           Trips = userBackup.payload.user.states;
-        }, 500);
-        setTimeout(() => {
+        
           window.location.reload();
-        }, 500);
-      }, 500);
-    }, 500);
+    
   };
 
-  const handleDelete = (event) => {
+  const handleDelete = async (event) => {
     event.preventDefault();
     const deleteTrip = {
       userId: "",
@@ -150,23 +164,16 @@ export default function Map() {
     deleteTrip.stateIdx = stateindex;
     deleteTrip.userId = user.payload.user._id;
     console.log(deleteTrip);
-    dispatch(deleteMemory(deleteTrip));
-    setTimeout(() => {
-      setTimeout(() => {
-        dispatch(getUser(newUser));
-        setTimeout(() => {
-          user = JSON.parse(localStorage.getItem("profile"));
-          userBackup = user;
-          Trips = userBackup.payload.user.states;
-        }, 1000);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }, 1000);
-    }, 1000);
+    await dispatch(deleteMemory(deleteTrip));
+    await dispatch(getUser(newUser));
+    user = await JSON.parse(localStorage.getItem("profile"));
+    userBackup = user;
+    Trips = userBackup.payload.user.states;
+    
+    window.location.reload();
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     //html Element has state
@@ -184,22 +191,15 @@ export default function Map() {
     newTrip.stateAbbreviation = htmlElement;
     newTrip.image = "";
     newTrip.userId = user.payload.user._id;
-    console.log(user);
-    console.log(newTrip);
 
-    dispatch(addMemory(newTrip));
-    setTimeout(() => {
-      dispatch(getUser(newUser));
-      setTimeout(() => {
-        user = JSON.parse(localStorage.getItem("profile"));
-        console.log(user);
-        userBackup = user;
-        Trips = userBackup.payload.user.states;
-      }, 500);
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    }, 500);
+    await dispatch(addMemory(newTrip));
+    
+    await  dispatch(getUser(newUser));
+    user = await JSON.parse(localStorage.getItem("profile"));
+    userBackup = user;
+    Trips = userBackup.payload.user.states;
+
+    window.location.reload();
   };
 
   const [open, setOpen] = React.useState(false);
@@ -629,7 +629,7 @@ export default function Map() {
 
   return (
     <div>
-      <Box onClick={(element) => sayHello(element.target)}>
+      <Box onClick={(element) => openElement(element.target)}>
         <AppBar position="sticky">
           <Toolbar sx={{ backgroundColor: "#65743a" }}>
             <AccountCircle sx={{ fontSize: 21, m: 0.4 }} />
